@@ -40,4 +40,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('users-profile', [\App\Http\Controllers\UserController::class, 'profileView'])->name('users.profile');
     Route::post('profile-change', [\App\Http\Controllers\UserController::class, 'changeProfile'])->name('users.profile.change');
 
+    Route::resource('sections', App\Http\Controllers\SectionController::class);
+
+
 });

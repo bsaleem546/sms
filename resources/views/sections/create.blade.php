@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Add Role')
+@section('title', 'Add Section')
 
 @section('content')
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Add Roles</h4>
+            <h4 class="text-themecolor">Add Section</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item active">Roles</li>
-                    <li class="breadcrumb-item active">Add Role</li>
+                    <li class="breadcrumb-item active">Sections</li>
+                    <li class="breadcrumb-item active">Add Section</li>
                 </ol>
-                <a href="{{ route('roles.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
+                <a href="{{ route('sections.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>
@@ -34,6 +34,7 @@
                             </ul>
                         </div>
                     @endif
+
                         @if (Session::get('error'))
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -42,28 +43,14 @@
                                 </ul>
                             </div>
                         @endif
-                    <h5 class="card-title">Create Role</h5>
-                    {!! Form::open(array('route' => 'roles.store','method'=>'POST', 'class' => 'form-material m-t-40 create')) !!}
+
+                    <h5 class="card-title">Create Section</h5>
+                    {!! Form::open(array('route' => 'sections.store','method'=>'POST', 'class' => 'form-material m-t-40 create')) !!}
                             <div class="form-group">
                                 <div class="row">
                                     <label class="col-sm-12">Name</label>
                                     <div class="col-sm-12 validate">
-                                        {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-sm-12">Permission</label>
-                                    <div class="col-sm-12 validate">
-                                        <div class="row">
-                                            @foreach($permission as $value)
-                                                <div class="col-md-3">
-                                                    <label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}
-                                                        {{ $value->name }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                        {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control', 'required')) !!}
                                     </div>
                                 </div>
                             </div>
