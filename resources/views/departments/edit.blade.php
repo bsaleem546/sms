@@ -35,6 +35,15 @@
                         </div>
                     @endif
 
+                        @if (Session::get('error'))
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                <ul>
+                                    <p>{{ Session::get('error') }}</p>
+                                </ul>
+                            </div>
+                        @endif
+
                     <h5 class="card-title">Edit Department</h5>
                     {!! Form::open(array('route' => ['departments.update', $data->id],'method'=>'PATCH', 'class' => 'form-material m-t-40 create')) !!}
                     <div class="form-group">

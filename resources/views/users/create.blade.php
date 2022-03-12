@@ -34,6 +34,15 @@
                             </ul>
                         </div>
                     @endif
+
+                    @if (Session::get('error'))
+                        <div class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <ul>
+                                <p>{{ Session::get('error') }}</p>
+                            </ul>
+                        </div>
+                    @endif
                     <div class="alert alert-cyan">
                         <small>Password will be default <b>user1234</b></small>
                     </div>
@@ -61,6 +70,15 @@
                                     <label class="col-sm-12">Role</label>
                                     <div class="col-sm-12 validate">
                                         {!! Form::select('roles', $roles, null, array('class' => 'form-control','required')) !!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-12">Department</label>
+                                    <div class="col-sm-12 validate">
+                                        {!! Form::select('department', $department, null, array('class' => 'form-control','required')) !!}
                                     </div>
                                 </div>
                             </div>

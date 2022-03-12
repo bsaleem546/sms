@@ -44,3 +44,10 @@ form#login-reg {
     text-transform: uppercase;
     letter-spacing: 2px;
 }
+
+.small-text{
+    background-color: #fdf220;
+    padding: 10px;
+    margin-left: 10px;
+    color: #5a5717;
+}

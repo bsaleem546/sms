@@ -34,7 +34,14 @@
                             </ul>
                         </div>
                     @endif
-
+                        @if (Session::get('error'))
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                <ul>
+                                    <p>{{ Session::get('error') }}</p>
+                                </ul>
+                            </div>
+                        @endif
                     <h5 class="card-title">Create Role</h5>
                     {!! Form::open(array('route' => 'roles.store','method'=>'POST', 'class' => 'form-material m-t-40 create')) !!}
                             <div class="form-group">

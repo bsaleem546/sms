@@ -32,6 +32,15 @@
                         </div>
                     @endif
 
+                    @if (Session::get('error'))
+                        <div class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <ul>
+                                <p>{{ Session::get('error') }}</p>
+                            </ul>
+                        </div>
+                    @endif
+
                     <h5 class="card-title">Users list</h5>
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">

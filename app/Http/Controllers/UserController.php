@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Hash;
 
 class UserController extends Controller
 {
@@ -35,7 +38,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::pluck('name','name')->all();
-        return view('users.create', compact('roles'));
+        $department = Department::pluck('name', 'id')->all();
+        return view('users.create', compact('roles', 'department'));
     }
 
     /**
@@ -46,7 +50,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $data = $request->validate([
+                "name" => 'required|string',
+                "email" => 'required|unique:users,email',
+                "roles" => 'required',
+                "department" => 'required',
+            ]);
+
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make('user1234');
+            $user->save();
+
+            $user->assignRole($request->input('roles'));
+
+            $user->departments()->sync($request->department);
+            DB::commit();
+            return redirect()->route('users.index')
+                ->with('success','User created successfully');
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->nack()
+                ->with('error',$exception->getMessage());
+        }
     }
 
     /**
@@ -68,7 +98,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        $roles = Role::pluck('name','name')->all();
+        $userRole = $user->roles->pluck('name','name')->all();
+
+        $departments = Department::pluck('name','id')->all();
+        $userDep = $user->departments->first();
+        return view('users.edit',compact('user','roles','userRole', 'departments', 'userDep'));
     }
 
     /**
@@ -80,7 +116,31 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $data = $request->validate([
+                "name" => 'required|string',
+                "email" => 'required|unique:users,email,'.$id,
+                "roles" => 'required',
+                "department" => 'required',
+            ]);
+
+            $user = User::findOrFail($id);
+            $user->update($data);
+
+            DB::table('model_has_roles')->where('model_id',$id)->delete();
+            $user->assignRole($request->input('roles'));
+            $user->departments()->sync($request->department);
+
+            DB::commit();
+            return redirect()->route('users.index')
+                ->with('success','User updated successfully');
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error',$exception->getMessage());
+        }
     }
 
     /**
@@ -91,6 +151,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            User::find($id)->delete();
+            DB::commit();
+            return redirect()->route('users.index')
+                ->with('success','User deleted successfully');
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error',$exception->getMessage());
+        }
     }
 }
