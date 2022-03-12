@@ -78,8 +78,23 @@
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <li>
-                                <a href="{{ route('sections.index') }}">All Section</a>
+                                <a href="{{ route('sections.index') }}">All Sections</a>
                                 <a href="{{ route('sections.create') }}">Create Section</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('class-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-server"></i>
+                            <span class="hide-menu">Classes</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('classes.index') }}">All Classes</a>
+                                <a href="{{ route('classes.create') }}">Create Classes</a>
                             </li>
                         </ul>
                     </li>

@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Section extends Model
+class _Class extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['section_id', 'name'];
 
-    public function _classes()
+    public function section()
     {
-        return $this->hasOne(_Class::class);
+        return $this->belongsTo(Section::class);
     }
 }
