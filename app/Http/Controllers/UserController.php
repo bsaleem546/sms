@@ -164,4 +164,41 @@ class UserController extends Controller
                 ->with('error',$exception->getMessage());
         }
     }
+
+    public function profileView()
+    {
+        return view('users.profile');
+    }
+
+    public function changeProfile(Request $request)
+    {
+        try {
+            $request->validate([
+                "name" => 'required',
+                "email" => 'required|unique:users,email,'.Auth::user()->id,
+                "current_password" => 'required',
+                "new_password" => 'nullable',
+            ]);
+
+            $user = User::where('email', $request->email)->first();
+            $chkPassword = Hash::check(request('current_password'), $user->password);
+            if ($chkPassword !== true){
+                return redirect()->back()
+                    ->with('error',"Current password don't match");
+            }
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            if ($request->new_password !== null){
+                $user->password = Hash::make($request->new_password);
+            }
+            $user->update();
+            return redirect()->route('users.profile')
+                ->with('success','User details saved successfully');
+        }
+        catch (\Exception $exception){
+            return redirect()->back()
+                ->with('error',$exception->getMessage());
+        }
+    }
 }

@@ -9,6 +9,11 @@
                         <span class="hide-menu">{{ Auth::user()->name }}</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
+                            <a href="{{ route('users.profile') }}">
+                                <i class="fa mdi-face-profile"></i> Profile
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">

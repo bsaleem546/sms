@@ -37,4 +37,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('departments', App\Http\Controllers\DepartmentController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
 
+    Route::get('users-profile', [\App\Http\Controllers\UserController::class, 'profileView'])->name('users.profile');
+    Route::post('profile-change', [\App\Http\Controllers\UserController::class, 'changeProfile'])->name('users.profile.change');
+
 });
