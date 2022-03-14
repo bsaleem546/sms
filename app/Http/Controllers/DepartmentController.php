@@ -52,7 +52,7 @@ class DepartmentController extends Controller
                 ->with('success','Department created successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }
@@ -102,7 +102,7 @@ class DepartmentController extends Controller
                 ->with('success','Department updated successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }
@@ -123,7 +123,7 @@ class DepartmentController extends Controller
                 ->with('success','Department deleted successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }

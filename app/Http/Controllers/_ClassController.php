@@ -55,7 +55,7 @@ class _ClassController extends Controller
                 ->with('success','Class created successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }
@@ -104,7 +104,7 @@ class _ClassController extends Controller
                 ->with('success','Class updated successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }
@@ -125,7 +125,7 @@ class _ClassController extends Controller
                 ->with('success','Class deleted successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }

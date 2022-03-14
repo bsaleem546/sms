@@ -67,7 +67,7 @@ class RoleController extends Controller
                 ->with('success','Role created successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }
@@ -129,7 +129,7 @@ class RoleController extends Controller
                 ->with('success','Role updated successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
 
@@ -148,7 +148,7 @@ class RoleController extends Controller
                 ->with('success','Role deleted successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
         }

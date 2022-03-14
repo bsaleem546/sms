@@ -53,7 +53,7 @@ class SectionController extends Controller
                 ->with('success','Section created successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }
@@ -99,7 +99,7 @@ class SectionController extends Controller
                 ->with('success','Section updated successfully');
         }
         catch (\Exception $exception){
-             return redirect()->nack()
+             return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }
@@ -119,7 +119,7 @@ class SectionController extends Controller
                 ->with('success','Section deleted successfully');
         }
         catch (\Exception $exception){
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }

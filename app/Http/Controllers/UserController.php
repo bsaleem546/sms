@@ -74,7 +74,7 @@ class UserController extends Controller
         }
         catch (\Exception $exception){
             DB::rollBack();
-            return redirect()->nack()
+            return redirect()->back()
                 ->with('error',$exception->getMessage());
         }
     }

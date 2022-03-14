@@ -32,10 +32,16 @@ class PermissionTableSeeder extends Seeder
 //                'section-create',
 //                'section-edit',
 //                'section-delete',
-            'class-list',
-            'class-create',
-            'class-edit',
-            'class-delete',
+//            'class-list',
+//            'class-create',
+//            'class-edit',
+//            'class-delete',
+//            'student-list',
+//            'student-create',
+//            'student-edit',
+//            'student-delete',
+//                'student-view-my-account',
+//            'no-user'
         ];
 
         foreach ($permissions as $permission) {

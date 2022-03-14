@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('sections', App\Http\Controllers\SectionController::class);
     Route::resource('classes', App\Http\Controllers\_ClassController::class);
+    Route::resource('students', App\Http\Controllers\StudentController::class);
 
 
 });
