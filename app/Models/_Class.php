@@ -15,4 +15,9 @@ class _Class extends Model
     {
         return $this->belongsTo(Section::class);
     }
+
+//    public function student()
+//    {
+//        return $this->hasOne(Student::class);
+//    }
 }

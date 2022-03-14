@@ -115,6 +115,51 @@
                     </li>
                 @endcan
 
+                @can('transport-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-car"></i>
+                            <span class="hide-menu">Transports</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('transports.index') }}">All Transports</a>
+                                <a href="{{ route('transports.create') }}">Create Transport</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('troute-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-car"></i>
+                            <span class="hide-menu">Routes</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('transport-routes.index') }}">All Routes</a>
+                                <a href="{{ route('transport-routes.create') }}">Create Route</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('session-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-settings"></i>
+                            <span class="hide-menu">Sessions</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('yearly-session.index') }}">All Sessions</a>
+                                <a href="{{ route('yearly-session.create') }}">Create Sessions</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

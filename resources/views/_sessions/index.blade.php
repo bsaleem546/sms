@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Students')
+@section('title', 'Sessions')
 
 @section('content')
 
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">All Students</h4>
+            <h4 class="text-themecolor">All Sessions</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item active">All Students</li>
+                    <li class="breadcrumb-item active">All Sessions</li>
                 </ol>
-                @can('class-create')
-                    <a href="{{ route('students.create') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Create New</a>
+                @can('session-create')
+                    <a href="{{ route('yearly-session.create') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Create New</a>
                 @endcan
             </div>
         </div>
@@ -40,14 +40,14 @@
                             </div>
                         @endif
 
-                    <h5 class="card-title">Students list</h5>
+                    <h5 class="card-title">Sessions list</h5>
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Section</th>
                                 <th>Name</th>
+                                <th>Status</th>
                                 <th width="280px">Action</th>
                             </tr>
                             </thead>
@@ -55,14 +55,20 @@
                                 @foreach ($data as $key => $d)
                                     <tr>
                                         <td>{{ $d->id }}</td>
-                                        <td>{{ $d->section->name }}</td>
                                         <td>{{ $d->name }}</td>
                                         <td>
-                                            @can('class-edit')
-                                                <a class="btn btn-primary" href="{{ route('students.edit',$d->id) }}">Edit</a>
+                                            @if($d->status == 1)
+                                                <label class="label label-success">ACTIVE</label>
+                                            @else
+                                                <label class="label label-danger">NOT ACTIVE</label>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @can('session-edit')
+                                                <a class="btn btn-primary" href="{{ route('yearly-session.edit',$d->id) }}">Edit</a>
                                             @endcan
-                                            @can('class-delete')
-                                                {!! Form::open(['method' => 'DELETE','route' => ['students.destroy', $d->id],'style'=>'display:inline']) !!}
+                                            @can('session-delete')
+                                                {!! Form::open(['method' => 'DELETE','route' => ['yearly-session.destroy', $d->id],'style'=>'display:inline']) !!}
                                                 {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
                                                 {!! Form::close() !!}
                                             @endcan
