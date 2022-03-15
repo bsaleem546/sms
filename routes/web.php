@@ -47,5 +47,19 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('transport-routes', App\Http\Controllers\TransportRoutesController::class);
     Route::resource('yearly-session', App\Http\Controllers\_SessionController::class);
 
+    Route::get('registrations/students', [\App\Http\Controllers\RegisterationController::class, 'getRegistrations'])
+        ->name('registrations.students');
+
+    Route::get('registrations/{id}', [\App\Http\Controllers\RegisterationController::class, 'show'])
+        ->name('registrations.show');
+
+    Route::delete('registrations/cancel/{id}', [\App\Http\Controllers\RegisterationController::class, 'admissionCancel'])
+        ->name('registrations.cancel');
+
+    Route::post('admission/confirm', [\App\Http\Controllers\AdmissionController::class, 'store'])->name('admission.store');
 
 });
+
+
+Route::get('registrations', [\App\Http\Controllers\RegisterationController::class, 'index']);
+Route::post('registrations', [\App\Http\Controllers\RegisterationController::class, 'store'])->name('registrations.store');

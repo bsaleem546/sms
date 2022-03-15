@@ -115,6 +115,20 @@
                     </li>
                 @endcan
 
+                @can('reg-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-bookmark"></i>
+                            <span class="hide-menu">Registrations</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('registrations.students') }}">All Registrations</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
                 @can('transport-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">

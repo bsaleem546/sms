@@ -50,10 +50,13 @@ class PermissionTableSeeder extends Seeder
 //            'troute-create',
 //            'troute-edit',
 //            'troute-delete',
-            'session-list',
-            'session-create',
-            'session-edit',
-            'session-delete',
+//            'session-list',
+//            'session-create',
+//            'session-edit',
+//            'session-delete',
+//            'reg-list',
+//            'reg-status-change',
+//            'admission-confirm',
         ];
 
         foreach ($permissions as $permission) {

@@ -32,7 +32,13 @@
                 <!-- ============================================================== -->
                 <li class="nav-item">
                     <form class="app-search d-none d-md-block d-lg-block">
-                        <input type="text" class="form-control" placeholder="Search & enter">
+                        <label style="color:white">Active Session</label>
+                        <select id="sessions_status" class="form-control">
+                            @foreach(\App\Models\_Session::latest()->get() as $s)
+                                <option value="{{ $s->id }}" {{ $s->status == 1 ? 'selected' : '' }}>{{ $s->name }}</option>
+                            @endforeach
+                        </select>
+{{--                        <input type="text" class="form-control" placeholder="Search & enter">--}}
                     </form>
                 </li>
             </ul>
