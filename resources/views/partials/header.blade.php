@@ -35,7 +35,9 @@
                         <label style="color:white">Active Session</label>
                         <select id="sessions_status" class="form-control">
                             @foreach(\App\Models\_Session::latest()->get() as $s)
-                                <option value="{{ $s->id }}" {{ $s->status == 1 ? 'selected' : '' }}>{{ $s->name }}</option>
+                                <option value="{{ $s->id }}" {{ $s->status == 1 ? 'selected' : '' }}>
+                                    {{ \Carbon\Carbon::parse($s->start_date)->format('Y')." - ".\Carbon\Carbon::parse($s->end_date)->format('Y') }}
+                                </option>
                             @endforeach
                         </select>
 {{--                        <input type="text" class="form-control" placeholder="Search & enter">--}}

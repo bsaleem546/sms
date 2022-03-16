@@ -43,14 +43,14 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Student Name</th>
+                                    <th width="200px">Student Name</th>
                                     <th>Gender</th>
-                                    <th>Date of birth</th>
-                                    <th>Address</th>
+                                    <th width="200px">Date of birth</th>
+                                    <th width="200px">Address</th>
                                     <th>City</th>
                                     <th>State / Province</th>
                                     <th>Class</th>
-                                    <th>Submitted At</th>
+                                    <th width="200px">Submitted At</th>
                                     <th>Status</th>
                                     <th width="280px">Action</th>
                                 </tr>

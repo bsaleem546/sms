@@ -44,7 +44,7 @@
                             </div>
                         @endif
 
-                    <h5 class="card-title">Edit Department</h5>
+                    <h5 class="card-title">Edit Section</h5>
                     {!! Form::model($data, array('route' => ['sections.update', $data->id],'method'=>'PATCH', 'class' => 'form-material m-t-40 create')) !!}
                     <div class="form-group">
                         <div class="row">

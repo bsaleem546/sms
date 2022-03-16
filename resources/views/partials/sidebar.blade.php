@@ -129,6 +129,20 @@
                     </li>
                 @endcan
 
+                @can('admission-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-archive"></i>
+                            <span class="hide-menu">Admissions</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('admission.index') }}">All Admissions</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
                 @can('transport-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">

@@ -35,6 +35,13 @@ class Admission extends Model
         '__class_id',
         '__session_id',
         'user_id',
+        'student_auth_id',
         'status',
     ];
+
+    public function _class()
+    {
+        return $this->belongsTo(_Class::class, '__class_id');
+    }
+
 }

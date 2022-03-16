@@ -46,7 +46,8 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 <th>Status</th>
                                 <th width="280px">Action</th>
                             </tr>
@@ -55,7 +56,8 @@
                                 @foreach ($data as $key => $d)
                                     <tr>
                                         <td>{{ $d->id }}</td>
-                                        <td>{{ $d->name }}</td>
+                                        <td>{{ $d->start_date }}</td>
+                                        <td>{{ $d->end_date }}</td>
                                         <td>
                                             @if($d->status == 1)
                                                 <label class="label label-success">ACTIVE</label>

@@ -40,6 +40,7 @@ return new class extends Migration
             $table->foreignId('__class_id')->constrained();
             $table->foreignId('__session_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->integer('student_auth_id')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
         });

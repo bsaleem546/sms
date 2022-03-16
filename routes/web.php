@@ -57,6 +57,10 @@ Route::group(['middleware' => ['auth']], function() {
         ->name('registrations.cancel');
 
     Route::post('admission/confirm', [\App\Http\Controllers\AdmissionController::class, 'store'])->name('admission.store');
+    Route::get('admissions', [\App\Http\Controllers\AdmissionController::class, 'index'])->name('admission.index');
+    Route::get('admissions/create', [\App\Http\Controllers\AdmissionController::class, 'create'])->name('admission.create');
+    Route::get('admissions/edit/{id}', [\App\Http\Controllers\AdmissionController::class, 'edit'])->name('admission.edit');
+
 
 });
 

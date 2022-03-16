@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Section')
+@section('title', 'Edit Session')
 
 @section('content')
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Edit Section</h4>
+            <h4 class="text-themecolor">Edit Session</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item active">Sections</li>
-                    <li class="breadcrumb-item active">Edit Section</li>
+                    <li class="breadcrumb-item active">Sessions</li>
+                    <li class="breadcrumb-item active">Edit Session</li>
                 </ol>
-                <a href="{{ route('sections.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
+                <a href="{{ route('yearly-session.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>
@@ -44,16 +44,36 @@
                             </div>
                         @endif
 
-                    <h5 class="card-title">Edit Department</h5>
-                    {!! Form::model($data, array('route' => ['sections.update', $data->id],'method'=>'PATCH', 'class' => 'form-material m-t-40 create')) !!}
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-12">Name</label>
-                            <div class="col-sm-12 validate">
-                                {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control', 'required')) !!}
+                    <h5 class="card-title">Edit Session</h5>
+                    {!! Form::model($data, array('route' => ['yearly-session.update', $data->id],'method'=>'PATCH', 'class' => 'form-material m-t-40 create')) !!}
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-12">Start Date</label>
+                                <div class="col-sm-12 validate">
+                                    <input type="date" name="start_date" class="form-control" required value="{{ $data->start_date }}">
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-12">End Date</label>
+                                <div class="col-sm-12 validate">
+                                    <input type="date" name="end_date" class="form-control" required value="{{ $data->end_date }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-12">Status</label>
+                                <div class="col-sm-12 validate">
+                                    <select class="form-control" name="status" required>
+                                        <option value="">Select Option</option>
+                                        <option value="1">Active</option>
+                                        <option value="0">Not Active</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     <button type="submit" class="btn btn-info waves-effect waves-light m-r-10">Submit</button>
                     {!! Form::close() !!}
                 </div>

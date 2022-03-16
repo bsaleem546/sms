@@ -48,9 +48,17 @@
                     {!! Form::open(array('route' => 'yearly-session.store','method'=>'POST', 'class' => 'form-material m-t-40 create')) !!}
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-sm-12">Name</label>
+                                    <label class="col-sm-12">Start Date</label>
                                     <div class="col-sm-12 validate">
-                                        {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control', 'required')) !!}
+                                        <input type="date" name="start_date" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-12">End Date</label>
+                                    <div class="col-sm-12 validate">
+                                        <input type="date" name="end_date" class="form-control" required>
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +66,7 @@
                                 <div class="row">
                                     <label class="col-sm-12">Status</label>
                                     <div class="col-sm-12 validate">
-                                        <select class="form-control" name="status">
+                                        <select class="form-control" name="status" required>
                                             <option value="">Select Option</option>
                                             <option value="1">Active</option>
                                             <option value="0">Not Active</option>

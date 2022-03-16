@@ -45,7 +45,8 @@ class _SessionController extends Controller
     {
         try {
             $data = $request->validate([
-                'name' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
                 'status' => 'required'
             ]);
 
@@ -98,7 +99,8 @@ class _SessionController extends Controller
     {
         try {
             $data = $request->validate([
-                'name' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
                 'status' => 'required'
             ]);
 
