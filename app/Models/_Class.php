@@ -20,4 +20,9 @@ class _Class extends Model
     {
         return $this->hasOne(Admission::class, '__class_id');
     }
+
+    public function subject()
+    {
+        return $this->hasOne(Subject::class, '__class_id');
+    }
 }

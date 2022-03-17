@@ -28,7 +28,7 @@
                 @can('role-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-anchor"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Roles Management</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -43,7 +43,7 @@
                 @can('department-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-layout-grid2"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Department Management</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -58,7 +58,7 @@
                 @can('user-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-user"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Users Management</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -73,7 +73,7 @@
                 @can('section-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-server"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Sections</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -88,7 +88,7 @@
                 @can('class-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-server"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Classes</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -103,13 +103,42 @@
                 @can('student-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-user"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Students</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('students.index') }}">All Students</a>
-                                <a href="{{ route('students.create') }}">Create Student</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('subject-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Subjects</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('subjects.index') }}">All Subjects</a>
+                                <a href="{{ route('subjects.create') }}">Create Subject</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('staff-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Staffs</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('staffs.index') }}">All Staffs</a>
+                                <a href="{{ route('staffs.create') }}">Create Staff</a>
                             </li>
                         </ul>
                     </li>
@@ -118,7 +147,7 @@
                 @can('reg-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-bookmark"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Registrations</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -132,12 +161,28 @@
                 @can('admission-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-archive"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Admissions</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('admission.index') }}">All Admissions</a>
+                                <a href="{{ route('admission.create') }}">Create Admission</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('transfer-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Transfers</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('transfers.index') }}">All Transfers</a>
+                                <a href="{{ route('transfers.create') }}">Create Transfers</a>
                             </li>
                         </ul>
                     </li>
@@ -146,7 +191,7 @@
                 @can('transport-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-car"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Transports</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -161,7 +206,7 @@
                 @can('troute-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-car"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Routes</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -176,7 +221,7 @@
                 @can('session-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-settings"></i>
+                            <i class="ti-plus"></i>
                             <span class="hide-menu">Sessions</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">

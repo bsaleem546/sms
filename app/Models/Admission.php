@@ -44,4 +44,14 @@ class Admission extends Model
         return $this->belongsTo(_Class::class, '__class_id');
     }
 
+    public function transfer()
+    {
+        return $this->hasOne(Transfer::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
 }

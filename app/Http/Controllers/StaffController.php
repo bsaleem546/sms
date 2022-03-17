@@ -2,19 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class StaffController extends Controller
 {
-
-    function __construct()
-    {
-        $this->middleware('permission:student-list|student-create|student-edit|student-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:student-create', ['only' => ['create','store']]);
-        $this->middleware('permission:student-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:student-delete', ['only' => ['destroy']]);
-    }
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +13,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $data = Student::latest()->get();
-        return view('students.index', compact('data'));
+        //
     }
 
     /**
@@ -55,8 +45,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $data = Student::findOrFail($id);
-        return view('students.show', compact('data'));
+        //
     }
 
     /**
@@ -90,15 +79,6 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        try {
-
-            Student::where('id', $id)->update([ 'status' => 'not-active' ]);
-
-            return redirect()->route('students.index')
-                ->with( 'success', 'Record deleted.....' );
-        }
-        catch (\Exception $exception){
-            return redirect()->back()->with('error',$exception->getMessage());
-        }
+        //
     }
 }

@@ -60,7 +60,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('admissions', [\App\Http\Controllers\AdmissionController::class, 'index'])->name('admission.index');
     Route::get('admissions/create', [\App\Http\Controllers\AdmissionController::class, 'create'])->name('admission.create');
     Route::get('admissions/edit/{id}', [\App\Http\Controllers\AdmissionController::class, 'edit'])->name('admission.edit');
+    Route::patch('admissions/update/{id}', [\App\Http\Controllers\AdmissionController::class, 'update'])->name('admission.update');
+    Route::delete('admissions/delete/{id}', [\App\Http\Controllers\AdmissionController::class, 'destroy'])->name('admission.destroy');
 
+    Route::resource('transfers', \App\Http\Controllers\TransferController::class);
+    Route::resource('students', \App\Http\Controllers\StudentController::class);
+    Route::resource('subjects', \App\Http\Controllers\SubjectController::class);
+
+    Route::resource('staffs', \App\Http\Controllers\StaffController::class);
 
 });
 

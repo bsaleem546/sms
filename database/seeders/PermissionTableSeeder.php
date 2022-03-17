@@ -61,6 +61,22 @@ class PermissionTableSeeder extends Seeder
 //            'admission-create',
 //            'admission-edit',
 //            'admission-delete',
+//            'transfer-list',
+//            'transfer-create',
+//            'transfer-edit',
+//            'transfer-delete',
+//            'teacher-list',
+//            'teacher-create',
+//            'teacher-edit',
+//            'teacher-delete',
+//            'staff-list',
+//            'staff-create',
+//            'staff-edit',
+//            'staff-delete',
+//            'subject-list',
+//            'subject-create',
+//            'subject-edit',
+//            'subject-delete',
         ];
 
         foreach ($permissions as $permission) {

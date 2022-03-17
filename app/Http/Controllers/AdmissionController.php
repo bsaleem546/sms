@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdmissionRequest;
+use App\Http\Requests\AdmissionUpdateRequest;
 use App\Http\Resources\AdmissionResource;
 use App\Models\_Session;
 use App\Models\Admission;
@@ -27,10 +28,74 @@ class AdmissionController extends Controller
         $this->middleware('permission:admission-confirm', ['only' => ['store']]);
     }
 
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            Fees::where('admission_id', $id)->delete();
+            Student::where('admission_id', $id)->delete();
+            Admission::where('id', $id)->delete();
+
+            DB::commit();
+            return redirect()->route('admission.index')
+                ->with( 'success', 'Record deleted.....' );
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('error',$exception->getMessage());
+        }
+        dd($id);
+    }
+
+    public function update(AdmissionUpdateRequest $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
+
+            $img = null;
+            if ($request->id_proof !== null){
+                $img = time().'.' . $request->id_proof->getClientOriginalExtension();
+                \Image::make($request->id_proof)->save(public_path('uploads/students/').$img);
+            }
+
+            $admission = new AdmissionResource($request);
+            $res = $admission->update($data, $id, $img);
+            $ad_id = $res['ad_id'];
+
+            if ( $res['status'] == false){
+                return redirect()->back()->with( 'error', $res['error'] );
+            }
+            else{
+                if ($request->is_login == 1){
+                    $user = User::create([
+                        'name' => $request->student_name,
+                        'email' => $request->email,
+                        'password' => Hash::make('student123'),
+                    ]);
+                    $role = Role::find(3);
+                    $user->assignRole([$role->id]);
+                    Admission::where('id', $ad_id)->update([ 'student_auth_id' => $user->id ]);
+                }
+                DB::commit();
+                return redirect()->route('admission.index')
+                    ->with( 'success',$res['success'] );
+            }
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('error',$exception->getMessage());
+        }
+    }
+
     public function edit($id)
     {
         $data = Admission::findOrFail($id);
-        return view('admissions.edit', compact('data'));
+        $ad_fee = Fees::where('admission_id', $id)->where('fee_type', 'admission')->first();
+        $tt_fee = Fees::where('admission_id', $id)->where('fee_type', 'tuition')->latest()->first();
+        $tp_fee = Fees::where('admission_id', $id)->where('fee_type', 'transportation')->latest()->first();
+        return view('admissions.edit', compact('data', 'ad_fee', 'tt_fee', 'tp_fee'));
     }
 
     public function create()
