@@ -23,11 +23,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('joining_date');
             $table->decimal('salary')->default(0);
-            $table->text('extra_note');
+            $table->text('extra_note')->nullable();
             $table->boolean('is_bus_incharge')->default(0);
             $table->integer('transport_id')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->integer('added_by');
+            $table->string('id_proof')->nullable();
             $table->timestamps();
         });
     }

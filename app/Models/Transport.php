@@ -22,4 +22,9 @@ class Transport extends Model
     {
         return $this->belongsToMany(TransportRoute::class, 'route_transport');
     }
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class,'transport_id');
+    }
 }

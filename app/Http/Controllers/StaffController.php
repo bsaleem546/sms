@@ -2,10 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
+use App\Models\Staff;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Transport;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use function Spatie\LaravelIgnition\Recorders\JobRecorder\start;
+use Auth;
 
 class StaffController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:staff-list|staff-create|staff-edit|staff-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:staff-create', ['only' => ['create','store']]);
+        $this->middleware('permission:staff-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:staff-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +30,8 @@ class StaffController extends Controller
      */
     public function index()
     {
-        //
+        $data = Staff::latest()->get();
+        return view('staffs.index', compact('data'));
     }
 
     /**
@@ -23,7 +41,10 @@ class StaffController extends Controller
      */
     public function create()
     {
-        //
+        $deps = Department::latest()->get();
+        $transports = Transport::latest()->get();
+        $roles = Role::pluck('name','name')->all();
+        return view('staffs.create', compact('deps', 'transports', 'roles'));
     }
 
     /**
@@ -34,7 +55,63 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+
+            $data = $request->validate([
+                "id_proof" => 'nullable',
+                "name" => 'required',
+                "gender" => 'required',
+                "dob" => 'required',
+                "address" => 'required',
+                "phone" => 'required',
+                "email" => 'required|unique:staffs,email',
+                "joining_date" => 'required',
+                "salary" => 'required',
+                "department" => 'required',
+                "is_bus_incharge" => 'required',
+                "transport_id" => 'required',
+                'roles' => 'required',
+            ]);
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make('staff123')
+            ]);
+
+            $user->assignRole($request->input('roles'));
+
+            $user->departments()->sync($request->department);
+
+            $staff = new Staff();
+            $staff->name = $request->name;
+            $staff->gender = $request->gender;
+            $staff->dob = $request->dob;
+            $staff->address = $request->address;
+            $staff->phone = $request->phone;
+            $staff->email = $request->email;
+            $staff->joining_date = $request->joining_date;
+            $staff->salary = $request->salary;
+            $staff->is_bus_incharge = $request->is_bus_incharge;
+            $staff->transport_id = $request->transport_id;
+            $staff->user_id = $user->id;
+            $staff->added_by = Auth::user()->id;
+            if ($request->id_proof !== null){
+                $img = time().'.' . $request->id_proof->getClientOriginalExtension();
+                \Image::make($request->id_proof)->save(public_path('uploads/staffs/').$img);
+                $staff->id_proof = $img;
+            }
+            $staff->save();
+
+            DB::commit();
+            return redirect()->route('staffs.index')
+                ->with( 'success', 'Record created.....' );
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('error',$exception->getMessage());
+        }
     }
 
     /**
@@ -45,7 +122,13 @@ class StaffController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Staff::findOrFail($id);
+        $user = User::where('id', $data->user_id)->first();
+        $userRole = $user->roles->first();
+        $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+            ->where("role_has_permissions.role_id",$userRole->id)
+            ->get();
+        return view('staffs.show', compact('data', 'userRole', 'rolePermissions'));
     }
 
     /**
@@ -56,7 +139,16 @@ class StaffController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Staff::findOrFail($id);
+
+        $deps = Department::latest()->get();
+        $transports = Transport::latest()->get();
+        $roles = Role::pluck('name','name')->all();
+
+        $user = User::where('id', $data->user_id)->first();
+        $userRole = $user->roles->pluck('name','name')->all();
+
+        return view('staffs.edit', compact('data', 'userRole', 'deps', 'transports', 'roles'));
     }
 
     /**
@@ -68,7 +160,65 @@ class StaffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+
+            $data = $request->validate([
+                "id_proof" => 'nullable',
+                "name" => 'required',
+                "gender" => 'required',
+                "dob" => 'required',
+                "address" => 'required',
+                "phone" => 'required',
+                "email" => 'required|unique:staffs,email,'.$id,
+                "joining_date" => 'required',
+                "salary" => 'required',
+                "department" => 'required',
+                "is_bus_incharge" => 'required',
+                "transport_id" => 'required',
+                'roles' => 'required',
+            ]);
+
+            $staff = Staff::findOrFail($id);
+
+            $user = User::where('id', $staff->user_id)->first();
+            $user->email = $request->email;
+            $user->update();
+
+            foreach ($user->roles as $ur){
+                $ur->delete();
+            }
+            $user->assignRole($request->input('roles'));
+
+            $user->departments()->sync($request->department);
+
+            $staff->name = $request->name;
+            $staff->gender = $request->gender;
+            $staff->dob = $request->dob;
+            $staff->address = $request->address;
+            $staff->phone = $request->phone;
+            $staff->email = $request->email;
+            $staff->joining_date = $request->joining_date;
+            $staff->salary = $request->salary;
+            $staff->is_bus_incharge = $request->is_bus_incharge;
+            $staff->transport_id = $request->transport_id;
+            $staff->user_id = $user->id;
+            $staff->added_by = Auth::user()->id;
+            if ($request->id_proof !== null){
+                $img = time().'.' . $request->id_proof->getClientOriginalExtension();
+                \Image::make($request->id_proof)->save(public_path('uploads/staffs/').$img);
+                $staff->id_proof = $img;
+            }
+            $staff->update();
+
+            DB::commit();
+            return redirect()->route('staffs.index')
+                ->with( 'success', 'Record updated.....' );
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('error',$exception->getMessage());
+        }
     }
 
     /**
@@ -79,6 +229,18 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+
+            Staff::where('id', $id)->delete();
+
+            DB::commit();
+            return redirect()->route('staffs.index')
+                ->with( 'success', 'Record deleted.....' );
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('error',$exception->getMessage());
+        }
     }
 }

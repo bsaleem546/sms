@@ -9,6 +9,8 @@ class Staff extends Model
 {
     use HasFactory;
 
+    protected $table = 'staffs';
+
     protected $fillable = [
         'name',
         'gender',
@@ -23,5 +25,17 @@ class Staff extends Model
         'transport_id',
         'user_id',
         'added_by',
+        'id_proof',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function transport()
+    {
+        return $this->belongsTo(Transport::class, 'transport_id');
+    }
+
 }
