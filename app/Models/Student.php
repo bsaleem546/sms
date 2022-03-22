@@ -22,4 +22,14 @@ class Student extends Model
     {
         return $this->belongsTo(Admission::class);
     }
+
+    public function fees()
+    {
+        return $this->hasOne(Fees::class);
+    }
+
+    public function _class()
+    {
+        return $this->belongsTo(_Class::class, '__class_id');
+    }
 }

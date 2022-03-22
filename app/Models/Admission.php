@@ -53,5 +53,4 @@ class Admission extends Model
     {
         return $this->hasOne(Student::class);
     }
-
 }

@@ -38,4 +38,9 @@ class Staff extends Model
         return $this->belongsTo(Transport::class, 'transport_id');
     }
 
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'subject_staff');
+    }
+
 }

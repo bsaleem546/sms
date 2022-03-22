@@ -19,4 +19,14 @@ class Fees extends Model
         'due_date',
         'status',
     ];
+
+    public function _session()
+    {
+        return $this->belongsTo(_Session::class, '__session_id');
+    }
+
+    public function students()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
 }

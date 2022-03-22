@@ -29,7 +29,7 @@
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                             <i class="ti-plus"></i>
-                            <span class="hide-menu">Roles Management</span>
+                            <span class="hide-menu">Roles</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <li>
@@ -44,7 +44,7 @@
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                             <i class="ti-plus"></i>
-                            <span class="hide-menu">Department Management</span>
+                            <span class="hide-menu">Departments</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <li>
@@ -59,7 +59,7 @@
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                             <i class="ti-plus"></i>
-                            <span class="hide-menu">Users Management</span>
+                            <span class="hide-menu">Users</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <li>
@@ -139,6 +139,20 @@
                             <li>
                                 <a href="{{ route('staffs.index') }}">All Staffs</a>
                                 <a href="{{ route('staffs.create') }}">Create Staff</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('teacher-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Teachers</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('teachers.index') }}">All Teachers</a>
                             </li>
                         </ul>
                     </li>
@@ -228,6 +242,21 @@
                             <li>
                                 <a href="{{ route('yearly-session.index') }}">All Sessions</a>
                                 <a href="{{ route('yearly-session.create') }}">Create Sessions</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+
+                @can('fee-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Fees</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('fees.index') }}">All Fees</a>
                             </li>
                         </ul>
                     </li>

@@ -185,9 +185,7 @@ class StaffController extends Controller
             $user->email = $request->email;
             $user->update();
 
-            foreach ($user->roles as $ur){
-                $ur->delete();
-            }
+            DB::table('model_has_roles')->where('model_id',$id)->delete();
             $user->assignRole($request->input('roles'));
 
             $user->departments()->sync($request->department);

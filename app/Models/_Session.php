@@ -13,4 +13,9 @@ class _Session extends Model
         'start_date',
         'end_date',
         'status'];
+
+    public function fees()
+    {
+        return $this->hasOne(Fees::class);
+    }
 }

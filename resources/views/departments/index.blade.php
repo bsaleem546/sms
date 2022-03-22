@@ -40,7 +40,7 @@
                             </div>
                         @endif
 
-                    <h5 class="card-title">Roles list</h5>
+                    <h5 class="card-title">Departments list</h5>
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>

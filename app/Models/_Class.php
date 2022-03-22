@@ -25,4 +25,9 @@ class _Class extends Model
     {
         return $this->hasOne(Subject::class, '__class_id');
     }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class, '__class_id');
+    }
 }
