@@ -53,7 +53,9 @@
                                 <th>Fee Type</th>
                                 <th>Fee Amount</th>
                                 <th>Fee Discount</th>
+                                <th>Month Of</th>
                                 <th>Due Date</th>
+                                <th>Voucher Count</th>
                                 <th>Status</th>
                                 <th width="280px">Action</th>
                             </tr>
@@ -69,7 +71,9 @@
                                     <td>{{ $d->fee_type }}</td>
                                     <td>{{ $d->fee_amount }}</td>
                                     <td>{{ $d->fee_discount }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($d->month_of)->format('M-Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($d->due_date)->format('M d, Y') }}</td>
+                                    <td>{{ $d->voucher_count }}</td>
                                     <td>
                                         @if($d->status == 'pending')
                                             <label class="label label-warning">{{ $d->status }}</label>
@@ -80,8 +84,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <a class="btn btn-info" href="{{ route('fees.show',$d->id) }}">Show</a>
                                         @can('fee-edit')
-                                            <a class="btn btn-primary" href="{{ route('fees.edit',$d->id) }}">Edit</a>
+                                            <a class="btn btn-primary" href="{{ route('fees.edit',$d->id) }}">Pay</a>
                                         @endcan
                                         @can('fee-delete')
                                             {!! Form::open(['method' => 'DELETE','route' => ['fees.destroy', $d->id],'style'=>'display:inline']) !!}

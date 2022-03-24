@@ -94,7 +94,10 @@ class AdmissionController extends Controller
         $data = Admission::findOrFail($id);
         $ad_fee = Fees::where('admission_id', $id)->where('fee_type', 'admission')->first();
         $tt_fee = Fees::where('admission_id', $id)->where('fee_type', 'tuition')->latest()->first();
-        $tp_fee = Fees::where('admission_id', $id)->where('fee_type', 'transportation')->latest()->first();
+        $tp_fee = null;
+        if ($data->is_trans == 1){
+            $tp_fee = Fees::where('admission_id', $id)->where('fee_type', 'transportation')->latest()->first();
+        }
         return view('admissions.edit', compact('data', 'ad_fee', 'tt_fee', 'tp_fee'));
     }
 

@@ -5,7 +5,7 @@
 @section('content')
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Edit Roles</h4>
+            <h4 class="text-themecolor">Show Roles</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
@@ -14,9 +14,7 @@
                     <li class="breadcrumb-item active">Roles</li>
                     <li class="breadcrumb-item active">Show Role</li>
                 </ol>
-                @can('role-create')
-                    <a href="{{ route('roles.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
-                @endcan
+                <a href="{{ route('roles.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>

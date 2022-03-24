@@ -31,6 +31,7 @@ class Admission extends Model
         'mother_phone',
         'mother_occ',
         'student_pic',
+        'is_trans',
         'transport_id',
         '__class_id',
         '__session_id',

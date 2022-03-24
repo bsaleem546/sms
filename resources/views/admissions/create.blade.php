@@ -294,18 +294,25 @@
 
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="row d-flex">
+                                    <label class="col-sm-12">Want Transportation?</label>
+                                    <input type="radio" name="is_trans" value="0" class="ml-4 mr-4" checked><span>No</span>
+                                    <input type="radio" name="is_trans" value="1" class="ml-4 mr-4"><span>Yes</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <label class="col-sm-12">Transportation</label>
                                 <div class="col-sm-12 validate">
                                     <select name="transportation" class="form-control">
-                                        <option value="">Select Option</option>
+                                        <option value="0">Select Option</option>
                                         @foreach(\App\Models\Transport::latest()->get() as $t)
                                             <option value="{{ $t->id }}">{{ $t->vehicle_number.'  '.$t->vehicle_model }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="col-sm-12">Transportation Fees</label>
                                 <div class="col-sm-12 validate">
                                     <input type="text" placeholder="Transportation Fees"  name="transportation_fees" value="0" class="form-control">

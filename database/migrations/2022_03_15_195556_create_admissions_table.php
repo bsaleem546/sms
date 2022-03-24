@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email')->nullable();
             $table->string('extra_note')->nullable();
-            $table->string('gr_no');
+            $table->string('gr_no')->unique();
             $table->string('father_name');
             $table->string('father_phone')->nullable();
             $table->string('father_occ')->nullable();
@@ -36,10 +36,11 @@ return new class extends Migration
             $table->string('mother_phone')->nullable();
             $table->string('mother_occ')->nullable();
             $table->string('student_pic');
-            $table->foreignId('transport_id')->constrained();
-            $table->foreignId('__class_id')->constrained();
-            $table->foreignId('__session_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->boolean('is_trans')->default(0);
+            $table->integer('transport_id')->default(0); //default 0
+            $table->foreignId('__class_id')->constrained('__classes');
+            $table->foreignId('__session_id')->constrained('__sessions');
+            $table->foreignId('user_id')->constrained('users');
             $table->integer('student_auth_id')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();

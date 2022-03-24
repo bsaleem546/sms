@@ -257,6 +257,7 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('fees.index') }}">All Fees</a>
+                                <a href="{{ route('fees.create') }}">Create Fee</a>
                             </li>
                         </ul>
                     </li>

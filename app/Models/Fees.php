@@ -16,7 +16,15 @@ class Fees extends Model
         'fee_type',
         'fee_amount',
         'fee_discount',
+        'month_of',
         'due_date',
+        'payment_type',
+        'operator',
+        'transaction_id',
+        'paid_amount',
+        'balance_amount',
+        'voucher_count',
+        'paid_at',
         'status',
     ];
 

@@ -33,8 +33,8 @@ class AdmissionUpdateRequest extends FormRequest
             "admission_fees" => "required", "tuition_fees" => "required",
             "father_name" => "required", "father_phone" => "nullable", "father_occ" => "nullable",
             "mother_name" => "required", "mother_phone" => "nullable", "mother_occ" => "nullable",
-            "transportation" => "required", "transportation_fees" => "required",
-            "is_login" => "required",
+            "transportation" => "nullable", "transportation_fees" => "nullable",
+            "is_login" => "required", "is_trans" => "required"
         ];
     }
 }

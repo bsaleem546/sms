@@ -19,6 +19,22 @@ class AdmissionResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+
+//$to = Carbon::now();
+//$from = Carbon::parse($session->end_date);
+//$no_of_months = $to->diffInMonths($from);
+//$date = date('y').'-'.date('m').'-'.'10';
+//for($i = 0; $i <= $no_of_months; $i++){
+//Fees::create([
+//'admission_id' => $admission->id,
+//'__session_id' => $session->id,
+//'student_id' => $student->id,
+//'fee_type' => $type,
+//'fee_amount' => $fee,
+//'due_date' => Carbon::parse( $date )->addMonths($i),
+//]);
+//}
+
     public function toArray($request)
     {
         return parent::toArray($request);
@@ -61,6 +77,7 @@ class AdmissionResource extends JsonResource
                 "mother_phone" => $data['mother_phone'],
                 "mother_occ" => $data['mother_occ'],
                 "student_pic" => $img,
+                "is_trans" => $data['is_trans'],
                 "transport_id" => $data['transportation'],
                 "__class_id" => $data['selected_class'],
                 "__session_id" => $session->id,
@@ -86,40 +103,33 @@ class AdmissionResource extends JsonResource
                         'student_id' => $student->id,
                         'fee_type' => $type,
                         'fee_amount' => $fee,
+                        'month_of' => Carbon::now(),
                         'due_date' => Carbon::now()->addDays(10),
                     ]);
                 }
                 if ($type == 'tuition') {
                     $fee = $data['tuition_fees'];
-                    $to = Carbon::now();
-                    $from = Carbon::parse($session->end_date);
-                    $no_of_months = $to->diffInMonths($from);
-                    $date = date('y').'-'.date('m').'-'.'10';
-                    for($i = 0; $i <= $no_of_months; $i++){
-                        Fees::create([
-                            'admission_id' => $admission->id,
-                            '__session_id' => $session->id,
-                            'student_id' => $student->id,
-                            'fee_type' => $type,
-                            'fee_amount' => $fee,
-                            'due_date' => Carbon::parse( $date )->addMonths($i),
-                        ]);
-                    }
+                    Fees::create([
+                        'admission_id' => $admission->id,
+                        '__session_id' => $session->id,
+                        'student_id' => $student->id,
+                        'fee_type' => $type,
+                        'fee_amount' => $fee,
+                        'month_of' => Carbon::now(),
+                        'due_date' => Carbon::now()->addDays(10),
+                    ]);
                 }
                 if ($type == 'transportation') {
-                    $fee = $data['transportation_fees'];
-                    $to = Carbon::now();
-                    $from = Carbon::parse($session->end_date);
-                    $no_of_months = $to->diffInMonths($from);
-                    $date = date('y').'-'.date('m').'-'.'10';
-                    for($i = 0; $i <= $no_of_months; $i++){
+                    if ($data['is_trans'] == 1){
+                        $fee = $data['transportation_fees'];
                         Fees::create([
                             'admission_id' => $admission->id,
                             '__session_id' => $session->id,
                             'student_id' => $student->id,
                             'fee_type' => $type,
                             'fee_amount' => $fee,
-                            'due_date' => Carbon::parse( $date )->addMonths($i),
+                            'month_of' => Carbon::now(),
+                            'due_date' => Carbon::now()->addDays(10),
                         ]);
                     }
                 }
@@ -169,6 +179,7 @@ class AdmissionResource extends JsonResource
             if ($img != null){
                 $admission->student_pic = $img;
             }
+            $admission->is_trans = $data['is_trans'];
             $admission->transport_id = $data['transportation'];
             $admission->__class_id = $data['selected_class'];
             $admission->__session_id = $session->id;
@@ -176,7 +187,7 @@ class AdmissionResource extends JsonResource
             $admission->status = 'admitted';
             $admission->update();
 
-            Student::where('admission_id', $id)->update([
+            $student = Student::where('admission_id', $id)->update([
                 '__class_id' => $data['selected_class'],
                 '__session_id' => $session->id,
                 'name' => $data['student_name'],
@@ -188,8 +199,27 @@ class AdmissionResource extends JsonResource
             Fees::where('admission_id', $id)->where('fee_type', 'tuition')->where('status', 'pending')
                 ->update([ 'fee_amount' => $data['tuition_fees'] ]);
 
-            Fees::where('admission_id', $id)->where('fee_type', 'transportation')->where('status', 'pending')
-                ->update([ 'fee_amount' => $data['transportation_fees'] ]);
+            if ($admission->is_trans == 1 && $data['is_trans'] == 1){
+                Fees::where('admission_id', $id)->where('fee_type', 'transportation')->where('status', 'pending')
+                    ->update([ 'fee_amount' => $data['transportation_fees'] ]);
+            }
+
+            if ($admission->is_trans == 0 && $data['is_trans'] == 1){
+                $fee = $data['transportation_fees'];
+                Fees::create([
+                    'admission_id' => $admission->id,
+                    '__session_id' => $session->id,
+                    'student_id' => $student,
+                    'fee_type' => 'transportation',
+                    'fee_amount' => $fee,
+                    'due_date' => Carbon::now()->addDays(10),
+                ]);
+            }
+
+            if ($admission->is_trans == 1 && $data['is_trans'] == 0){
+                Fees::where('admission_id', $id)->where('fee_type', 'transportation')->where('status', 'pending')
+                    ->delete();
+            }
 
             DB::commit();
             return [ 'status' => true, 'success' => 'Record updated...', 'ad_id' => $admission->id ];
