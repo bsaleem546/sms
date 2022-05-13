@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admission;
 use App\Models\Fees;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,8 @@ class FeeController extends Controller
      */
     public function create()
     {
-        return view('fees.create');
+        $students = Admission::all();
+        return view('fees.create', compact('students'));
     }
 
     /**
@@ -84,8 +86,8 @@ class FeeController extends Controller
         try {
 
             $request->validate([
-                "payment_type" => "required",
-                "operator" => "required",
+                "payment_type" => "nullable",
+                "operator" => "nullable",
                 "transaction_id" => "nullable",
                 "paid_amount" => "required",
                 "fee_discount" => "nullable",
@@ -98,10 +100,11 @@ class FeeController extends Controller
             $fee->fee_discount = $request->fee_discount;
             $fee->paid_amount = $request->paid_amount;
             $fee->balance_amount = $fee->fee_amount - $request->paid_amount;
-            $fee->paid_at = date('M d, Y');
+            $fee->paid_at = date('Y-m-d');
+            $fee->status = 'paid';
             $fee->update();
 
-//            DB::commit();
+            DB::commit();
             return redirect()->route('fees.index')
                 ->with( 'success', 'Record updated.....' );
         }
@@ -109,7 +112,6 @@ class FeeController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error',$exception->getMessage());
         }
-        dd($request);
     }
 
     /**

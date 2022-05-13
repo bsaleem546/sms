@@ -72,11 +72,12 @@
                             </div>
                         @endif
                         {!! Form::model($data, array('route' => ['fees.update', $data->id],'method'=>'PATCH', 'class' => 'form-material m-t-40 create')) !!}
+
                             <div class="form-group">
                                 <div class="row">
                                     <label class="col-sm-12">Payment Type</label>
                                     <div class="col-sm-12 validate">
-                                        <select name="payment_type" class="form-control" required>
+                                        <select name="payment_type" class="form-control" >
                                             <option value="">Select Option</option>
                                             <option value="Cash">Cash</option>
                                             <option value="Jazz Cash">Jazz Cash</option>
@@ -88,11 +89,12 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <div class="row">
                                     <label class="col-sm-12">Operator / Bank</label>
                                     <div class="col-sm-12 validate">
-                                        <input type="text" value="{{ $data->operator }}" name="operator" class="form-control" required>
+                                        <input type="text" value="{{ $data->operator }}" name="operator" class="form-control" >
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +110,7 @@
                                 <div class="row">
                                     <label class="col-sm-12">Paid Amount</label>
                                     <div class="col-sm-12 validate">
-                                        <input type="text" value="{{ $data->paid_amount }}" name="paid_amount" class="form-control" required>
+                                        <input type="text" value="{{ $data->paid_amount > 0 ? $data->paid_amount : $data->fee_amount }}" name="paid_amount" class="form-control" required>
                                     </div>
                                 </div>
                             </div>
