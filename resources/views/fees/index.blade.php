@@ -40,7 +40,11 @@
                         </div>
                     @endif
 
-                    <h5 class="card-title">Fees list</h5>
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Fees list</h5>
+                        <a class="btn btn-primary" href="{{ route('fees.print', ['id' => 0]) }}">Print All</a>
+                    </div>
+
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>
@@ -131,5 +135,11 @@
 
 @endsection
 
+
+@section('javascript')
+
+
+
+@endsection
 
 

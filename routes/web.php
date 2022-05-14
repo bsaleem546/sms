@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('teachers', \App\Http\Controllers\TeacherController::class);
 
     Route::resource('fees', \App\Http\Controllers\FeeController::class);
+    Route::get('fees/print/{id}', [\App\Http\Controllers\FeeController::class, 'printView'])->name('fees.print');
 
 });
 

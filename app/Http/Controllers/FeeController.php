@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\_Session;
 use App\Models\Admission;
 use App\Models\Fees;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,11 +18,25 @@ class FeeController extends Controller
         $this->middleware('permission:fee-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:fee-delete', ['only' => ['destroy']]);
     }
+
+    public function printView($id)
+    {
+        $data = array();
+        if ($id === 0){
+            $fees = Fees::where('status', 'pending')->get();
+            foreach ($fees as $f){
+                $data = Student::with('fees')->where('students.id', $f->student_id)->get();
+            }
+            dd($data);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $data = Fees::latest()->get();
@@ -46,7 +62,38 @@ class FeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                "admission_id" => "required",
+                "fee_type" => "required",
+                "fee_amount" => "required",
+                "month_of" => "required",
+                "due_date" => "required",
+            ]);
+
+            $get_admission = Admission::findOrFail($request->admission_id);
+            $get_session = _Session::where('status', 1)->first();
+
+            Fees::create([
+                'admission_id' => $request->admission_id,
+                '__session_id' => $get_session->id,
+                'student_id' => $get_admission->student->id,
+                'fee_type' => $request->fee_type,
+                'fee_amount' => $request->fee_amount,
+                'month_of' => $request->month_of,
+                'due_date' => $request->due_date,
+                'status' => 'pending',
+            ]);
+
+            DB::commit();
+            return redirect()->route('fees.index')
+                ->with( 'success', 'Record created.....' );
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('error',$exception->getMessage());
+        }
     }
 
     /**
