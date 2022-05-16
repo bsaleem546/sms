@@ -42,7 +42,7 @@
 
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">Fees list</h5>
-                        <a class="btn btn-primary" href="{{ route('fees.print', ['id' => 0]) }}">Print All</a>
+{{--                        <a class="btn btn-primary" href="{{ route('fees.print', ['id' => 0]) }}">Print All</a>--}}
                     </div>
 
                     <div class="table-responsive">
@@ -54,12 +54,10 @@
                                 <th>Session</th>
                                 <th>Student Name</th>
                                 <th>Student Class</th>
-                                <th>Fee Type</th>
-                                <th>Fee Amount</th>
-                                <th>Fee Discount</th>
                                 <th>Month Of</th>
                                 <th>Due Date</th>
-                                <th>Voucher Count</th>
+                                <th>Arrears</th>
+                                <th>Total</th>
                                 <th>Status</th>
                                 <th width="280px">Action</th>
                             </tr>
@@ -72,12 +70,10 @@
                                     <td>{{ \Carbon\Carbon::parse($d->_session->start_date)->format('Y')." - ".\Carbon\Carbon::parse($d->_session->end_date)->format('Y') }}</td>
                                     <td>{{ $d->students->name }}</td>
                                     <td>{{ $d->students->_class->name." - ".$d->students->_class->section->name }}</td>
-                                    <td>{{ $d->fee_type }}</td>
-                                    <td>{{ $d->fee_amount }}</td>
-                                    <td>{{ $d->fee_discount }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($d->month_of)->format('M-Y') }}</td>
+                                    <td>{{ $d->month_of }}</td>
                                     <td>{{ \Carbon\Carbon::parse($d->due_date)->format('M d, Y') }}</td>
-                                    <td>{{ $d->voucher_count }}</td>
+                                    <td>{{ $d->arrears }}</td>
+                                    <td>{{ $d->total }}</td>
                                     <td>
                                         @if($d->status == 'pending')
                                             <label class="label label-warning">{{ $d->status }}</label>
@@ -88,11 +84,9 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a class="btn btn-info" href="{{ route('fees.show',$d->id) }}">Show</a>
+                                        <a class="btn btn-info" href="{{ route('fees.print', $d->id) }}">Print</a>
+{{--                                        <a class="btn btn-info" href="{{ route('fees.show',$d->id) }}">Show</a>--}}
                                         @can('fee-edit')
-{{--                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">--}}
-{{--                                                Pay--}}
-{{--                                            </button>--}}
                                             <a class="btn btn-primary" href="{{ route('fees.edit',$d->id) }}">Pay</a>
                                         @endcan
                                         @can('fee-delete')
@@ -111,34 +105,14 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 @endsection
 
 
 @section('javascript')
 
+    <script>
 
+    </script>
 
 @endsection
 

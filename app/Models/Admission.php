@@ -54,4 +54,9 @@ class Admission extends Model
     {
         return $this->hasOne(Student::class);
     }
+
+    public function fees()
+    {
+        return $this->hasMany(Fees::class, 'admission_id');
+    }
 }

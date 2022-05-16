@@ -17,9 +17,16 @@
         border-color: #fb9678;
         color: white;
     }
+    body{
+        background-color: darkgray;
+    }
+    @media print {
+        @page  { margin: 0; }
+        body { margin: 1.6cm }
+    }
 </style>
 
-<div>
+<div style="margin: 20px 0">
     <button class="btn btn-primary" onclick="printAll()">Print</button>
 </div>
 
@@ -27,65 +34,188 @@
         min-height: 210mm;
         margin: 0 auto;
         background: white;
-        border: 1px solid green;">
-    <table border="1" style="width: 100%">
+        padding: 5px">
+    <table style="width: 100%">
         <tbody>
         <tr>
-            <td>
+            <td style="width: 33%;padding-right: 10px; ">
                 <div style="border: 1px solid gray; padding: 5px 10px;">
                     <div style="display: flex; justify-content: space-around">
-                        <p style="text-align: center">Bank Al-Habib <br> Shahrah-e-Faisal Branch <br> Karachi</p>
-                        <p style="text-align: center">Due Date <br> 21-02-2200 <br> Copy</p>
+                        <p style="text-align: left">Bank Al-Habib <br> Shahrah-e-Faisal Branch <br> Karachi</p>
+                        <p style="text-align: right">Due Date <br> {{ \Carbon\Carbon::parse( $fee->due_date )->format('d.m.Y')  }} <br> BANK COPY</p>
                     </div>
                     <p style="font-weight: bold">A/c. 1003-0072-54478-75-1</p>
-                    <p>Challan No: <span style="border: 1px solid gray; padding: 5px 10px; background-color: lightgray">3624</span></p>
-                    <p>GR. No: <span>2214</span></p>
-                    <p>Issue Date: <span>2214</span></p>
+                    <p>Challan No: <span style="border: 1px solid gray; padding: 5px 10px; background-color: lightgray">{{ $fee->id }}</span></p>
+                    <p>GR. No: <span>{{ $fee->admission->gr_no }}</span></p>
+                    <p>Issue Date: <span>{{ \Carbon\Carbon::now()->format('M d, Y') }}</span></p>
                 </div>
                 <div STYLE="text-align: center">
                     <p style="font-weight: bold">Custom Public School <br> Gulshan-e-Iqbal, Block-11</p>
                 </div>
                 <div style="text-align: left">
-                    <p>Student's Name: abv</p>
-                    <p>Class: abv</p>
+                    <p>Student's Name: {{ $fee->admission->student_name }}</p>
+                    <p>Class: {{ $fee->students->_class->name.' - '.$fee->students->_class->section->name }}</p>
+                </div>
+                <table border="1" style="">
+                    <thead>
+                        <td style="width: 80%; padding: 5px 10px;border-style: none;">FEES</td>
+                        <td style="width: 20%; padding: 5px 10px;border-style: none;">AMOUNT</td>
+                    </thead>
+                    <tbody>
+                        @foreach($fee->feedetails as $fd)
+                            <tr>
+                                <td style="width: 80%; padding: 5px 10px;border-style: none; font-size: 12px">{{ strtoupper($fd->fee_type) }}</td>
+                                <td style="width: 20%; padding: 5px 10px;border-style: none; font-size: 12px">{{ strtoupper($fd->fee_amount) }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td style="width: 80%; padding: 5px 10px;border-style: none; font-size: 12px">Arrears</td>
+                            <td style="width: 20%; padding: 5px 10px;border-style: none; font-size: 12px">{{ $fee->arrears }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            TOTAL PAYMENT BY DUE DATE
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. {{ $fee->total }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            Surcharge
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. 100</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            TOTAL PAYMENT AFTER DUE DATE
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. {{ $fee->total + 100 }}</td>
+                    </tr>
+                </table>
+                <div style="text-align: center;padding: 20px;border: 1px solid;">
+                    Bank Stamp
                 </div>
             </td>
-            <td>
+            <td style="width: 33%;padding-right: 10px; ">
                 <div style="border: 1px solid gray; padding: 5px 10px;">
                     <div style="display: flex; justify-content: space-around">
-                        <p style="text-align: center">Bank Al-Habib <br> Shahrah-e-Faisal Branch <br> Karachi</p>
-                        <p style="text-align: center">Due Date <br> 21-02-2200 <br> Copy</p>
+                        <p style="text-align: left">Bank Al-Habib <br> Shahrah-e-Faisal Branch <br> Karachi</p>
+                        <p style="text-align: right">Due Date <br> {{ \Carbon\Carbon::parse( $fee->due_date )->format('d.m.Y')  }} <br> SCHOOL COPY</p>
                     </div>
                     <p style="font-weight: bold">A/c. 1003-0072-54478-75-1</p>
-                    <p>Challan No: <span style="border: 1px solid gray; padding: 5px 10px; background-color: lightgray">3624</span></p>
-                    <p>GR. No: <span>2214</span></p>
-                    <p>Issue Date: <span>2214</span></p>
+                    <p>Challan No: <span style="border: 1px solid gray; padding: 5px 10px; background-color: lightgray">{{ $fee->id }}</span></p>
+                    <p>GR. No: <span>{{ $fee->admission->gr_no }}</span></p>
+                    <p>Issue Date: <span>{{ \Carbon\Carbon::now()->format('M d, Y') }}</span></p>
                 </div>
-                <div STYLE="text-align: center">
+                <div style="text-align: center">
                     <p style="font-weight: bold">Custom Public School <br> Gulshan-e-Iqbal, Block-11</p>
                 </div>
                 <div style="text-align: left">
-                    <p>Student's Name: abv</p>
-                    <p>Class: abv</p>
+                    <p>Student's Name: {{ $fee->admission->student_name }}</p>
+                    <p>Class: {{ $fee->students->_class->name.' - '.$fee->students->_class->section->name }}</p>
+                </div>
+                <table border="1" style="">
+                    <thead>
+                    <td style="width: 80%; padding: 5px 10px;border-style: none;">FEES</td>
+                    <td style="width: 20%; padding: 5px 10px;border-style: none;">AMOUNT</td>
+                    </thead>
+                    <tbody>
+                    @foreach($fee->feedetails as $fd)
+                        <tr>
+                            <td style="width: 80%; padding: 5px 10px;border-style: none; font-size: 12px">{{ strtoupper($fd->fee_type) }}</td>
+                            <td style="width: 20%; padding: 5px 10px;border-style: none; font-size: 12px">{{ strtoupper($fd->fee_amount) }}</td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;border-style: none; font-size: 12px">Arrears</td>
+                        <td style="width: 20%; padding: 5px 10px;border-style: none; font-size: 12px">{{ $fee->arrears }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            TOTAL PAYMENT BY DUE DATE
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. {{ $fee->total }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            Surcharge
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. 100</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            TOTAL PAYMENT AFTER DUE DATE
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. {{ $fee->total + 100 }}</td>
+                    </tr>
+                </table>
+                <div style="text-align: center;padding: 20px;border: 1px solid;">
+                    Bank Stamp
                 </div>
             </td>
-            <td>
+            <td style="width: 33%">
                 <div style="border: 1px solid gray; padding: 5px 10px;">
                     <div style="display: flex; justify-content: space-around">
-                        <p style="text-align: center">Bank Al-Habib <br> Shahrah-e-Faisal Branch <br> Karachi</p>
-                        <p style="text-align: center">Due Date <br> 21-02-2200 <br> Copy</p>
+                        <p style="text-align: left">Bank Al-Habib <br> Shahrah-e-Faisal Branch <br> Karachi</p>
+                        <p style="text-align: right">Due Date <br> {{ \Carbon\Carbon::parse( $fee->due_date )->format('d.m.Y')  }} <br> STUDENT'S COPY</p>
                     </div>
                     <p style="font-weight: bold">A/c. 1003-0072-54478-75-1</p>
-                    <p>Challan No: <span style="border: 1px solid gray; padding: 5px 10px; background-color: lightgray">3624</span></p>
-                    <p>GR. No: <span>2214</span></p>
-                    <p>Issue Date: <span>2214</span></p>
+                    <p>Challan No: <span style="border: 1px solid gray; padding: 5px 10px; background-color: lightgray">{{ $fee->id }}</span></p>
+                    <p>GR. No: <span>{{ $fee->admission->gr_no }}</span></p>
+                    <p>Issue Date: <span>{{ \Carbon\Carbon::now()->format('M d, Y') }}</span></p>
                 </div>
-                <div STYLE="text-align: center">
+                <div style="text-align: center">
                     <p style="font-weight: bold">Custom Public School <br> Gulshan-e-Iqbal, Block-11</p>
                 </div>
                 <div style="text-align: left">
-                    <p>Student's Name: abv</p>
-                    <p>Class: abv</p>
+                    <p>Student's Name: {{ $fee->admission->student_name }}</p>
+                    <p>Class: {{ $fee->students->_class->name.' - '.$fee->students->_class->section->name }}</p>
+                </div>
+                <table border="1" style="">
+                    <thead>
+                    <td style="width: 80%; padding: 5px 10px;border-style: none;">FEES</td>
+                    <td style="width: 20%; padding: 5px 10px;border-style: none;">AMOUNT</td>
+                    </thead>
+                    <tbody>
+                    @foreach($fee->feedetails as $fd)
+                        <tr>
+                            <td style="width: 80%; padding: 5px 10px;border-style: none; font-size: 12px">{{ strtoupper($fd->fee_type) }}</td>
+                            <td style="width: 20%; padding: 5px 10px;border-style: none; font-size: 12px">{{ strtoupper($fd->fee_amount) }}</td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;border-style: none; font-size: 12px">Arrears</td>
+                        <td style="width: 20%; padding: 5px 10px;border-style: none; font-size: 12px">{{ $fee->arrears }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            TOTAL PAYMENT BY DUE DATE
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. {{ $fee->total }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            Surcharge
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. 100</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%; padding: 5px 10px;font-size: 10px;">
+                            TOTAL PAYMENT AFTER DUE DATE
+                        </td>
+                        <td style="width: 20%; padding: 5px 10px;font-size: 10px"> RS. {{ $fee->total + 100 }}</td>
+                    </tr>
+                </table>
+                <div style="text-align: center;padding: 20px;border: 1px solid;">
+                    Bank Stamp
                 </div>
             </td>
         </tr>
@@ -95,7 +225,6 @@
 
 <script>
     function printAll() {
-        var data = {!! $data !!}
         var restorepage = document.body.innerHTML;
         var printcontent = document.getElementById('A4').innerHTML;
         document.body.innerHTML = printcontent;

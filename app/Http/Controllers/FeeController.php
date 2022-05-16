@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\_Session;
 use App\Models\Admission;
+use App\Models\FeeDetails;
 use App\Models\Fees;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,16 +21,10 @@ class FeeController extends Controller
         $this->middleware('permission:fee-delete', ['only' => ['destroy']]);
     }
 
-    public function printView($id)
+    public function printViewSingleID($id)
     {
-        $data = array();
-        if ($id === 0){
-            $fees = Fees::where('status', 'pending')->get();
-            foreach ($fees as $f){
-                $data = Student::with('fees')->where('students.id', $f->student_id)->get();
-            }
-            dd($data);
-        }
+        $fee = Fees::findOrFail($id);
+        return view('fees.print', compact('fee'));
     }
 
     /**
@@ -66,33 +62,58 @@ class FeeController extends Controller
         try {
             $request->validate([
                 "admission_id" => "required",
-                "fee_type" => "required",
-                "fee_amount" => "required",
                 "month_of" => "required",
                 "due_date" => "required",
             ]);
 
+            $feeArr = json_decode($request->feeArr);
+            $amount = 0;
+            foreach ($feeArr as $f){
+                $amount += $f->amount;
+            }
+
             $get_admission = Admission::findOrFail($request->admission_id);
             $get_session = _Session::where('status', 1)->first();
 
-            Fees::create([
+            $chk_month = Carbon::now()->format('M-Y');
+            $chk = Fees::where('admission_id', $request->admission_id)
+                ->where('__session_id', $get_session->id)->where('month_of', $chk_month)->first();
+
+            if($chk !== null){
+                DB::commit();
+                return redirect()->back()->with('error', 'This fee is already created.');
+            }
+
+            $pendings = Fees::wwhere('admission_id', $request->admission_id)->where('status', 'pending')->get();
+            $arrears = 0;
+            foreach ($pendings as $p){
+                $arrears += $p->total;
+            }
+
+            $fee = Fees::create([
                 'admission_id' => $request->admission_id,
                 '__session_id' => $get_session->id,
                 'student_id' => $get_admission->student->id,
-                'fee_type' => $request->fee_type,
-                'fee_amount' => $request->fee_amount,
-                'month_of' => $request->month_of,
+                'month_of' => Carbon::parse($request->month_of)->format('M-Y'),
                 'due_date' => $request->due_date,
-                'status' => 'pending',
+                'total' => $amount + $arrears,
+                'arrears' => $arrears
             ]);
 
+            foreach ($feeArr as $f){
+                FeeDetails::create([
+                    'fee_id' => $fee->id,
+                    'fee_type' => $f->type,
+                    'fee_amount' => $f->amount,
+                ]);
+            }
+
             DB::commit();
-            return redirect()->route('fees.index')
-                ->with( 'success', 'Record created.....' );
+            return response()->json([ 'status' => true, 'msg' => 'Record created.....' ]);
         }
         catch (\Exception $exception){
             DB::rollBack();
-            return redirect()->back()->with('error',$exception->getMessage());
+            return response()->json([ 'status' => false, 'msg' => $exception->getMessage() ]);
         }
     }
 
@@ -131,22 +152,7 @@ class FeeController extends Controller
     {
         DB::beginTransaction();
         try {
-
-            $request->validate([
-                "payment_type" => "nullable",
-                "operator" => "nullable",
-                "transaction_id" => "nullable",
-                "paid_amount" => "required",
-                "fee_discount" => "nullable",
-            ]);
-
             $fee = Fees::findOrFail($id);
-            $fee->payment_type = $request->payment_type;
-            $fee->operator = $request->operator;
-            $fee->transaction_id = $request->transaction_id;
-            $fee->fee_discount = $request->fee_discount;
-            $fee->paid_amount = $request->paid_amount;
-            $fee->balance_amount = $fee->fee_amount - $request->paid_amount;
             $fee->paid_at = date('Y-m-d');
             $fee->status = 'paid';
             $fee->update();

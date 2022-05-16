@@ -13,18 +13,12 @@ class Fees extends Model
         'admission_id',
         '__session_id',
         'student_id',
-        'fee_type',
-        'fee_amount',
-        'fee_discount',
         'month_of',
         'due_date',
-        'payment_type',
-        'operator',
-        'transaction_id',
-        'paid_amount',
-        'balance_amount',
-        'voucher_count',
         'paid_at',
+        'issued_at',
+        'arrears',
+        'total',
         'status',
     ];
 
@@ -36,5 +30,15 @@ class Fees extends Model
     public function students()
     {
         return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function admission()
+    {
+        return $this->belongsTo(Admission::class, 'admission_id');
+    }
+
+    public function feedetails()
+    {
+        return $this->hasMany(FeeDetails::class, 'fee_id');
     }
 }

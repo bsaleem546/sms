@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\_Session;
 use App\Models\Admission;
+use App\Models\FeeDetails;
 use App\Models\Fees;
 use App\Models\Student;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -94,42 +95,42 @@ class AdmissionResource extends JsonResource
             ]);
 
             $fee_types = ['admission', 'tuition', 'transportation'];
+            $trans = $data['is_trans'] == 1 ? $data['transportation_fees'] : 0;
+            $total = $trans + $data['admission_fees'] + $data['tuition_fees'];
+
+            $fee = Fees::create([
+                'admission_id' => $admission->id,
+                '__session_id' => $session->id,
+                'student_id' => $student->id,
+                'month_of' => Carbon::now()->format('M-Y'),
+                'due_date' => Carbon::now()->addDays(10),
+                'total' => $total,
+            ]);
+
             foreach ($fee_types as $type){
                 if ($type == 'admission') {
-                    $fee = $data['admission_fees'];
-                    Fees::create([
-                        'admission_id' => $admission->id,
-                        '__session_id' => $session->id,
-                        'student_id' => $student->id,
+                    $amount = $data['admission_fees'];
+                    FeeDetails::create([
+                        'fee_id' => $fee->id,
                         'fee_type' => $type,
-                        'fee_amount' => $fee,
-                        'month_of' => Carbon::now(),
-                        'due_date' => Carbon::now()->addDays(10),
+                        'fee_amount' => $amount,
                     ]);
                 }
                 if ($type == 'tuition') {
-                    $fee = $data['tuition_fees'];
-                    Fees::create([
-                        'admission_id' => $admission->id,
-                        '__session_id' => $session->id,
-                        'student_id' => $student->id,
+                    $amount = $data['tuition_fees'];
+                    FeeDetails::create([
+                        'fee_id' => $fee->id,
                         'fee_type' => $type,
-                        'fee_amount' => $fee,
-                        'month_of' => Carbon::now(),
-                        'due_date' => Carbon::now()->addDays(10),
+                        'fee_amount' => $amount,
                     ]);
                 }
                 if ($type == 'transportation') {
                     if ($data['is_trans'] == 1){
-                        $fee = $data['transportation_fees'];
-                        Fees::create([
-                            'admission_id' => $admission->id,
-                            '__session_id' => $session->id,
-                            'student_id' => $student->id,
+                        $amount = $data['transportation_fees'];
+                        FeeDetails::create([
+                            'fee_id' => $fee->id,
                             'fee_type' => $type,
-                            'fee_amount' => $fee,
-                            'month_of' => Carbon::now(),
-                            'due_date' => Carbon::now()->addDays(10),
+                            'fee_amount' => $amount,
                         ]);
                     }
                 }
@@ -193,32 +194,34 @@ class AdmissionResource extends JsonResource
                 'name' => $data['student_name'],
             ]);
 
-            Fees::where('admission_id', $id)->where('fee_type', 'admission')->where('status', 'pending')
-                ->update([ 'fee_amount' => $data['admission_fees'] ]);
+            $fee = Fees::where('admission_id', $id)->first();
+            $feeDetails = FeeDetails::where('fee_id', $fee->id)->get();
 
-            Fees::where('admission_id', $id)->where('fee_type', 'tuition')->where('status', 'pending')
-                ->update([ 'fee_amount' => $data['tuition_fees'] ]);
-
-            if ($admission->is_trans == 1 && $data['is_trans'] == 1){
-                Fees::where('admission_id', $id)->where('fee_type', 'transportation')->where('status', 'pending')
-                    ->update([ 'fee_amount' => $data['transportation_fees'] ]);
-            }
-
-            if ($admission->is_trans == 0 && $data['is_trans'] == 1){
-                $fee = $data['transportation_fees'];
-                Fees::create([
-                    'admission_id' => $admission->id,
-                    '__session_id' => $session->id,
-                    'student_id' => $student,
-                    'fee_type' => 'transportation',
-                    'fee_amount' => $fee,
-                    'due_date' => Carbon::now()->addDays(10),
-                ]);
-            }
-
-            if ($admission->is_trans == 1 && $data['is_trans'] == 0){
-                Fees::where('admission_id', $id)->where('fee_type', 'transportation')->where('status', 'pending')
-                    ->delete();
+            foreach ($feeDetails  as $fd){
+                if ($fd->fee_type === 'admission'){
+                    $fd->fee_amount = $data['admission_fees'];
+                    $fd->update();
+                }
+                if ($fd->fee_type === 'tuition'){
+                    $fd->fee_amount = $data['tuition_fees'];
+                    $fd->update();
+                }
+                if ($fd->fee_type === 'transportation'){
+                    if ($admission->is_trans == 1 && $data['is_trans'] == 1){
+                        $fd->fee_amount = $data['transportation_fees'];
+                        $fd->update();
+                    }
+                    if ($admission->is_trans == 0 && $data['is_trans'] == 1){
+                        FeeDetails::create([
+                            'fee_id' => $fee->id,
+                            'fee_type' => 'transportation',
+                            'fee_amount' => $data['transportation_fees'],
+                        ]);
+                    }
+                    if ($admission->is_trans == 1 && $data['is_trans'] == 0){
+                        FeeDetails::where('fee_id', $fee->id)->where('fee_type', 'transportation')->delete();
+                    }
+                }
             }
 
             DB::commit();

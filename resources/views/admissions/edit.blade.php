@@ -226,13 +226,13 @@
                             <div class="col-md-6">
                                 <label class="col-sm-12">Admission Fees</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" required placeholder="Admission Fees"  name="admission_fees" value="{{ $ad_fee->fee_amount }}" class="form-control">
+                                    <input type="text" required placeholder="Admission Fees"  name="admission_fees" value="{{ $ad_fee }}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="col-sm-12">Tuition Fees</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" required placeholder="Admission Fees"  name="tuition_fees" value="{{ $tt_fee->fee_amount }}" class="form-control">
+                                    <input type="text" required placeholder="Admission Fees"  name="tuition_fees" value="{{ $tt_fee }}" class="form-control">
                                 </div>
                             </div>
 
@@ -314,7 +314,8 @@
                             <div class="col-md-4">
                                 <label class="col-sm-12">Transportation Fees</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" placeholder="Transportation Fees"  name="transportation_fees" value="{{ $data->is_trans == 0 ? 0 : $tp_fee->fee_amount }}" class="form-control">
+                                    <input type="text" placeholder="Transportation Fees"  name="transportation_fees"
+                                           value="{{ $data->is_trans == 0 ? 0 : $tp_fee }}" class="form-control">
                                 </div>
                             </div>
                         </div>

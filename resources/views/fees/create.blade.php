@@ -45,11 +45,14 @@
                     @endif
 
                     <h5 class="card-title">Create Fees</h5>
-                    {!! Form::open(array('route' => 'fees.store','method'=>'POST', 'class' => 'form-material m-t-40 create')) !!}
+                    {!! Form::open(array('route' => 'fees.store','method'=>'POST', 'class' => 'form-material m-t-40 create', 'id' => 'submitForm')) !!}
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <label class="">All Students</label>
+
+                                <div class="col-sm-3 mb-4">
+                                    <label class="col-sm-12">All Students</label>
+                                </div>
+                                <div class="col-sm-9 mb-4">
                                     <div class="validate">
                                         <select class="form-control" required name="admission_id">
                                             <option value="">Select Please</option>
@@ -60,10 +63,38 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6">
+                                <br>
+
+                                <div class="col-sm-3 mb-4">
+                                    <label class="col-sm-12">Month Of</label>
+                                </div>
+                                <div class="col-sm-9 mb-4">
+                                    <div class="col-sm-12 validate">
+                                        <input type="month" name="month_of" required class="form-control">
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <div class="col-sm-3 mb-4">
+                                    <label class="col-sm-12">Due Date</label>
+                                </div>
+                                <div class="col-sm-9 mb-4">
+                                    <div class="col-sm-12 validate">
+                                        <input type="date" name="due_date" required class="form-control">
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <div class="col-sm-12 mb-4">
+                                    <h5 class="font-bold">Add Fees with type</h5>
+                                </div>
+
+                                <div class="col-sm-4 mb-4">
                                     <label class="col-sm-12">Fee Type</label>
                                     <div class="col-sm-12 validate">
-                                        <select class="form-control" required name="fee_type">
+                                        <select class="form-control"  name="fee_type" id="ft">
                                             <option value="">Select Please</option>
                                             <option value="admission">Admission</option>
                                             <option value="tuition">Tuition</option>
@@ -72,44 +103,118 @@
                                     </div>
                                 </div>
 
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4 mb-4">
                                     <label class="col-sm-12">Fees Amount</label>
                                     <div class="col-sm-12 validate">
-                                        <input type="text" name="fee_amount" required placeholder="Fees Amount" class="form-control">
+                                        <input type="text" name="fee_amount"  placeholder="Fees Amount" class="form-control" id="am">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label class="col-sm-12">Month Of</label>
-                                    <div class="col-sm-12 validate">
-                                        <input type="date" name="month_of" required class="form-control">
-                                    </div>
+
+                                <div class="col-sm-4 mb-4">
+                                    <label class="col-sm-12"></label>
+                                    <a href="javascript::void(0)" onclick="addFee()" class="btn btn-primary">Add Fee Type</a>
                                 </div>
+
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label class="col-sm-12">Month Of</label>
-                                    <div class="col-sm-12 validate">
-                                        <input type="date" name="due_date" required class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <button type="submit" class="btn btn-info waves-effect waves-light m-r-10 mt-4">Submit</button>
-                                </div>
-                            </div>
-                        </div>
+                        <table border="1" style="width: 100%;text-align: center;font-weight: bold;">
+                           <thead>
+                               <td>#</td>
+                               <td>Fee Type</td>
+                               <td>Fee Amount</td>
+                           </thead>
+                            <tbody style="font-weight: normal" id="tb">
 
-                    {!! Form::close() !!}
+                            </tbody>
+                        </table>
+
+                        <button type="submit" class="btn btn-info waves-effect waves-light m-r-10 mt-4">Submit</button>
+
+                        {!! Form::close() !!}
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+
+@section('javascript')
+
+    <script type="text/javascript">
+        var arr = [];
+        function addFee() {
+            var ft = document.getElementById("ft").value;
+            var am = document.getElementById("am").value;
+            if (ft === ''){
+                alert('no fee type selected')
+                return;
+            }
+            if (am === ''){
+                alert('no amount given')
+                return;
+            }
+
+            var count = arr.length
+            if (count > 0){
+                var chk = false;
+                $.each(arr, (i, v) => {
+                    if (v.type === ft){
+                        alert('already added')
+                        chk = true;
+                    }
+                })
+                if (chk === true){
+                    return;
+                }
+            }
+            arr.push( { 'type':ft, 'amount':am } )
+
+            $('#tb').html('')
+            $.each(arr, (i, v) => {
+                var html = '<tr>\n' +
+                    '            <td>'+i+'</td>\n' +
+                    '            <td>'+v.type+'</td>\n' +
+                    '            <td>'+v.amount+'</td>\n' +
+                    '            </tr>'
+               $('#tb').append(html)
+            })
+        }
+
+        $(document).on('submit', '#submitForm', (e) => {
+            e.preventDefault()
+            if (arr.length === 0){
+                alert('No fees added')
+                return;
+            }
+
+            var form = $('#submitForm');
+            var formData = new FormData(form[0]);
+            var conv = JSON.stringify(arr)
+            formData.append('feeArr', conv)
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                data: formData,
+                success: (response) => {
+                    if(response.status === true){
+                        alert(response.msg)
+                        setTimeout(function(){ window.location = '{{ route('fees.index') }}' }, 1500);
+                    }else{
+                        alert(response.msg)
+                    }
+                },
+                error: (err) => {
+                    alert(err.statusText)
+                }
+            });
+
+        })
+    </script>
+
 @endsection
 
