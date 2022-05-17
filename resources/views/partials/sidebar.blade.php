@@ -263,6 +263,21 @@
                     </li>
                 @endcan
 
+                @can('s_att-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Student Attendance</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('s_atd.list') }}">View Attendance</a>
+                                <a href="{{ route('s_atd.index') }}">Attendance</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

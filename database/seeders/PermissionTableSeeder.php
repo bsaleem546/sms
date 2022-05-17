@@ -81,6 +81,10 @@ class PermissionTableSeeder extends Seeder
 //            'fee-create',
 //            'fee-edit',
 //            'fee-delete',
+//            's_att-list',
+//            's_att-create',
+//            's_att-edit',
+//            's_att-delete',
         ];
 
         foreach ($permissions as $permission) {

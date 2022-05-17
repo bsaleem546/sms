@@ -42,13 +42,15 @@
 
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">Fees list</h5>
-{{--                        <a class="btn btn-primary" href="{{ route('fees.print', ['id' => 0]) }}">Print All</a>--}}
+                        <a class="btn btn-primary" href="{{ route('fees.print.all') }}">Print All</a>
+                        <a class="btn btn-outline-primary" href="javascript::void(0)" onclick="printSelected()">Print Selected</a>
                     </div>
 
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>
                             <tr>
+                                <th></th>
                                 <th>No</th>
                                 <th>GR NO</th>
                                 <th>Session</th>
@@ -65,6 +67,9 @@
                             <tbody>
                             @foreach ($data as $key => $d)
                                 <tr>
+                                    <td>
+                                        <input type="checkbox" id="{{ 'chk_'.$d->id }}" value="{{ $d->id }}">
+                                    </td>
                                     <td>{{ $d->id }}</td>
                                     <td>{{ $d->students->admission->gr_no }}</td>
                                     <td>{{ \Carbon\Carbon::parse($d->_session->start_date)->format('Y')." - ".\Carbon\Carbon::parse($d->_session->end_date)->format('Y') }}</td>
@@ -111,7 +116,24 @@
 @section('javascript')
 
     <script>
-
+        function printSelected() {
+            var data = {!! $data !!}
+            var arr = []
+            $.each(data, (i, v) => {
+                var chk = $('#chk_'+v.id).is(':checked')
+                if (chk === true){
+                    arr.push(v.id)
+                }
+            })
+            if (arr.length > 0){
+                var arrStr = JSON.stringify(arr);
+                console.log(arrStr)
+                window.location = 'fees/print/'+arrStr;
+            }
+            else{
+                alert('No fees selected')
+            }
+        }
     </script>
 
 @endsection

@@ -32,4 +32,5 @@ class Student extends Model
     {
         return $this->belongsTo(_Class::class, '__class_id');
     }
+
 }

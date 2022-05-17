@@ -21,6 +21,22 @@ class FeeController extends Controller
         $this->middleware('permission:fee-delete', ['only' => ['destroy']]);
     }
 
+    public function printViewByIDS($ids)
+    {
+        $get_ids = json_decode($ids);
+        $fees = array();
+        foreach ($get_ids as $id){
+            array_push( $fees, Fees::findOrFail($id) );
+        }
+        return view('fees.printGetByIDS', compact('fees'));
+    }
+
+    public function printViewAll()
+    {
+        $fees = Fees::where('status', 'pending')->get();
+        return view('fees.printAll', compact('fees'));
+    }
+
     public function printViewSingleID($id)
     {
         $fee = Fees::findOrFail($id);

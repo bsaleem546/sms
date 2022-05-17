@@ -73,7 +73,13 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('fees', \App\Http\Controllers\FeeController::class);
     Route::get('fees/print/single/{id}', [\App\Http\Controllers\FeeController::class, 'printViewSingleID'])->name('fees.print');
+    Route::get('fees/print/all', [\App\Http\Controllers\FeeController::class, 'printViewAll'])->name('fees.print.all');
+    Route::get('fees/print/{ids}', [\App\Http\Controllers\FeeController::class, 'printViewByIDS'])->name('fees.print.ids');
 
+    Route::get('student-attendance', [\App\Http\Controllers\StudentAttendenceController::class, 'index'])->name('s_atd.index');
+    Route::get('student-attendance/list', [\App\Http\Controllers\StudentAttendenceController::class, 'listView'])->name('s_atd.list');
+    Route::get('getStudentsFromClass/{id}', [\App\Http\Controllers\StudentAttendenceController::class, 'getStudentsFromClass']);
+    Route::post('save-attendance', [\App\Http\Controllers\StudentAttendenceController::class, 'store']);
 });
 
 
