@@ -6,6 +6,7 @@ use App\Models\_Class;
 use App\Models\Student;
 use App\Models\StudentAttendence;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentAttendenceController extends Controller
 {
@@ -18,9 +19,33 @@ class StudentAttendenceController extends Controller
         $this->middleware('permission:s_att-list', ['only' => ['listView']]);
     }
 
+    public function update(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $data = StudentAttendence::findOrFail($id);
+            $data->attendence = $request->attendence;
+            $data->update();
+
+            DB::commit();
+            return redirect()->route('s_atd.list')
+                ->with( 'success', 'Record updated.....' );
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('error',$exception->getMessage());
+        }
+    }
+
+    public function edit($id)
+    {
+        $data = StudentAttendence::findOrFail($id);
+        return view('student-atd.edit', compact('data'));
+    }
+
     public function listView()
     {
-        $data = StudentAttendence::all();
+        $data = StudentAttendence::latest()->get();
         return view('student-atd.list', compact('data'));
     }
 

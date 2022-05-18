@@ -47,6 +47,8 @@
                                 <th>Roll Number</th>
                                 <th>Name</th>
                                 <th>Attendance</th>
+                                <th>Date</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -62,6 +64,10 @@
                                                 <label class="label label-danger">Absent</label>
                                             @endif
                                         </td>
+                                        <td>{{ Carbon\Carbon::parse( $d->added_at )->format('M d, Y')  }}</td>
+                                        @can('s_att-edit')
+                                            <td> <a class="btn btn-primary" href="{{ route('s_atd.edit',$d->id) }}">Edit</a></td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                             </tbody>
