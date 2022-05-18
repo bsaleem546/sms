@@ -43,4 +43,9 @@ class Staff extends Model
         return $this->belongsToMany(Subject::class, 'subject_staff');
     }
 
+    public function staff_atd()
+    {
+        return $this->hasOne(StaffAttendence::class, 'staff_id');
+    }
+
 }

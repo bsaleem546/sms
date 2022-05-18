@@ -82,6 +82,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('student-attendance/{id}', [\App\Http\Controllers\StudentAttendenceController::class, 'edit'])->name('s_atd.edit');
     Route::patch('student-attendance/{student_attendance}', [\App\Http\Controllers\StudentAttendenceController::class, 'update'])->name('s_atd.update');
     Route::post('save-attendance', [\App\Http\Controllers\StudentAttendenceController::class, 'store']);
+
+    Route::resource('staff-attendance', \App\Http\Controllers\StaffAttendenceController::class);
 });
 
 
