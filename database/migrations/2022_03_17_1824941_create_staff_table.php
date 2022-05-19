@@ -29,6 +29,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->integer('added_by');
             $table->string('id_proof')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

@@ -60,45 +60,45 @@
                             </div>
                         </div>
                     </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label class="col-sm-12">Time In</label>
-                                    <div class="col-sm-12 validate">
-                                        <input type="time" name="time_in" class="form-control">
-                                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="col-sm-12">Time In</label>
+                                <div class="col-sm-12 validate">
+                                    <input type="time" name="time_in" class="form-control">
                                 </div>
-                                <div class="col-sm-6">
-                                    <label class="col-sm-12">Time Out</label>
-                                    <div class="col-sm-12 validate">
-                                        <input type="time" name="time_out" class="form-control">
-                                    </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-12">Time Out</label>
+                                <div class="col-sm-12 validate">
+                                    <input type="time" name="time_out" class="form-control">
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-12">Date</label>
-                                <div class="col-sm-12 validate">
-                                    <input required type="date" name="add_at" class="form-control">
-                                </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-12">Date</label>
+                            <div class="col-sm-12 validate">
+                                <input required type="date" name="add_at" class="form-control">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-12">Status</label>
-                                <div class="col-sm-12 validate">
-                                    <select required name="status" class="form-control">
-                                        <option value="">select option</option>
-                                        <option value="absent">Absent</option>
-                                        <option value="present">Present</option>
-                                        <option value="leave">Leave</option>
-                                        <option value="late">Late</option>
-                                    </select>
-                                </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-12">Status</label>
+                            <div class="col-sm-12 validate">
+                                <select required name="status" class="form-control">
+                                    <option value="">select option</option>
+                                    <option value="absent">Absent</option>
+                                    <option value="present">Present</option>
+                                    <option value="leave">Leave</option>
+                                    <option value="late">Late</option>
+                                </select>
                             </div>
                         </div>
+                    </div>
                     <button type="submit" class="btn btn-info waves-effect waves-light m-r-10">Submit</button>
                     {!! Form::close() !!}
                 </div>

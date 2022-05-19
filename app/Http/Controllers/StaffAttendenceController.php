@@ -48,9 +48,7 @@ class StaffAttendenceController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request);
         DB::beginTransaction();
-
         try {
 //            VALIDITION
             $request->validate([

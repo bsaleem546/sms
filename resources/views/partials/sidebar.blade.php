@@ -287,6 +287,7 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('staff-attendance.index') }}">View Attendance</a>
+                                <a href="{{ route('staff-attendance.create') }}">Create Attendance</a>
                             </li>
                         </ul>
                     </li>

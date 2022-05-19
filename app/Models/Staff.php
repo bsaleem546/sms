@@ -26,6 +26,7 @@ class Staff extends Model
         'user_id',
         'added_by',
         'id_proof',
+        'status'
     ];
 
     public function users()
