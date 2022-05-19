@@ -293,6 +293,21 @@
                     </li>
                 @endcan
 
+                @can('salary-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Staff Salary</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('salaries.index') }}">View Staff Salary</a>
+                                <a href="{{ route('salaries.create') }}">Create Staff Salary</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

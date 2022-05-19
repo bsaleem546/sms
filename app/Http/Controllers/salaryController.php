@@ -2,10 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Salary;
+use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class salaryController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:salary-list|salary-create|salary-edit|salary-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:salary-create', ['only' => ['create','store']]);
+        $this->middleware('permission:salary-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:salary-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +23,8 @@ class salaryController extends Controller
      */
     public function index()
     {
-        //
+        $data = Salary::latest()->get();
+        return view('salary.index', compact('data'));
     }
 
     /**
@@ -23,7 +34,8 @@ class salaryController extends Controller
      */
     public function create()
     {
-        //
+        $staffs = Staff::latest()->get();
+        return view('salary.create', compact('staffs'));
     }
 
     /**
@@ -56,7 +68,9 @@ class salaryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Salary::findOrFail($id);
+        $staffs = Staff::latest()->get();
+        return view('salary.edit', compact('staffs', 'data'));
     }
 
     /**
@@ -79,6 +93,17 @@ class salaryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            Salary::find($id)->delete();
+            DB::commit();
+            return redirect()->route('salaries.index')
+                ->with('success','Staff Salary deleted successfully');
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error',$exception->getMessage());
+        }
     }
 }
