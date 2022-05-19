@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('save-attendance', [\App\Http\Controllers\StudentAttendenceController::class, 'store']);
 
     Route::resource('staff-attendance', \App\Http\Controllers\StaffAttendenceController::class);
+    Route::resource('salaries', \App\Http\Controllers\salaryController::class);
 });
 
 
