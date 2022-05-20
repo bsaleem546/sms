@@ -179,13 +179,15 @@ class StaffController extends Controller
                 'roles' => 'required',
             ]);
 
+
+
             $staff = Staff::findOrFail($id);
 
             $user = User::where('id', $staff->user_id)->first();
             $user->email = $request->email;
             $user->update();
 
-            DB::table('model_has_roles')->where('model_id',$id)->delete();
+            DB::table('model_has_roles')->where('model_id',$user->id)->delete();
             $user->assignRole($request->input('roles'));
 
             $user->departments()->sync($request->department);
@@ -214,6 +216,7 @@ class StaffController extends Controller
                 ->with( 'success', 'Record updated.....' );
         }
         catch (\Exception $exception){
+            dd($exception);
             DB::rollBack();
             return redirect()->back()->with('error',$exception->getMessage());
         }

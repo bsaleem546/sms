@@ -69,4 +69,9 @@ class User extends Authenticatable
         return $this->roles()->where('id', 3)->exists();
     }
 
+    public function expense()
+    {
+        return $this->hasOne(Expense::class, 'user_id');
+    }
+
 }

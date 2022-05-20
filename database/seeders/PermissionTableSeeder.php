@@ -89,10 +89,14 @@ class PermissionTableSeeder extends Seeder
 //            'st_atd-create',
 //            'st_atd-edit',
 //            'st_atd-delete',
-            'salary-list',
-            'salary-create',
-            'salary-edit',
-            'salary-delete',
+//            'salary-list',
+//            'salary-create',
+//            'salary-edit',
+//            'salary-delete',
+            'expense-list',
+            'expense-create',
+            'expense-edit',
+            'expense-delete',
         ];
 
         foreach ($permissions as $permission) {

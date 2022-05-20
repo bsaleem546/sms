@@ -308,6 +308,21 @@
                     </li>
                 @endcan
 
+                @can('expense-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Expenses</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('expenses.index') }}">View Expenses</a>
+                                <a href="{{ route('expenses.create') }}">Create Expenses</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
