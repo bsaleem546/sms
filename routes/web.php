@@ -90,3 +90,8 @@ Route::group(['middleware' => ['auth']], function() {
 
 Route::get('registrations', [\App\Http\Controllers\RegisterationController::class, 'index']);
 Route::post('registrations', [\App\Http\Controllers\RegisterationController::class, 'store'])->name('registrations.store');
+
+
+Route::get('test', function (){
+    dd( auth()->user()->is_teacher );
+});

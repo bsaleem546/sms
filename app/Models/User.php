@@ -54,4 +54,19 @@ class User extends Authenticatable
         return $this->hasOne(Staff::class, 'user_id');
     }
 
+    public function getIsAdminAttribute()
+    {
+        return $this->roles()->where('id', 1)->exists();
+    }
+
+    public function getIsTeacherAttribute()
+    {
+        return $this->roles()->where('id', 2)->exists();
+    }
+
+    public function getIsStudentAttribute()
+    {
+        return $this->roles()->where('id', 3)->exists();
+    }
+
 }
