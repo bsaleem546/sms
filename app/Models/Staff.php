@@ -49,4 +49,9 @@ class Staff extends Model
         return $this->hasOne(StaffAttendence::class, 'staff_id');
     }
 
+    public function salary()
+    {
+        return $this->hasOne(Salary::class, 'staff_id');
+    }
+
 }

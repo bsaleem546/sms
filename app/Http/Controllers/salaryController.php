@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Salary;
 use App\Models\Staff;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 class salaryController extends Controller
 {
@@ -36,6 +38,8 @@ class salaryController extends Controller
     {
         $staffs = Staff::latest()->get();
         return view('salary.create', compact('staffs'));
+
+
     }
 
     /**
@@ -46,7 +50,44 @@ class salaryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+//            VALIDITION
+            $request->validate([
+                "staff_id" => "required",
+                "salary" => "required",
+                "deduction_days" => "nullable",
+                "deduction" => "nullable",
+                "month_of" => "required",
+                "note" => "nullable",
+            ]);
+
+            $month_of = Carbon::parse($request->month_of)->format('M-Y');
+            //            check
+            $check = salary::where('staff_id',$request->staff_id)->where('month_of',$month_of)->first();
+            if($check !== null){
+                return redirect()->back()->with('error','record already exist');
+            }
+
+            //            save
+            salary::create([
+                "staff_id" => $request->staff_id,
+                "salary" => $request->salary,
+                "deduction_days" => $request->deduction_days,
+                "deduction" => $request->deduction,
+                "month_of" => $month_of,
+                'note' => $request->note,
+            ]);
+
+            //            commit
+            DB::commit();
+            return redirect()->route('salaries.index')
+                ->with('success','Salary Saved');
+        }catch(\Exception $exception){
+            DB::rollback();
+            return redirect()->back()
+                ->with('error',$exception->getMessage());
+        }
     }
 
     /**
@@ -82,7 +123,35 @@ class salaryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+//            VALIDITION
+            $request->validate([
+                "salary" => "required",
+                "deduction_days" => "nullable",
+                "deduction" => "nullable",
+                "note" => "nullable",
+                "status" => "required",
+            ]);
+
+            //            save
+            salary::where('id', $id)->update([
+                "salary" => $request->salary,
+                "deduction_days" => $request->deduction_days,
+                "deduction" => $request->deduction,
+                'note' => $request->note,
+                'status' => $request->status,
+            ]);
+
+            //            commit
+            DB::commit();
+            return redirect()->route('salaries.index')
+                ->with('success','Salary updated');
+        }catch(\Exception $exception){
+            DB::rollback();
+            return redirect()->back()
+                ->with('error',$exception->getMessage());
+        }
     }
 
     /**

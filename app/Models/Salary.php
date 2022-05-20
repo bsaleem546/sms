@@ -12,4 +12,9 @@ class Salary extends Model
     protected $fillable = [
         'staff_id','salary','deduction','deduction_days','month_of','note','status'
     ];
+
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class, 'staff_id');
+    }
 }
