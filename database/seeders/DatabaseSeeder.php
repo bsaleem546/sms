@@ -19,6 +19,7 @@ class   DatabaseSeeder extends Seeder
 //        $this->call(staffAttSeeder::class);
 //         \App\Models\User::factory(10)->create();
 //        $this->call(ClassSeeder::class);
-        $this->call(StudentSeeder::class);
+//        $this->call(StudentSeeder::class);
+        $this->call(SubjectSeeder::class);
     }
 }
