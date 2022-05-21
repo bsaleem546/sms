@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NoticeBoard;
+use App\Models\StaffLeave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class NoticeBoradController extends Controller
+class StaffLeaveController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:notice-list|notice-create|notice-edit|notice-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:notice-create', ['only' => ['create','store']]);
-        $this->middleware('permission:notice-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:notice-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:staff-leave-list|staff-leave-create|staff-leave-edit|staff-leave-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:staff-leave-create', ['only' => ['create','store']]);
+        $this->middleware('permission:staff-leave-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:staff-leave-delete', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -22,8 +22,8 @@ class NoticeBoradController extends Controller
      */
     public function index()
     {
-        $data = NoticeBoard::latest()->get();
-        return view('notices.index', compact('data'));
+        $data = StaffLeave::latest()->get();
+        return view('staff-leaves.index', compact('data'));
     }
 
     /**
@@ -33,7 +33,7 @@ class NoticeBoradController extends Controller
      */
     public function create()
     {
-        return view('notices.create');
+        return view('staff-leaves.create');
     }
 
     /**
@@ -47,23 +47,22 @@ class NoticeBoradController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'title' => 'required',
-                'notice' => 'required',
-                'start_date' => 'nullable',
-                'end_date' => 'nullable',
+                'staff_id' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'reason' => 'required',
             ]);
 
-            NoticeBoard::create([
-                'title' => $request->title,
-                'notice' => $request->notice,
+            StaffLeave::create([
+                'staff_id' => $request->staff_id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'user_id' => auth()->user()->id,
+                'reason' => $request->reason,
             ]);
 
             DB::commit();
-            return redirect()->route('notices.index')
-                ->with('success','Notice saved successfully');
+            return redirect()->route('staff-leaves.index')
+                ->with('success','Leave saved successfully');
         }
         catch (\Exception $exception){
             DB::rollBack();
@@ -71,7 +70,6 @@ class NoticeBoradController extends Controller
                 ->with('error',$exception->getMessage());
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -92,8 +90,8 @@ class NoticeBoradController extends Controller
      */
     public function edit($id)
     {
-        $data = NoticeBoard::findOrFail($id);
-        return view('notices.edit', compact('data'));
+        $data = StaffLeave::findOrFail($id);
+        return view('staff-leaves.edit', compact('data'));
     }
 
     /**
@@ -108,25 +106,24 @@ class NoticeBoradController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'title' => 'required',
-                'notice' => 'required',
-                'start_date' => 'nullable',
-                'end_date' => 'nullable',
+                'staff_id' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'reason' => 'required',
                 'status' => 'required',
             ]);
 
-            NoticeBoard::where('id', $id)->update([
-                'title' => $request->title,
-                'notice' => $request->notice,
+            StaffLeave::where('id', $id)->update([
+                'staff_id' => $request->staff_id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'user_id' => auth()->user()->id,
+                'reason' => $request->reason,
                 'status' => $request->status,
             ]);
 
             DB::commit();
-            return redirect()->route('notices.index')
-                ->with('success','Notice updated successfully');
+            return redirect()->route('staff-leaves.index')
+                ->with('success','Leave updated successfully');
         }
         catch (\Exception $exception){
             DB::rollBack();
@@ -145,12 +142,10 @@ class NoticeBoradController extends Controller
     {
         DB::beginTransaction();
         try {
-
-            NoticeBoard::where('id', $id)->delete();
-
+            StaffLeave::where('id', $id)->delete();
             DB::commit();
-            return redirect()->route('notices.index')
-                ->with('success','Notice deleted successfully');
+            return redirect()->route('staff-leaves.index')
+                ->with('success','Leave deleted successfully');
         }
         catch (\Exception $exception){
             DB::rollBack();

@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NoticeBoard;
+use App\Models\Student;
+use App\Models\StudentLeave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class NoticeBoradController extends Controller
+class StudentLeaveController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:notice-list|notice-create|notice-edit|notice-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:notice-create', ['only' => ['create','store']]);
-        $this->middleware('permission:notice-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:notice-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:student-leave-list|student-leave-create|student-leave-edit|student-leave-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:student-leave-create', ['only' => ['create','store']]);
+        $this->middleware('permission:student-leave-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:student-leave-delete', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -22,8 +23,8 @@ class NoticeBoradController extends Controller
      */
     public function index()
     {
-        $data = NoticeBoard::latest()->get();
-        return view('notices.index', compact('data'));
+        $data = StudentLeave::latest()->get();
+        return view('student-leaves.index', compact('data'));
     }
 
     /**
@@ -33,7 +34,7 @@ class NoticeBoradController extends Controller
      */
     public function create()
     {
-        return view('notices.create');
+        return view('student-leaves.create');
     }
 
     /**
@@ -47,23 +48,22 @@ class NoticeBoradController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'title' => 'required',
-                'notice' => 'required',
-                'start_date' => 'nullable',
-                'end_date' => 'nullable',
+                'student_id' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'reason' => 'required',
             ]);
 
-            NoticeBoard::create([
-                'title' => $request->title,
-                'notice' => $request->notice,
+            StudentLeave::create([
+                'student_id' => $request->student_id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'user_id' => auth()->user()->id,
+                'reason' => $request->reason,
             ]);
 
             DB::commit();
-            return redirect()->route('notices.index')
-                ->with('success','Notice saved successfully');
+            return redirect()->route('student-leaves.index')
+                ->with('success','Leave saved successfully');
         }
         catch (\Exception $exception){
             DB::rollBack();
@@ -71,7 +71,6 @@ class NoticeBoradController extends Controller
                 ->with('error',$exception->getMessage());
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -92,8 +91,8 @@ class NoticeBoradController extends Controller
      */
     public function edit($id)
     {
-        $data = NoticeBoard::findOrFail($id);
-        return view('notices.edit', compact('data'));
+        $data = StudentLeave::findOrFail($id);
+        return view('student-leaves.edit', compact('data'));
     }
 
     /**
@@ -108,25 +107,24 @@ class NoticeBoradController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'title' => 'required',
-                'notice' => 'required',
-                'start_date' => 'nullable',
-                'end_date' => 'nullable',
+                'student_id' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'reason' => 'required',
                 'status' => 'required',
             ]);
 
-            NoticeBoard::where('id', $id)->update([
-                'title' => $request->title,
-                'notice' => $request->notice,
+            StudentLeave::where('id', $id)->update([
+                'student_id' => $request->student_id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'user_id' => auth()->user()->id,
+                'reason' => $request->reason,
                 'status' => $request->status,
             ]);
 
             DB::commit();
-            return redirect()->route('notices.index')
-                ->with('success','Notice updated successfully');
+            return redirect()->route('student-leaves.index')
+                ->with('success','Leave updated successfully');
         }
         catch (\Exception $exception){
             DB::rollBack();
@@ -145,12 +143,10 @@ class NoticeBoradController extends Controller
     {
         DB::beginTransaction();
         try {
-
-            NoticeBoard::where('id', $id)->delete();
-
+            StudentLeave::where('id', $id)->delete();
             DB::commit();
-            return redirect()->route('notices.index')
-                ->with('success','Notice deleted successfully');
+            return redirect()->route('student-leaves.index')
+                ->with('success','Leave deleted successfully');
         }
         catch (\Exception $exception){
             DB::rollBack();

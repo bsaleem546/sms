@@ -353,6 +353,38 @@
                     </li>
                 @endcan
 
+
+                @can('student-leave-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Student Leave</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('student-leaves.index') }}">View Student Leave</a>
+                                <a href="{{ route('student-leaves.create') }}">Create Student Leave</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+
+                @can('staff-leave-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Staff Leave</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('staff-leaves.index') }}">View Staff Leave</a>
+                                <a href="{{ route('staff-leaves.create') }}">Create Staff Leave</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

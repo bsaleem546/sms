@@ -54,4 +54,8 @@ class Staff extends Model
         return $this->hasOne(Salary::class, 'staff_id');
     }
 
+    public function leave()
+    {
+        return $this->hasOne(StaffLeave::class, 'staff_id');
+    }
 }
