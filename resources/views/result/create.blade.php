@@ -53,7 +53,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label class="font-medium">Class Name</label>
-                                    <select name="class_id" required class="form-control">
+                                    <select name="class_id" required class="form-control" id="class_id">
                                         <option value="">Select Option</option>
                                         @foreach($classes as $cl)
                                             <option value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</option>
@@ -100,5 +100,34 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('javascript')
+    <script>
+        $('#class_id').change( () => {
+            $('#student_id').html('')
+            $('#tb').html('')
+            var id = $('#class_id').val()
+            $.ajax({
+                url: site_url+"/getSubjectsAndStudents/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $.each(res.students, (index, value) => {
+                       $('#student_id').append('<option value="'+value.id+'">'+value.name+'</option>')
+                    })
+
+                    $.each(res.subjects, (index, value) => {
+                        var html = '<tr>\n' +
+                            '                                        <td>'+(index + 1)+'</td>\n' +
+                            '                                        <td>'+value.name+'</td>\n' +
+                            '                                        <td><input type="text" id="obt_'+value.id+'"></td>\n' +
+                            '                                        <td><input type="text" id="tt_'+value.id+'"></td>\n' +
+                            '                                    </tr>'
+                        $('#tb').append(html)
+                    })
+                }
+            });
+        })
+    </script>
 @endsection

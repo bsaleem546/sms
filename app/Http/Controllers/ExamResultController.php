@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\_Class;
 use App\Models\Result;
+use App\Models\Student;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class ExamResultController extends Controller
@@ -15,6 +17,13 @@ class ExamResultController extends Controller
         $this->middleware('permission:result-create', ['only' => ['create','store']]);
         $this->middleware('permission:result-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:result-delete', ['only' => ['destroy']]);
+    }
+
+    public function getSubjectsAndStudents($id)
+    {
+        $subjects = Subject::where('__class_id', $id)->get();
+        $students = Student::where('__class_id', $id)->get();
+        return response()->json([ 'subjects' => $subjects, 'students' => $students ]);
     }
     /**
      * Display a listing of the resource.

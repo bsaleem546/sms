@@ -87,7 +87,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('salaries', \App\Http\Controllers\salaryController::class);
     Route::resource('expenses', \App\Http\Controllers\ExpenseController::class);
     Route::resource('notices', \App\Http\Controllers\NoticeBoradController::class);
+
     Route::resource('results',\App\Http\Controllers\ExamResultController::class);
+    Route::get('getSubjectsAndStudents/{id}', [\App\Http\Controllers\ExamResultController::class, 'getSubjectsAndStudents']);
 
     Route::resource('student-leaves', \App\Http\Controllers\StudentLeaveController::class);
     Route::resource('staff-leaves', \App\Http\Controllers\StaffLeaveController::class);
