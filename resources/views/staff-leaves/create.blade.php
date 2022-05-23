@@ -14,7 +14,7 @@
                     <li class="breadcrumb-item active">Staff Leaves</li>
                     <li class="breadcrumb-item active">Add Staff Leave</li>
                 </ol>
-                <a href="{{ route('student-leaves.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
+                <a href="{{ route('staff-leaves.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>
