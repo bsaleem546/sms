@@ -47,7 +47,7 @@
 
 
                     {!! Form::open(array('route' => 'results.store','method'=>'POST',
-                        'class' => 'form-material m-t-40 create', 'enctype' => 'multipart/form-data')) !!}
+                        'class' => 'form-material m-t-40 create')) !!}
 
                         <div class="form-group">
                             <div class="row">
@@ -121,8 +121,8 @@
                         var html = '<tr>\n' +
                             '                                        <td>'+(index + 1)+'</td>\n' +
                             '                                        <td>'+value.name+'</td>\n' +
-                            '                                        <td><input type="text" id="obt_'+value.id+'"></td>\n' +
-                            '                                        <td><input type="text" id="tt_'+value.id+'"></td>\n' +
+                            '                                        <td><input type="text" value="0" id="obt_'+value.id+'"></td>\n' +
+                            '                                        <td><input type="text" value="100" id="tt_'+value.id+'"></td>\n' +
                             '                                    </tr>'
                         $('#tb').append(html)
                     })
