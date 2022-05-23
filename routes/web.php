@@ -93,6 +93,10 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('student-leaves', \App\Http\Controllers\StudentLeaveController::class);
     Route::resource('staff-leaves', \App\Http\Controllers\StaffLeaveController::class);
+
+    Route::resource('live-classes', \App\Http\Controllers\LiveClassController::class);
+    Route::resource('study-material', \App\Http\Controllers\StudyMaterialController::class);
+
 });
 
 

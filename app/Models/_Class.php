@@ -30,4 +30,14 @@ class _Class extends Model
     {
         return $this->hasOne(Student::class, '__class_id');
     }
+
+    public function results()
+    {
+        return $this->hasOne(Result::class, 'class_id');
+    }
+
+    public function live_class()
+    {
+        return $this->hasOne(LiveClass::class, 'class_id');
+    }
 }

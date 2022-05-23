@@ -5,25 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Result extends Model
+class LiveClass extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-            'admission_id',
-            'student_id',
-            'class_id',
-            'session_id',
-            'exam_type',
-            'total_marks',
-            'obtained_marks',
-            'percentage',
-            'grade',
-            'status',
+        'class_id',
+        'user_id',
+        'meeting_link',
+        'status',
     ];
 
     public function __class()
     {
         return $this->belongsTo(_Class::class, 'class_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

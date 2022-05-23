@@ -56,7 +56,6 @@
                                     <select name="class_id" required class="form-control" id="class_id">
                                         <option value="">Select Option</option>
                                         @foreach($classes as $cl)
-{{--                                            @dd($cl)--}}
                                             <option value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</option>
                                         @endforeach
                                     </select>

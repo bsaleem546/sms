@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Exam')
+@section('title', 'Results')
 
 @section('content')
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Examination</h4>
+            <h4 class="text-themecolor">Results</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item active">Examination</li>
+                    <li class="breadcrumb-item active">Results</li>
                 </ol>
-                @can('staff-create')
+                @can('result-create')
                     <a href="{{ route('results.create') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Create New</a>
                 @endcan
             </div>
@@ -48,10 +48,8 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Admission</th>
-                                <th>Student</th>
                                 <th>Class</th>
-                                <th>Session</th>
+                                <th>Student</th>
                                 <th>Exam Type</th>
                                 <th>Total Marks</th>
                                 <th>Obtained Marks</th>
@@ -63,20 +61,16 @@
                             </thead>
                             <tbody>
                             @foreach ($data as $key => $d)
-{{--                                @dd($data)--}}
                                 <tr>
                                     <td>{{ $d->id }}</td>
-                                    <td>{{ $d->admission_id }}</td>
-                                    <td>{{ $d->student_id }}</td>
-                                    <td>{{ $d->class_id }}</td>
-                                    <td>{{ $d->session_id }}</td>
+                                    <td>{{ $d->__class->name.' - '.$d->__class->section->name }}</td>
+                                    <td>{{ $d->__class->student->name }}</td>
                                     <td>{{ $d->exam_type }}</td>
                                     <td>{{ $d->total_marks }}</td>
                                     <td>{{ $d->obtained_marks }}</td>
                                     <td>{{ $d->percentage }}</td>
                                     <td>{{ $d->grade }}</td>
                                     <td>{{ $d->status }}</td>
-{{--                                    <td>{{ \App\Models\User::where('id', $d->added_by)->pluck('name')->first() }}</td>--}}
                                     <td>
                                         @can('result-edit')
                                             <a class="btn btn-primary" href="{{ route('results.edit',$d->id) }}">Edit</a>

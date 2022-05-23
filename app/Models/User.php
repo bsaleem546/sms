@@ -74,4 +74,9 @@ class User extends Authenticatable
         return $this->hasOne(Expense::class, 'user_id');
     }
 
+    public function live_class()
+    {
+        return $this->hasOne(LiveClass::class, 'class_id');
+    }
+
 }

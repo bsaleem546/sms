@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Exam Result Create')
+@section('title', 'Exam Result Edit')
 
 @section('content')
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Exam Result Create</h4>
+            <h4 class="text-themecolor">Exam Result Edit</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                     <li class="breadcrumb-item">Exam Results</li>
-                    <li class="breadcrumb-item active">Create Exam Result</li>
+                    <li class="breadcrumb-item active">Edit Exam Result</li>
                 </ol>
                 <a href="{{ route('results.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
             </div>
@@ -43,35 +43,35 @@
                         </div>
                     @endif
 
-                    <h5 class="card-title">Create Exam Result</h5>
+                    <h5 class="card-title">Edit Exam Result</h5>
 
 
-                    {!! Form::open(array('route' => 'results.store','method'=>'POST',
+                    {!! Form::model($data, array('route' => ['results.update', $data->id],'method'=>'PATCH',
                         'class' => 'form-material m-t-40 create', 'id' => 'submitted')) !!}
 
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
                                 <label class="font-medium">Class Name</label>
-                                <select name="class_id" required class="form-control" id="class_id">
+                                <select name="class_id" required disabled class="form-control" id="class_id">
                                     <option value="">Select Option</option>
                                     @foreach($classes as $cl)
-                                        <option value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</option>
+                                        <option value="{{ $cl->id }}" {{ $data->class_id === $cl->id ? 'selected' : '' }}>{{ $cl->name.' - '.$cl->section->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label class="font-medium">Student Name</label>
-                                <select name="student_id" required class="form-control" id="student_id">
+                                <select name="student_id" required disabled class="form-control" id="student_id">
                                     <option value="">Select Option</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label class="font-medium">Exam Type</label>
-                                <select name="exam_type" required class="form-control" id="exam_type">
+                                <select name="exam_type" disabled required class="form-control" id="exam_type">
                                     <option value="">Select Option</option>
-                                    <option value="mid-term">Mid Term</option>
-                                    <option value="final-term">Final Term</option>
+                                    <option value="mid-term" {{ $data->exam_type === 'mid-term' ? 'selected' : '' }}>Mid Term</option>
+                                    <option value="final-term" {{ $data->exam_type === 'final-term' ? 'selected' : '' }}>Final Term</option>
                                 </select>
                             </div>
                         </div>
@@ -89,7 +89,14 @@
                             </tr>
                             </thead>
                             <tbody id="tb">
-
+                                @foreach($rds as $key => $rd)
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $rd->subject_name }}</td>
+                                        <td><input type="text" value="{{ $rd->obtained_marks }}" id="obt_{{ $rd->id }}"></td>
+                                        <td><input type="text" value="{{ $rd->subject_marks }}" id="tt_{{ $rd->id }}"></td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -104,53 +111,48 @@
 
 @section('javascript')
     <script>
-        var subjects = null
-        $('#class_id').change( () => {
+        var result_details = {!! $rds !!}
+        function onload(){
             $('#student_id').html('')
-            $('#tb').html('')
             var id = $('#class_id').val()
             $.ajax({
                 url: site_url+"/getSubjectsAndStudents/"+id,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    subjects = res.subjects
                     $.each(res.students, (index, value) => {
                         $('#student_id').append('<option value="'+value.id+'">'+value.name+'</option>')
                     })
-
-                    $.each(res.subjects, (index, value) => {
-                        var html = '<tr>\n' +
-                            '                                        <td>'+(index + 1)+'</td>\n' +
-                            '                                        <td>'+value.name+'</td>\n' +
-                            '                                        <td><input type="text" value="0" id="obt_'+value.id+'"></td>\n' +
-                            '                                        <td><input type="text" value="100" id="tt_'+value.id+'"></td>\n' +
-                            '                                    </tr>'
-                        $('#tb').append(html)
-                    })
                 }
             });
-        })
+        }
+
+        window.onload = onload();
 
         $(document).on('submit', '#submitted', (event) => {
             event.preventDefault()
 
-            var local_subjects = []
-            var formData = {
-                'class_id':$('#class_id').val(),
-                'student_id':$('#student_id').val(),
-                'exam_type':$('#exam_type').val(),
-            }
+            var local_result_details = []
+            var total = 0
+            var obt = 0
 
-            $.each(subjects, (i, v) => {
-                local_subjects.push({ 'subject_name': v.name, 'obt_marks': $('#obt_'+v.id).val(), 'total_marks': $('#tt_'+v.id).val() })
+            $.each(result_details, (i, v) => {
+                total = total + parseInt($('#tt_'+v.id).val())
+                obt = obt + parseFloat($('#obt_'+v.id).val())
+                local_result_details.push({ 'id':v.id, 'subject_name': v.subject_name, 'obt_marks': $('#obt_'+v.id).val(), 'total_marks': $('#tt_'+v.id).val() })
             })
 
+            var per = (obt/total)*100
+
+            var formData = {
+                total, obt, per
+            }
+
             $.ajax({
-                url: '{{  route('results.store') }}',
-                type: 'post',
+                url: '{{  route('results.update', $data->id) }}',
+                type: 'PATCH',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                data: {local_subjects:local_subjects},
+                data: {local_result_details:local_result_details, formData:formData},
                 success: function(response) {
                     if (response.status === true){
                         alert(response.msg)
