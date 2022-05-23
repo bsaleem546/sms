@@ -78,7 +78,6 @@
                                     <td>{{ $d->status }}</td>
 {{--                                    <td>{{ \App\Models\User::where('id', $d->added_by)->pluck('name')->first() }}</td>--}}
                                     <td>
-                                        <a class="btn btn-info" href="{{ route('results.show',$d->id) }}">Show</a>
                                         @can('result-edit')
                                             <a class="btn btn-primary" href="{{ route('results.edit',$d->id) }}">Edit</a>
                                         @endcan

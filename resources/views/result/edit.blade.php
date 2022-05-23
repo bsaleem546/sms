@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Staff Edit')
+@section('title', 'Exam Result Create')
 
 @section('content')
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Staff Details</h4>
+            <h4 class="text-themecolor">Exam Result Create</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item">Staffs</li>
-                    <li class="breadcrumb-item active">Edit Staff</li>
+                    <li class="breadcrumb-item">Exam Results</li>
+                    <li class="breadcrumb-item active">Create Exam Result</li>
                 </ol>
-                <a href="{{ route('staffs.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
+                <a href="{{ route('results.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>
@@ -43,176 +43,56 @@
                         </div>
                     @endif
 
-                    <h5 class="card-title">Edit Staff</h5>
-                    <div class="alert alert-warning">
-                        <p>Default staff login password will be <b>staff123</b> .</p>
-                    </div>
+                    <h5 class="card-title">Create Exam Result</h5>
 
-                    {!! Form::model($data, array('route' => ['staffs.update', $data->id],'method'=>'PATCH', 'class' => 'form-material m-t-40 create', 'enctype' => 'multipart/form-data')) !!}
 
-                    <h3>Personal Information</h3>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-sm-12">Upload an image</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="file" id="id_proof" name="id_proof" class="form-control" accept="image/*" onchange="loadImage(event)">
-                                    <script>
-                                        var loadImage = function(event) {
-
-                                            var input = document.getElementById('id_proof');
-                                            var file = input.files[0];
-                                            if( file.size > 2097152 )
-                                            {
-                                                alert("Cannot upload Files greater than 2MB")
-                                                input.value = '';
-                                            }
-                                            else
-                                            {
-                                                var output = document.getElementById('image_uploaded');
-                                                output.src = URL.createObjectURL(event.target.files[0]);
-                                                output.onload = function() {
-                                                    URL.revokeObjectURL(output.src) // free memory
-                                                }
-                                            }
-                                        };
-                                    </script>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-center">
-                                    <img id="image_uploaded" src="{{ $data->id_proof !== null ?  url('public/uploads/staffs/'.$data->id_proof) : url('public/placeholder.png') }}" alt="" style="margin-bottom: 15px; height: 200px;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {!! Form::open(array('route' => 'results.store','method'=>'POST',
+                        'class' => 'form-material m-t-40 create', 'id' => 'submitted')) !!}
 
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
-                                <label class="col-sm-12">Name</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="text" name="name" required placeholder="Name" class="form-control" value="{{ $data->name }}">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="col-sm-12">Gender</label>
-                                <div class="d-flex">
-                                    <div class="col-sm-12 validate">
-                                        <select name="gender" class="form-control" required>
-                                            <option value="male" {{ $data->gender == 'male' ? 'selected' : '' }}>Male</option>
-                                            <option value="female" {{ $data->gender == 'female' ? 'selected' : '' }}>Female</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="col-sm-12">Date of birth</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="date" name="dob" required  class="form-control" value="{{ $data->dob }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="col-sm-12">Address</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="text" name="address" required placeholder="Address" class="form-control" value="{{ $data->address }}">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="col-sm-12">Phone</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="text" name="phone" required placeholder="Phone" class="form-control" value="{{ $data->phone }}">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="col-sm-12">Email</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="email" name="email" required placeholder="Email" class="form-control" value="{{ $data->email }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <hr>
-
-                    <h3>Joining Information</h3>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="col-sm-12">Joining date</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="date" name="joining_date" required class="form-control" value="{{ $data->joining_date }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-sm-12">Salary</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="text" name="salary" required class="form-control" value="0" value="{{ $data->salary }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="d-inline-flex">
-                                    <label class="col-sm-12">Department</label>
-                                    @foreach($data->users->departments as $dd)
-                                        <label class="label label-megna">{{ $dd->name }}</label>
+                                <label class="font-medium">Class Name</label>
+                                <select name="class_id" required class="form-control" id="class_id">
+                                    <option value="">Select Option</option>
+                                    @foreach($classes as $cl)
+                                        <option value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</option>
                                     @endforeach
-                                </div>
-
-                                <div class="col-sm-12 validate">
-                                    <select name="department" class="form-control" required>
-                                        <option value="">Select Option</option>
-                                        @foreach($deps as $d)
-                                            <option value="{{ $d->id }}">{{ $d->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                </select>
                             </div>
-                            <div class="col-md-3">
-                                <label class="col-sm-12">Role</label>
-                                <div class="col-sm-12 validate">
-                                    {!! Form::select('roles', $roles, $userRole, array('class' => 'form-control','required')) !!}
-                                </div>
+                            <div class="col-md-4">
+                                <label class="font-medium">Student Name</label>
+                                <select name="student_id" required class="form-control" id="student_id">
+                                    <option value="">Select Option</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="font-medium">Exam Type</label>
+                                <select name="exam_type" required class="form-control" id="exam_type">
+                                    <option value="">Select Option</option>
+                                    <option value="mid-term">Mid Term</option>
+                                    <option value="final-term">Final Term</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
-                    <hr>
+                    <div class="table-responsive">
 
-                    <h3>Transportation Information</h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Subjects</th>
+                                <th>Obt. Marks</th>
+                                <th>Total Marks</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tb">
 
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="col-sm-12">Is bus incharge</label>
-                                <div class="col-sm-12 validate">
-                                    <input type="radio" name="is_bus_incharge" value="0" {{ $data->is_bus_incharge == 0 ? 'checked' : '' }}><span> No </span>
-                                    <input type="radio" name="is_bus_incharge" value="1" {{ $data->is_bus_incharge == 1 ? 'checked' : '' }}><span> Yes </span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-sm-12">Transports</label>
-                                <div class="col-sm-12 validate">
-                                    <select name="transport_id" class="form-control" required>
-                                        <option value="">Select Option</option>
-                                        @foreach($transports as $t)
-                                            <option value="{{ $t->id }}" {{ $t->id == $data->transport_id ? 'selected' : '' }}>{{ $t->vehicle_number.'  '.$t->vehicle_model }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
-
-
 
                     <button type="submit" class="btn btn-info waves-effect waves-light m-r-10">Submit</button>
                     {!! Form::close() !!}
@@ -220,5 +100,70 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('javascript')
+    <script>
+        var subjects = null
+        $('#class_id').change( () => {
+            $('#student_id').html('')
+            $('#tb').html('')
+            var id = $('#class_id').val()
+            $.ajax({
+                url: site_url+"/getSubjectsAndStudents/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    subjects = res.subjects
+                    $.each(res.students, (index, value) => {
+                        $('#student_id').append('<option value="'+value.id+'">'+value.name+'</option>')
+                    })
+
+                    $.each(res.subjects, (index, value) => {
+                        var html = '<tr>\n' +
+                            '                                        <td>'+(index + 1)+'</td>\n' +
+                            '                                        <td>'+value.name+'</td>\n' +
+                            '                                        <td><input type="text" value="0" id="obt_'+value.id+'"></td>\n' +
+                            '                                        <td><input type="text" value="100" id="tt_'+value.id+'"></td>\n' +
+                            '                                    </tr>'
+                        $('#tb').append(html)
+                    })
+                }
+            });
+        })
+
+        $(document).on('submit', '#submitted', (event) => {
+            event.preventDefault()
+
+            var local_subjects = []
+            var formData = {
+                'class_id':$('#class_id').val(),
+                'student_id':$('#student_id').val(),
+                'exam_type':$('#exam_type').val(),
+            }
+
+            $.each(subjects, (i, v) => {
+                local_subjects.push({ 'subject_name': v.name, 'obt_marks': $('#obt_'+v.id).val(), 'total_marks': $('#tt_'+v.id).val() })
+            })
+
+            $.ajax({
+                url: '{{  route('results.store') }}',
+                type: 'post',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {local_subjects:local_subjects},
+                success: function(response) {
+                    if (response.status === true){
+                        alert(response.msg)
+                        location.reload();
+                    }
+                    else {
+                        alert(response.msg)
+                    }
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
+                }
+            });
+        })
+    </script>
 @endsection

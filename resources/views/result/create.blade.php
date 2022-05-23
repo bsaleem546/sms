@@ -47,7 +47,7 @@
 
 
                     {!! Form::open(array('route' => 'results.store','method'=>'POST',
-                        'class' => 'form-material m-t-40 create')) !!}
+                        'class' => 'form-material m-t-40 create', 'id' => 'submitted')) !!}
 
                         <div class="form-group">
                             <div class="row">
@@ -56,6 +56,7 @@
                                     <select name="class_id" required class="form-control" id="class_id">
                                         <option value="">Select Option</option>
                                         @foreach($classes as $cl)
+{{--                                            @dd($cl)--}}
                                             <option value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</option>
                                         @endforeach
                                     </select>
@@ -68,7 +69,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="font-medium">Exam Type</label>
-                                    <select name="exam_type" required class="form-control">
+                                    <select name="exam_type" required class="form-control" id="exam_type">
                                         <option value="">Select Option</option>
                                         <option value="mid-term">Mid Term</option>
                                         <option value="final-term">Final Term</option>
@@ -104,6 +105,7 @@
 
 @section('javascript')
     <script>
+        var subjects = null
         $('#class_id').change( () => {
             $('#student_id').html('')
             $('#tb').html('')
@@ -113,6 +115,7 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
+                    subjects = res.subjects
                     $.each(res.students, (index, value) => {
                        $('#student_id').append('<option value="'+value.id+'">'+value.name+'</option>')
                     })
@@ -126,6 +129,40 @@
                             '                                    </tr>'
                         $('#tb').append(html)
                     })
+                }
+            });
+        })
+
+        $(document).on('submit', '#submitted', (event) => {
+            event.preventDefault()
+
+            var local_subjects = []
+            var formData = {
+                'class_id':$('#class_id').val(),
+                'student_id':$('#student_id').val(),
+                'exam_type':$('#exam_type').val(),
+            }
+
+            $.each(subjects, (i, v) => {
+                local_subjects.push({ 'subject_name': v.name, 'obt_marks': $('#obt_'+v.id).val(), 'total_marks': $('#tt_'+v.id).val() })
+            })
+
+            $.ajax({
+                url: '{{  route('results.store') }}',
+                type: 'post',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {local_subjects:local_subjects, formData: formData},
+                success: function(response) {
+                    if (response.status === true){
+                        alert(response.msg)
+                        location.reload();
+                    }
+                    else {
+                        alert(response.msg)
+                    }
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
                 }
             });
         })
