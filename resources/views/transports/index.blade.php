@@ -31,14 +31,14 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
-                        @if (Session::get('error'))
-                            <div class="alert alert-danger">
-                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                                <ul>
-                                    <p>{{ Session::get('error') }}</p>
-                                </ul>
-                            </div>
-                        @endif
+                    @if (Session::get('error'))
+                        <div class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <ul>
+                                <p>{{ Session::get('error') }}</p>
+                            </ul>
+                        </div>
+                    @endif
 
                     <h5 class="card-title">Transports list</h5>
                     <div class="table-responsive">
@@ -55,26 +55,26 @@
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $key => $d)
-                                    <tr>
-                                        <td>{{ $d->id }}</td>
-                                        <td>{{ $d->vehicle_number }}</td>
-                                        <td>{{ $d->vehicle_model }}</td>
-                                        <td>{{ $d->driver_name }}</td>
-                                        <td>{{ $d->driver_phone }}</td>
-                                        <td>{{ $d->note }}</td>
-                                        <td>
-                                            @can('transport-edit')
-                                                <a class="btn btn-primary" href="{{ route('transports.edit',$d->id) }}">Edit</a>
-                                            @endcan
-                                            @can('transport-delete')
-                                                {!! Form::open(['method' => 'DELETE','route' => ['transports.destroy', $d->id],'style'=>'display:inline']) !!}
-                                                {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                                                {!! Form::close() !!}
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($data as $key => $d)
+                                <tr>
+                                    <td>{{ $d->id }}</td>
+                                    <td>{{ $d->vehicle_number }}</td>
+                                    <td>{{ $d->vehicle_model }}</td>
+                                    <td>{{ $d->driver_name }}</td>
+                                    <td>{{ $d->driver_phone }}</td>
+                                    <td>{{ $d->note }}</td>
+                                    <td>
+                                        @can('transport-edit')
+                                            <a class="btn btn-primary" href="{{ route('transports.edit',$d->id) }}">Edit</a>
+                                        @endcan
+                                        @can('transport-delete')
+                                            {!! Form::open(['method' => 'DELETE','route' => ['transports.destroy', $d->id],'style'=>'display:inline']) !!}
+                                            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                                            {!! Form::close() !!}
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>

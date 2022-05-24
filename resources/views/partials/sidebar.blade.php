@@ -415,6 +415,21 @@
                     </li>
                 @endcan
 
+                @can('time-table-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Time Tables</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('time-tables.index') }}">View Time Tables</a>
+                                <a href="{{ route('time-tables.create') }}">Create Time Tables</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

@@ -68,7 +68,8 @@ class _ClassController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = _Class::findOrFail($id);
+        return view('classes.show', compact('data'));
     }
 
     /**

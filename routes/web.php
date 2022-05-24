@@ -96,7 +96,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('live-classes', \App\Http\Controllers\LiveClassController::class);
     Route::resource('study-materials', \App\Http\Controllers\StudyMaterialController::class);
-
+    Route::resource('time-tables', \App\Http\Controllers\TimeTableController::class);
+    Route::get('getSubjectsByClass/{id}', [\App\Http\Controllers\TimeTableController::class, 'getSubjectsByClass']);
 });
 
 

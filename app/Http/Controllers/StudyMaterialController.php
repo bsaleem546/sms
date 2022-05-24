@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class StudyMaterialController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:study-material-list|study-material-create|study-material-edit|study-material-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:study-material-create', ['only' => ['create','store']]);
+        $this->middleware('permission:study-material-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:study-material-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
