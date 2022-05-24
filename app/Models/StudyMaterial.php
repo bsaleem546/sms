@@ -15,4 +15,14 @@ class StudyMaterial extends Model
             'upload',
             'text',
     ];
+
+    public function __class()
+    {
+        return $this->belongsTo(_Class::class, 'class_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

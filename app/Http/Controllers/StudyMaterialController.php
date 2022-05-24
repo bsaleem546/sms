@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\_Class;
 use App\Models\StudyMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,8 +27,8 @@ class StudyMaterialController extends Controller
      */
     public function create()
     {
-        $classes = _CLass::latest()->get();
-        return view('study-materials.index', compact('classes'));
+        $classes = _Class::latest()->get();
+        return view('study-materials.create', compact('classes'));
     }
 
     /**
@@ -48,7 +49,7 @@ class StudyMaterialController extends Controller
             $img = null;
             if($request->upload != '' ){
                 $img = time().'.' . $request->upload->getClientOriginalExtension();
-                \Image::make($request->upload)->save(public_path('uploads/').$img);
+                \Image::make($request->upload)->save(public_path('uploads/study/').$img);
             }
             StudyMaterial::create([
                 'class_id' => $request->class_id,
@@ -57,7 +58,7 @@ class StudyMaterialController extends Controller
                 'text' => $request->text,
             ]);
             DB::commit();
-            return redirect()->route('study-material.index')
+            return redirect()->route('study-materials.index')
                 ->with('success','Study Material saved successfully');
         }
         catch (\Exception $exception){
@@ -88,7 +89,7 @@ class StudyMaterialController extends Controller
     {
         $classes = _CLass::latest()->get();
         $data = StudyMaterial::findOrFail($id);
-        return view('study-materials.index', compact('classes', 'data'));
+        return view('study-materials.edit', compact('classes', 'data'));
     }
 
     /**
@@ -110,16 +111,17 @@ class StudyMaterialController extends Controller
             $img = null;
             if($request->upload != '' ){
                 $img = time().'.' . $request->upload->getClientOriginalExtension();
-                \Image::make($request->upload)->save(public_path('uploads/').$img);
+                \Image::make($request->upload)->save(public_path('uploads/study/').$img);
             }
-            StudyMaterial::where('id', $id)->update([
-                'class_id' => $request->class_id,
-                'user_id' => auth()->user()->id,
-                'upload' => $img,
-                'text' => $request->text,
-            ]);
+            $std = StudyMaterial::findOrFail($id);
+            $std->class_id = $request->class_id;
+            $std->user_id = auth()->user()->id;
+            $std->upload = $img === null ? $std->upload : $img;
+            $std->text = $request->text;
+            $std->update();
+
             DB::commit();
-            return redirect()->route('study-material.index')
+            return redirect()->route('study-materials.index')
                 ->with('success','Study Material saved successfully');
         }
         catch (\Exception $exception){
@@ -141,7 +143,7 @@ class StudyMaterialController extends Controller
         try {
             StudyMaterial::where('id', $id)->delete();
             DB::commit();
-            return redirect()->route('study-material.index')
+            return redirect()->route('study-materials.index')
                 ->with('success','Study Material deleted successfully');
         }
         catch (\Exception $exception){

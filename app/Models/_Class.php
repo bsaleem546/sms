@@ -40,4 +40,9 @@ class _Class extends Model
     {
         return $this->hasOne(LiveClass::class, 'class_id');
     }
+
+    public function study_material()
+    {
+        return $this->hasOne(StudyMaterial::class, 'class_id');
+    }
 }
