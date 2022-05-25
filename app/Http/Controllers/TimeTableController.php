@@ -19,6 +19,20 @@ class TimeTableController extends Controller
         $this->middleware('permission:time-table-delete', ['only' => ['destroy']]);
     }
 
+    public function getTimetable($id)
+    {
+        $arr = array();
+        $data = TimeTable::with('subject')->where('__class_id', $id)->get();
+        foreach ($data as $d){
+            $timseslot = $d->start_time.' - '.$d->end_time;
+
+            array_push($arr, [ 'timeslot' => $d->start_time.' - '.$d->end_time, 'day' => $d->day, 'subject' => $d->subject->name ]);
+        }
+        dd( $arr );
+
+       return TimeTable::with('subject')->where('__class_id', $id)->get();
+    }
+
     public function getSubjectsByClass($id)
     {
         return Subject::where('__class_id', $id)->get();

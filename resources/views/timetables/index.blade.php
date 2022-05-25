@@ -135,56 +135,73 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <table id="calendar">
-                            <caption>August 2014</caption>
-                            <tr class="weekdays">
-                                <th scope="col">Timeslot</th>
-                                <th scope="col">Monday</th>
-                                <th scope="col">Tuesday</th>
-                                <th scope="col">Wednesday</th>
-                                <th scope="col">Thursday</th>
-                                <th scope="col">Friday</th>
-                                <th scope="col">Saturday</th>
-                                <th scope="col">Sunday</th>
-                            </tr>
-                            <tr class="days">
-                                <td class="day other-month">
-                                    @foreach($classes as $cl)
-                                        <text value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</text>
-                                    @endforeach
-                                </td>
-                                <td class="day other-month">
-                                    <h6>Hellow</h6>
-                                </td>
-                                <td class="day other-month">
-                                    <h6>Hellow</h6>
-                                </td>
-                                <td class="day other-month">
-                                    <h6>Hellow</h6>
-                                </td>
-                                <td class="day other-month">
-                                    <h6>Hellow</h6>
-                                </td>
-                                <td class="day other-month">
-                                    <h6>Hellow</h6>
-                                </td>
-                                <td class="day other-month">
-                                    <h6>Hellow</h6>
-                                </td>
-                                <td class="day other-month">
-                                    <h6>Hellow</h6>
-                                </td>
 
-                            </tr>
-                        </table>
+                        <div class="col-lg-12">
+                            <table id="calendar">
+                                <tr class="weekdays">
+                                    <th scope="col">Timeslot</th>
+                                    <th scope="col">Monday</th>
+                                    <th scope="col">Tuesday</th>
+                                    <th scope="col">Wednesday</th>
+                                    <th scope="col">Thursday</th>
+                                    <th scope="col">Friday</th>
+                                    <th scope="col">Saturday</th>
+                                    <th scope="col">Sunday</th>
+                                </tr>
+                                <tr class="days" id="tr-data">
+
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+@endsection
+
+@section('javascript')
+    <script>
+        $('#class_id').change( () => {
+            $('#tr-data').html('')
+            var id = $('#class_id').val()
+            $.ajax({
+                url: site_url+"/getTimetable/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $.each(res, (i, v) => {
+                        var html = '<td class="day other-month">\n' +
+                            '                                        <h6>'+v.start_time+' - '+v.end_time+'</h6>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td class="day other-month">\n' +
+                            '                                        <h6>'+(v.day === "Monday" ? v.subject.name : "NON")+'</h6>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td class="day other-month">\n' +
+                            '                                        <h6>'+(v.day === "Tuesday" ? v.subject.name : "NON")+'</h6>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td class="day other-month">\n' +
+                            '                                        <h6>'+(v.day === "Wednesday" ? v.subject.name : "NON")+'</h6>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td class="day other-month">\n' +
+                            '                                        <h6>'+(v.day === "Thursday" ? v.subject.name : "NON")+'</h6>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td class="day other-month">\n' +
+                            '                                        <h6>'+(v.day === "Friday" ? v.subject.name : "NON")+'</h6>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td class="day other-month">\n' +
+                            '                                        <h6>'+(v.day === "Saturday" ? v.subject.name : "NON")+'</h6>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td class="day other-month">\n' +
+                            '                                        <h6>'+(v.day === "Sunday" ? v.subject.name : "NON")+'</h6>\n' +
+                            '                                    </td>'
+                        $('#tr-data').append(html)
+                    })
+                }
+            });
+        })
+    </script>
 @endsection
 
 

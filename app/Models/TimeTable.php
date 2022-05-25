@@ -16,4 +16,9 @@ class TimeTable extends Model
         'end_time',
         'day',
     ];
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id');
+    }
 }
