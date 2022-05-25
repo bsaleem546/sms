@@ -65,9 +65,11 @@
                                             @endif
                                         </td>
                                         <td>{{ Carbon\Carbon::parse( $d->added_at )->format('M d, Y')  }}</td>
-                                        @can('s_att-edit')
-                                            <td> <a class="btn btn-primary" href="{{ route('s_atd.edit',$d->id) }}">Edit</a></td>
-                                        @endcan
+                                        <td>
+                                            @can('s_att-edit')
+                                                <a class="btn btn-primary" href="{{ route('s_atd.edit',$d->id) }}">Edit</a>
+                                            @endcan
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
