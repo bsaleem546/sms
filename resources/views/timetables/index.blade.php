@@ -111,6 +111,9 @@
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                     <li class="breadcrumb-item active">Timetable</li>
                 </ol>
+                @can('time-table')
+                    <a href="{{ route('time-tables.create') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Create New</a>
+                @endcan
             </div>
         </div>
     </div>
@@ -119,39 +122,90 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-sm-12">Class Name</label>
-                                    <div class="col-sm-12 validate">
-                                        <select required name="__class_id" class="form-control" id="class_id">
-                                            <option value="">Select Option</option>
-                                            @foreach($classes as $cl)
-                                                <option value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
                         </div>
+                    @endif
+                    @if (Session::get('error'))
+                        <div class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <ul>
+                                <p>{{ Session::get('error') }}</p>
+                            </ul>
+                        </div>
+                    @endif
+
+                    <div class="row">
+{{--                        <div class="col-lg-12">--}}
+{{--                            <div class="form-group">--}}
+{{--                                <div class="row">--}}
+{{--                                    <label class="col-sm-12">Class Name</label>--}}
+{{--                                    <div class="col-sm-12 validate">--}}
+{{--                                        <select required name="__class_id" class="form-control" id="class_id">--}}
+{{--                                            <option value="">Select Option</option>--}}
+{{--                                            @foreach($classes as $cl)--}}
+{{--                                                <option value="{{ $cl->id }}">{{ $cl->name.' - '.$cl->section->name }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="col-lg-12">
-                            <table id="calendar">
-                                <tr class="weekdays">
-                                    <th scope="col">Timeslot</th>
-                                    <th scope="col">Monday</th>
-                                    <th scope="col">Tuesday</th>
-                                    <th scope="col">Wednesday</th>
-                                    <th scope="col">Thursday</th>
-                                    <th scope="col">Friday</th>
-                                    <th scope="col">Saturday</th>
-                                    <th scope="col">Sunday</th>
-                                </tr>
-                                <tr class="days" id="tr-data">
+{{--                            <table id="calendar">--}}
+{{--                                <tr class="weekdays">--}}
+{{--                                    <th scope="col">Timeslot</th>--}}
+{{--                                    <th scope="col">Monday</th>--}}
+{{--                                    <th scope="col">Tuesday</th>--}}
+{{--                                    <th scope="col">Wednesday</th>--}}
+{{--                                    <th scope="col">Thursday</th>--}}
+{{--                                    <th scope="col">Friday</th>--}}
+{{--                                    <th scope="col">Saturday</th>--}}
+{{--                                    <th scope="col">Sunday</th>--}}
+{{--                                </tr>--}}
+{{--                                <tr class="days" id="tr-data">--}}
 
-                                </tr>
-                            </table>
+{{--                                </tr>--}}
+{{--                            </table>--}}
+                            <h5 class="card-title">Timetable list</h5>
+                            <div class="table-responsive">
+
+                                <table class="table table-striped" id="myTable">
+                                    <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Class Name</th>
+                                        <th>Subject Name</th>
+                                        <th>Day</th>
+                                        <th>TimeSlot</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tb">
+                                        @foreach($timetable as $d)
+                                            <tr>
+                                                <td>{{ $d->id }}</td>
+                                                <td>{{ $d->subject->_class->name.' - '.$d->subject->_class->section->name }}</td>
+                                                <td>{{ $d->subject->name }}</td>
+                                                <td>{{ $d->day }}</td>
+                                                <td>{{ $d->start_time.' - '.$d->end_time }}</td>
+                                                <td>
+{{--                                                    @can('time-table-edit')--}}
+{{--                                                        <a class="btn btn-primary" href="{{ route('time-tables.edit',$d->id) }}">Edit</a>--}}
+{{--                                                    @endcan--}}
+                                                    @can('time-table-delete')
+                                                        {!! Form::open(['method' => 'DELETE','route' => ['time-tables.destroy', $d->id],'style'=>'display:inline']) !!}
+                                                        {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                                                        {!! Form::close() !!}
+                                                    @endcan
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -163,44 +217,29 @@
 
 @section('javascript')
     <script>
-        $('#class_id').change( () => {
-            $('#tr-data').html('')
-            var id = $('#class_id').val()
-            $.ajax({
-                url: site_url+"/getTimetable/"+id,
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $.each(res, (i, v) => {
-                        var html = '<td class="day other-month">\n' +
-                            '                                        <h6>'+v.start_time+' - '+v.end_time+'</h6>\n' +
-                            '                                    </td>\n' +
-                            '                                    <td class="day other-month">\n' +
-                            '                                        <h6>'+(v.day === "Monday" ? v.subject.name : "NON")+'</h6>\n' +
-                            '                                    </td>\n' +
-                            '                                    <td class="day other-month">\n' +
-                            '                                        <h6>'+(v.day === "Tuesday" ? v.subject.name : "NON")+'</h6>\n' +
-                            '                                    </td>\n' +
-                            '                                    <td class="day other-month">\n' +
-                            '                                        <h6>'+(v.day === "Wednesday" ? v.subject.name : "NON")+'</h6>\n' +
-                            '                                    </td>\n' +
-                            '                                    <td class="day other-month">\n' +
-                            '                                        <h6>'+(v.day === "Thursday" ? v.subject.name : "NON")+'</h6>\n' +
-                            '                                    </td>\n' +
-                            '                                    <td class="day other-month">\n' +
-                            '                                        <h6>'+(v.day === "Friday" ? v.subject.name : "NON")+'</h6>\n' +
-                            '                                    </td>\n' +
-                            '                                    <td class="day other-month">\n' +
-                            '                                        <h6>'+(v.day === "Saturday" ? v.subject.name : "NON")+'</h6>\n' +
-                            '                                    </td>\n' +
-                            '                                    <td class="day other-month">\n' +
-                            '                                        <h6>'+(v.day === "Sunday" ? v.subject.name : "NON")+'</h6>\n' +
-                            '                                    </td>'
-                        $('#tr-data').append(html)
-                    })
-                }
-            });
-        })
+        // $('#class_id').change( () => {
+        //     $('#tb').html('')
+        //     var id = $('#class_id').val()
+        //     $.ajax({
+        //         url: site_url+"/getTimetable/"+id,
+        //         type: 'GET',
+        //         dataType: 'json', // added data type
+        //         success: function(res) {
+        //             $.each(res, (i, v) => {
+        //                 console.log(res)
+        //                 var html = '<tr>\n' +
+        //                     '                                            <td>'+(i+1)+'</td>\n' +
+        //                     '                                            <td>'+v.subject._class.name+'</td>\n' +
+        //                     '                                            <td>'+v.subject.name+'</td>\n' +
+        //                     '                                            <td>'+v.day+'</td>\n' +
+        //                     '                                            <td>'+v.start_time+' - '+v.end_time+'</td>\n' +
+        //                     '                                            <td></td>\n' +
+        //                     '                                        </tr>'
+        //                 $('#tb').append(html)
+        //             })
+        //         }
+        //     });
+        // })
     </script>
 @endsection
 

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\_Class;
+use App\Models\Salary;
 use App\Models\Subject;
 use App\Models\TimeTable;
 use App\Services\TimeSlotService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class TimeTableController extends Controller
 {
@@ -21,16 +23,7 @@ class TimeTableController extends Controller
 
     public function getTimetable($id)
     {
-        $arr = array();
-        $data = TimeTable::with('subject')->where('__class_id', $id)->get();
-        foreach ($data as $d){
-            $timseslot = $d->start_time.' - '.$d->end_time;
-
-            array_push($arr, [ 'timeslot' => $d->start_time.' - '.$d->end_time, 'day' => $d->day, 'subject' => $d->subject->name ]);
-        }
-        dd( $arr );
-
-       return TimeTable::with('subject')->where('__class_id', $id)->get();
+       return TimeTable::with('subject._class')->where('__class_id', $id)->get();
     }
 
     public function getSubjectsByClass($id)
@@ -46,7 +39,8 @@ class TimeTableController extends Controller
     public function index()
     {
         $classes = _Class::all();
-        return view('timetables.index',compact('classes'));
+        $timetable = TimeTable::latest()->get();
+        return view('timetables.index',compact('classes', 'timetable'));
     }
 
     /**
@@ -126,7 +120,14 @@ class TimeTableController extends Controller
      */
     public function edit($id)
     {
-        //
+        $classes = _Class::all();
+        $subjects = Subject::all();
+        $timeslots = new TimeSlotService();
+        $data = TimeTable::findOrFail($id);
+//        dd($data);
+
+//        dd($timeslots->timeslotarray());
+        return view('timetables.edit', compact('classes', 'subjects','timeslots','data'));
     }
 
     /**
@@ -149,6 +150,19 @@ class TimeTableController extends Controller
      */
     public function destroy($id)
     {
-        //
+        {
+            DB::beginTransaction();
+            try {
+                TimeTable::find($id)->delete();
+                DB::commit();
+                return redirect()->route('time-tables.index')
+                    ->with('success','Row deleted successfully');
+            }
+            catch (\Exception $exception){
+                DB::rollBack();
+                return redirect()->back()
+                    ->with('error',$exception->getMessage());
+            }
+        }
     }
 }
