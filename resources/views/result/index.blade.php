@@ -40,9 +40,7 @@
                     @endif
 
                     <h5 class="card-title">Examination</h5>
-{{--                    <div class="alert alert-warning">--}}
-{{--                        <p>If admission record is deleted everything that is attached to that admission will be deleted also.</p>--}}
-{{--                    </div>--}}
+
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>
@@ -72,6 +70,7 @@
                                     <td>{{ $d->grade }}</td>
                                     <td>{{ $d->status }}</td>
                                     <td>
+                                        <a class="btn btn-info" href="{{ route('results.show',$d->id) }}">Show</a>
                                         @can('result-edit')
                                             <a class="btn btn-primary" href="{{ route('results.edit',$d->id) }}">Edit</a>
                                         @endcan

@@ -26,4 +26,9 @@ class Result extends Model
     {
         return $this->belongsTo(_Class::class, 'class_id');
     }
+
+    public function admission()
+    {
+        return $this->belongsTo(Admission::class, 'admission_id');
+    }
 }

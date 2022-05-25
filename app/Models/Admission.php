@@ -64,4 +64,9 @@ class Admission extends Model
     {
         return $this->hasOne(StudentAttendence::class);
     }
+
+    public function result()
+    {
+        return $this->hasOne(Result::class, 'admission_id');
+    }
 }

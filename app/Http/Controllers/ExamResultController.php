@@ -35,10 +35,15 @@ class ExamResultController extends Controller
      */
     public function index()
     {
-//        $data = DB::table('results')
-//            ->join('result_detail','result.id','result_detail.id')
-//            ->select('result.exam_type as term')->get();
-        $data = Result::with('__class')->latest()->get();
+        if ( auth()->user()->is_student ){
+            $data = Result::join('admissions', 'admissions.id', '=', 'results.admission_id')
+                ->where('admissions.student_auth_id', auth()->user()->id)
+                ->select('results.*')
+                ->orderBy('.results.id', 'DESC')->get();
+//            dd($data[0]);
+            return view('result.index', compact('data'));
+        }
+        $data = Result::latest()->get();
         return view('result.index', compact('data'));
     }
 
@@ -120,7 +125,10 @@ class ExamResultController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Result::findOrFail($id);
+        $classes = _Class::latest()->get();
+        $rds = ResultDetail::where('result_id', $id)->get();
+        return view('result.show', compact('classes', 'data', 'rds'));
     }
 
     /**

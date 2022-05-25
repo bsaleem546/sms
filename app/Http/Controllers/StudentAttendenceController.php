@@ -47,7 +47,9 @@ class StudentAttendenceController extends Controller
     {
         if (auth()->user()->is_student){
             $data = StudentAttendence::join('admissions', 'admissions.id', '=', 'student_attendences.admission_id')
-                ->where('admissions.student_auth_id', auth()->user()->id)->orderBy('.student_attendences.id', 'DESC')->get();
+                ->where('admissions.student_auth_id', auth()->user()->id)
+                ->select('student_attendences.*')
+                ->orderBy('.student_attendences.id', 'DESC')->get();
             return view('student-atd.list', compact('data'));
         }
         $data = StudentAttendence::latest()->get();
