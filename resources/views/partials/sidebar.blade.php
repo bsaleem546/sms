@@ -272,7 +272,7 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('s_atd.list') }}">View Attendance</a>
-                                <a href="{{ route('s_atd.index') }}">Attendance</a>
+                                <a href="{{ route('s_atd.create') }}">Attendance</a>
                             </li>
                         </ul>
                     </li>

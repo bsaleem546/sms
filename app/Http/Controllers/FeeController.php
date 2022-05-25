@@ -51,6 +51,15 @@ class FeeController extends Controller
 
     public function index()
     {
+        if (auth()->user()->is_student){
+            $data = DB::table('fees')
+                ->join('admissions', 'admissions.id', '=', 'fees.admission_id')
+                ->join('__sessions', '__sessions.id', '=', 'fees.__session_id')
+                ->join('__classes', '__classes.id', '=', 'fees.__session_id')
+                ->where('admissions.student_auth_id', auth()->user()->id )->get();
+            dd($data);
+            return view('fees.index', compact('data'));
+        }
         $data = Fees::latest()->get();
         return view('fees.index', compact('data'));
     }

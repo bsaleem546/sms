@@ -49,6 +49,12 @@ class StudentAttendenceController extends Controller
         return view('student-atd.list', compact('data'));
     }
 
+    public function create()
+    {
+        $class = _Class::all();
+        return view('student-atd.index', compact('class'));
+    }
+
     public function store(Request $request)
     {
         try {
@@ -91,7 +97,6 @@ class StudentAttendenceController extends Controller
 
     public function index()
     {
-        $class = _Class::all();
-        return view('student-atd.index', compact('class'));
+
     }
 }
