@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('admission_id')->constrained();
             $table->foreignId('__session_id')->constrained();
             $table->foreignId('student_id')->constrained();
+            $table->integer('user_id')->default(0);
             $table->string('month_of')->nullable();
             $table->date('due_date');
             $table->date('paid_at')->nullable();

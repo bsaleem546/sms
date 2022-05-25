@@ -45,7 +45,6 @@ class AdmissionController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error',$exception->getMessage());
         }
-        dd($id);
     }
 
     public function update(AdmissionUpdateRequest $request, $id)
@@ -77,6 +76,7 @@ class AdmissionController extends Controller
                     $role = Role::find(3);
                     $user->assignRole([$role->id]);
                     Admission::where('id', $ad_id)->update([ 'student_auth_id' => $user->id ]);
+                    Fees::where('admission_id', $ad_id)->update([ 'user_id' => $user->id ]);
                 }
                 DB::commit();
                 return redirect()->route('admission.index')
@@ -146,6 +146,7 @@ class AdmissionController extends Controller
                     $role = Role::find(3);
                     $user->assignRole([$role->id]);
                     Admission::where('id', $ad_id)->update([ 'student_auth_id' => $user->id ]);
+                    Fees::where('admission_id', $ad_id)->update([ 'user_id' => $user->id ]);
                 }
 
                 if ($request->reg_id > 0){

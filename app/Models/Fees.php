@@ -13,6 +13,7 @@ class Fees extends Model
         'admission_id',
         '__session_id',
         'student_id',
+        'user_id',
         'month_of',
         'due_date',
         'paid_at',

@@ -52,12 +52,7 @@ class FeeController extends Controller
     public function index()
     {
         if (auth()->user()->is_student){
-            $data = DB::table('fees')
-                ->join('admissions', 'admissions.id', '=', 'fees.admission_id')
-                ->join('__sessions', '__sessions.id', '=', 'fees.__session_id')
-                ->join('__classes', '__classes.id', '=', 'fees.__session_id')
-                ->where('admissions.student_auth_id', auth()->user()->id )->get();
-            dd($data);
+            $data = Fees::where('user_id', auth()->user()->id )->latest()->get();
             return view('fees.index', compact('data'));
         }
         $data = Fees::latest()->get();
@@ -115,10 +110,13 @@ class FeeController extends Controller
                 $arrears += $p->total;
             }
 
+            $userID = $get_admission->student_auth_id !== null ? $get_admission->student_auth_id : 0;
+
             $fee = Fees::create([
                 'admission_id' => $request->admission_id,
                 '__session_id' => $get_session->id,
                 'student_id' => $get_admission->student->id,
+                'user_id' => $userID,
                 'month_of' => Carbon::parse($request->month_of)->format('M-Y'),
                 'due_date' => $request->due_date,
                 'total' => $amount + $arrears,
