@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\_Class;
+use App\Models\Admission;
+use App\Models\Student;
 use App\Models\StudyMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +25,12 @@ class StudyMaterialController extends Controller
      */
     public function index()
     {
+        if ( auth()->user()->is_student ){
+            $ad = Admission::where('student_auth_id', auth()->user()->id)->first();
+            $st = Student::where('admission_id', $ad->id)->first();
+            $data = StudyMaterial::where('class_id', $st->__class_id)->latest()->get();
+            return view('study-materials.index', compact('data'));
+        }
         $data = StudyMaterial::latest()->get();
         return view('study-materials.index', compact('data'));
     }

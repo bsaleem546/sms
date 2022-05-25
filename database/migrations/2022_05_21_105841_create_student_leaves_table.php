@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students');
             $table->string('start_date');
             $table->string('end_date');
-            $table->string('reason');
+            $table->text('reason');
             $table->string('status')->default('pending');
             $table->timestamps();
         });

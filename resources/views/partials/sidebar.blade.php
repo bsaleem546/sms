@@ -323,7 +323,7 @@
                     </li>
                 @endcan
 
-                @can('expense-list')
+                @can('notice-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                             <i class="ti-plus"></i>

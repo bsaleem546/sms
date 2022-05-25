@@ -23,6 +23,13 @@ class StudentLeaveController extends Controller
      */
     public function index()
     {
+        if ( auth()->user()->is_student ){
+            $data = StudentLeave::join('students', 'students.id', '=', 'student_leaves.student_id')
+                ->join('admissions', 'admissions.id', '=', 'students.admission_id')
+                ->select('student_leaves.*')
+                ->where('student_auth_id', auth()->user()->id)->orderBy('student_leaves.id', 'DESC')->get();
+            return view('student-leaves.index', compact('data'));
+        }
         $data = StudentLeave::latest()->get();
         return view('student-leaves.index', compact('data'));
     }

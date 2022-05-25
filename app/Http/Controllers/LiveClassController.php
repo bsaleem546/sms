@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\_Class;
+use App\Models\Admission;
 use App\Models\LiveClass;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,6 +25,12 @@ class LiveClassController extends Controller
      */
     public function index()
     {
+        if ( auth()->user()->is_student ){
+            $ad = Admission::where('student_auth_id', auth()->user()->id)->first();
+            $st = Student::where('admission_id', $ad->id)->first();
+            $data = LiveClass::where('class_id', $st->__class_id)->latest()->get();
+            return view('live-classes.index', compact('data'));
+        }
         $data = LiveClass::latest()->get();
         return view('live-classes.index', compact('data'));
     }

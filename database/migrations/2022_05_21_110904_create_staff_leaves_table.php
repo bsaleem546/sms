@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('staff_id')->constrained('staffs');
             $table->string('start_date');
             $table->string('end_date');
-            $table->string('reason');
+            $table->text('reason');
             $table->string('status')->default('pending');
             $table->timestamps();
         });
