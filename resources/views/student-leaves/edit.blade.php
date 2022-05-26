@@ -50,7 +50,8 @@
                         <div class="row">
                             <label class="col-sm-12">Student Name</label>
                             <div class="col-sm-12 validate">
-                                {!! Form::select('student_id', \App\Models\Student::pluck('name', 'id'),null, array('class' => 'form-control', 'required')) !!}
+                                <input type="hidden" name="student_id" value="{{ $data->student_id }}">
+                                {!! Form::select('student_id', \App\Models\Student::pluck('name', 'id'),null, array('class' => 'form-control', 'required', 'disabled')) !!}
                             </div>
                         </div>
                     </div>
@@ -84,14 +85,18 @@
 
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-12">Status</label>
-                            <div class="col-sm-12 validate">
-                                <select name="status" class="form-control">
-                                    <option value="">Select Option</option>
-                                    <option value="approved" {{ $data->status === 'approved' ? 'selected' : '' }}>Approved</option>
-                                    <option value="pending" {{ $data->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                </select>
-                            </div>
+                                @if(auth()->user()->is_student)
+                                    <input type="hidden" name="status" value="{{ $data->status }}">
+                                @else
+                                <label class="col-sm-12">Status</label>
+                                    <div class="col-sm-12 validate">
+                                        <select name="status" class="form-control">
+                                            <option value="">Select Option</option>
+                                            <option value="approved" {{ $data->status === 'approved' ? 'selected' : '' }}>Approved</option>
+                                            <option value="pending" {{ $data->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                        </select>
+                                    </div>
+                                @endif
                         </div>
                     </div>
                     <button type="submit" class="btn btn-info waves-effect waves-light m-r-10">Submit</button>

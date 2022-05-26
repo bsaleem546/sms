@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admission;
 use App\Models\Student;
 use App\Models\StudentLeave;
 use Illuminate\Http\Request;
@@ -55,14 +56,22 @@ class StudentLeaveController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'student_id' => 'required',
+//                'student_id' => 'required',
                 'start_date' => 'required',
                 'end_date' => 'required',
                 'reason' => 'required',
             ]);
 
+            $studentID = $request->student_id;
+
+            if (auth()->user()->is_student){
+                $ad = Admission::where('student_auth_id', auth()->user()->id)->first();
+                $st = Student::where('admission_id', $ad->id)->first();
+                $studentID = $st->id;
+            }
+
             StudentLeave::create([
-                'student_id' => $request->student_id,
+                'student_id' => $studentID,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'reason' => $request->reason,

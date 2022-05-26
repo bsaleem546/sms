@@ -48,10 +48,13 @@
                     {!! Form::open(array('route' => 'student-leaves.store','method'=>'POST', 'class' => 'form-material m-t-40 create')) !!}
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-sm-12">Student Name</label>
-                                    <div class="col-sm-12 validate">
-                                        {!! Form::select('student_id', \App\Models\Student::pluck('name', 'id'),null, array('class' => 'form-control', 'required')) !!}
-                                    </div>
+                                    @if(auth()->user()->is_student)
+                                    @else
+                                        <label class="col-sm-12">Student Name</label>
+                                        <div class="col-sm-12 validate">
+                                            {!! Form::select('student_id', \App\Models\Student::pluck('name', 'id'),null, array('class' => 'form-control', 'required')) !!}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
