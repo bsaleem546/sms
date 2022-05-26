@@ -63,7 +63,7 @@
                                         <td>{{ $d->notice }}</td>
                                         <td>{{ $d->start_date }}</td>
                                         <td>{{ $d->end_date }}</td>
-                                        <td>{{ $d->user_id }}</td>
+                                        <td>{{ $d->user->name }}</td>
                                         <td>
                                             @if($d->status === 1)
                                                 <label class="label label-success">ACTIVE</label>
@@ -72,6 +72,7 @@
                                             @endif
                                         </td>
                                         <td>
+                                            <a class="btn btn-info" href="{{ route('notices.show',$d->id) }}">Show</a>
                                             @can('notice-edit')
                                                 <a class="btn btn-primary" href="{{ route('notices.edit',$d->id) }}">Edit</a>
                                             @endcan

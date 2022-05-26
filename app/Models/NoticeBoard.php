@@ -15,6 +15,11 @@ class NoticeBoard extends Model
             'start_date',
             'end_date',
             'user_id',
-        'status'
+            'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

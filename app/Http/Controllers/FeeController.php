@@ -148,9 +148,14 @@ class FeeController extends Controller
      */
     public function show($id)
     {
-        $data = Fees::findOrFail($id);
-        return view('fees.show', compact('data'));
+        $f = Fees::findOrFail($id);
+        $fds = FeeDetails::where('fee_id',$id)->get();
+//        $r = Result::findOrFail($id);
+//        $rds = ResultDetail::where('result_id', $id)->get();
+//        dd($data1);
+        return view('fees.show', compact('f','fds'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

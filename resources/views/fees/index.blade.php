@@ -96,7 +96,7 @@
                                             @if( !auth()->user()->is_student )
                                                 <a class="btn btn-info" href="{{ route('fees.print', $d->id) }}">Print</a>
                                             @endif
-                                            {{--                                        <a class="btn btn-info" href="{{ route('fees.show',$d->id) }}">Show</a>--}}
+                                                                                    <a class="btn btn-info" href="{{ route('fees.show',$d->id) }}">Show</a>
                                             @can('fee-edit')
                                                 <a class="btn btn-primary" href="{{ route('fees.edit',$d->id) }}">Pay</a>
                                             @endcan
