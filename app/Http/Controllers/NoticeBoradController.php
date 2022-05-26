@@ -81,7 +81,12 @@ class NoticeBoradController extends Controller
      */
     public function show($id)
     {
-        //
+        $note = NoticeBoard::findOrFail($id);
+//        $fds = FeeDetails::where('fee_id',$id)->get();
+//        $r = Result::findOrFail($id);
+//        $rds = ResultDetail::where('result_id', $id)->get();
+//        dd($data1);
+        return view('notices.show', compact('note'));
     }
 
     /**
