@@ -50,6 +50,7 @@
                                 <th>Added By</th>
                                 <th>Link</th>
                                 <th>Status</th>
+                                <th>Created At</th>
                                 <th width="280px">Action</th>
                             </tr>
                             </thead>
@@ -67,6 +68,7 @@
                                                 <label class="label label-danger">Not Active</label>
                                             @endif
                                         </td>
+                                        <td>{{ $d->created_at->format('M d, Y') }}</td>
                                         <td>
                                             @can('live-class-edit')
                                                 <a class="btn btn-primary" href="{{ route('live-classes.edit',$d->id) }}">Edit</a>
