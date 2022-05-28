@@ -424,7 +424,7 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('time-tables.index') }}">View Time Tables</a>
-                                @can('time-table-list')<a href="{{ route('time-tables.create') }}">Create Time Tables</a>@endcan
+                                @can('time-table-create')<a href="{{ route('time-tables.create') }}">Create Time Tables</a>@endcan
                             </li>
                         </ul>
                     </li>
