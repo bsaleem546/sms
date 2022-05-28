@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\_Class;
+use App\Models\Staff;
 use Illuminate\Http\Request;
 
 class _ClassController extends Controller
@@ -21,6 +22,14 @@ class _ClassController extends Controller
      */
     public function index()
     {
+        if ( auth()->user()->is_teacher ){
+            $data = array();
+            $staff = Staff::where('email', auth()->user()->email)->first();
+            foreach ($staff->subjects as $sub){
+                array_push($data, $sub->_class);
+            }
+            return view('classes.index',compact('data'));
+        }
         $data = _Class::latest()->get();
         return view('classes.index',compact('data'));
     }

@@ -155,7 +155,7 @@
                             <div class="col-md-3">
                                 <label class="col-sm-12">Salary</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" name="salary" required class="form-control" value="0" value="{{ $data->salary }}">
+                                    <input type="text" name="salary" required class="form-control" value="{{ $data->salary }}">
                                 </div>
                             </div>
                             <div class="col-md-3">

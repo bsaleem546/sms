@@ -65,7 +65,7 @@
                         </div>
                         <div class="col-6 justify-content-center">
                             @if($data->id_proof !== null)
-                                <img src="{{ url('public/uploads/staffs/'.$data->id_proof) }}" alt="" class="h-50 shadow-lg">
+                                <img src="{{ url('public/uploads/staffs/'.$data->id_proof) }}" alt="" class="shadow-lg" height="150px">
                             @endif
                         </div>
                     </div>
