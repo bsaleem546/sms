@@ -23,16 +23,16 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <h1>Notice Detail</h1>
+                    <h1><b>Notice Detail</b></h1>
 {{--                    @dd($note);--}}
-                    <h5><b>{{ $note->user->name }}</b></h5>
-                    <h6><b>{{ \Carbon\Carbon::parse($note->created_at)->format('D-M-Y') }}</b></h6><br>
+                    <h5 class="card-title"><b> From : {{ $note->user->name }}</b></h5>
+                    <h5 class="card-title"><b>{{ \Carbon\Carbon::parse($note->created_at)->format('D-M-Y') }}</b></h5><br>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h3>Notice Title</h3>
-                            <p><b>{{$note->title}}}</b></p>
-                            <h3>Notice</h3>
-                            <p><b>{{$note->notice}}}</b></p>
+                            <h3><b>Notice Title</b></h3>
+                            <p class="card-title"><b>{{$note->title}}}</b></p>
+                            <h3><b>Notice</b></h3>
+                            <p class="card-title"><b>{{$note->notice}}}</b></p>
                         </div>
                     </div>
                 </div>

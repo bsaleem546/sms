@@ -96,7 +96,8 @@ class StudentLeaveController extends Controller
      */
     public function show($id)
     {
-        //
+        $sl = StudentLeave::findOrFail($id);
+        return view('student-leaves.show', compact('sl'));
     }
 
     /**

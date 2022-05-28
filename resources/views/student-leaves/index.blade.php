@@ -66,6 +66,7 @@
                                         <td>{{ $d->reason }}</td>
                                         <td>{{ $d->status }}</td>
                                         <td>
+                                            <a class="btn btn-info" href="{{ route('student-leaves.show',$d->id) }}">Show</a>
                                             @can('student-leave-edit')
                                                 <a class="btn btn-primary" href="{{ route('student-leaves.edit',$d->id) }}">Edit</a>
                                             @endcan

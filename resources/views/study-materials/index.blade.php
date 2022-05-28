@@ -66,6 +66,8 @@
                                         </td>
                                         <td>{{ $d->text }}</td>
                                         <td>
+                                            <a class="btn btn-info" href="{{ route('study-materials.show',$d->id) }}">Show</a>
+
                                             @can('study-material-edit')
                                                 <a class="btn btn-primary" href="{{ route('study-materials.edit',$d->id) }}">Edit</a>
                                             @endcan

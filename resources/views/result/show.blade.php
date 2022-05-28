@@ -24,39 +24,36 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ $data->admission->student->name }}</h5>
-                    <small class="font-medium">{{ $data->__class->name.' - '.$data->__class->section->name }}</small>
                     <div class="row">
                         <div class="col-lg-8">
-
-                            <p>Gender: {{ $data->admission->gender }}</p>
-                            <p>Date of birth: {{ $data->admission->dob }}</p>
-                            <p>Address: {{ $data->admission->address }}</p>
-                            <p>Phone: {{ $data->admission->phone }}</p>
-                            <p>Email: {{ $data->admission->email }}</p>
-
-                            <h3>Result Details:</h3>
-
+                            <p class="font-medium card-title">{{ $data->__class->name.' - '.$data->__class->section->name }}</p>
+                            <p class="card-title">Gender: {{ $data->admission->gender }}</p>
+                            <p class="card-title">Date of birth: {{ $data->admission->dob }}</p>
+                            <p class="card-title">Address: {{ $data->admission->address }}</p>
+                            <p class="card-title">Phone: {{ $data->admission->phone }}</p>
+                            <p class="card-title">Email: {{ $data->admission->email }}</p>
+                            <h2 ><b>Result Details:</b></h2>
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <h4>Exam Type: {{ $data->exam_type }}</h4>
+                                    <h5 class="card-title">Exam Type: {{ $data->exam_type }}</h5>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h4>Total Marks: {{ $data->total_marks }}</h4>
+                                    <h5 class="card-title">Total Marks: {{ $data->total_marks }}</h5>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h4>Obt. Marks: {{ $data->obtained_marks }}</h4>
-                                </div>
-
-                                <div class="col-lg-4">
-                                    <h4>Percentage: {{ $data->percentage }}</h4>
+                                    <h5 class="card-title">Obt. Marks: {{ $data->obtained_marks }}</h5>
                                 </div>
 
                                 <div class="col-lg-4">
-                                    <h4>Grade: {{ $data->grade }}</h4>
+                                    <h5 class="card-title">Percentage: {{ $data->percentage }}</h5>
                                 </div>
 
                                 <div class="col-lg-4">
-                                    <h4>Status: {{ $data->status }}</h4>
+                                    <h5 class="card-title">Grade: {{ $data->grade }}</h5>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <h5 class="card-title">Status: {{ $data->status }}</h5>
                                 </div>
                             </div>
 

@@ -91,7 +91,9 @@ class StudyMaterialController extends Controller
      */
     public function show($id)
     {
-        //
+        $c = _CLass::findOrFail($id);
+        $sm = StudyMaterial::findOrFail($id);
+        return view('study-materials.show',compact('c','sm'));
     }
 
     /**
