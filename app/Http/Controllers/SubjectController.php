@@ -22,6 +22,14 @@ class SubjectController extends Controller
      */
     public function index()
     {
+        if ( auth()->user()->is_teacher ){
+            $data = array();
+            $staff = Staff::where('email', auth()->user()->email)->first();
+            foreach ($staff->subjects as $sub){
+                array_push($data, $sub);
+            }
+            return view('subjects.index',compact('data'));
+        }
         $data = Subject::latest()->get();
         return view('subjects.index', compact('data'));
     }

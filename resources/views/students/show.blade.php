@@ -22,7 +22,34 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Student Details</h5>
+                    <div class="row">
+                        <div class="col-lg-8"><br><br>
+                            <h3 class="card-title"><b>Student Details:</b></h3>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h5 class="card-title">Student Name :{{ $data->name }}</h5><br>
+                                    <h5 ><b> Class : </b>{{$data->_class->name}}</h5>
+                                    <h5 class="my-3"><b> Section : </b>{{$data->_class->section->name}}</b></h5>
+                                    <h5 class="my-3"><b> Roll Number : </b>{{$data->roll_no}}</h5>
+                                    <h5 class="my-3"><b> city : </b>{{$data->admission->city}}</h5>
+                                    <h5 class="my-3"><b> state : </b>{{$data->admission->state}}</h5>
+                                    <h5 class="my-3"><b> country : </b>{{$data->admission->country}}</h5>
+                                    <h5 class="my-3"><b> phone : </b>{{$data->admission->phone}}</h5>
+                                    <h5 class="my-3"><b> email : </b>{{$data->admission->email}}</h5>
+                                    <h5 class="my-3"><b> gender : </b>{{$data->admission->gender}}</h5>
+                                    <h5 class="my-3"><b> Religion : </b>{{$data->admission->religion}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="text-right">
+                                @if($data->admission->student_pic !== null)
+                                    <img src="{{ url('public/uploads/students/'.$data->admission->student_pic) }}" alt="" style="height: 150px">
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
