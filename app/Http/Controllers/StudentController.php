@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\_Class;
+use App\Models\Staff;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -22,8 +24,20 @@ class StudentController extends Controller
      */
     public function index()
     {
+        if ( auth()->user()->is_teacher ){
+            $data = array();
+            $staff = Staff::where('email', auth()->user()->email)->first();
+            foreach ($staff->subjects as $sub){
+                array_push($data, $sub->_class->student);
+            }
+            return view('students.index',compact('data'));
+        }
         $data = Student::latest()->get();
-        return view('students.index', compact('data'));
+        return view('students.index',compact('data'));
+
+
+//        $data = Student::latest()->get();
+//        return view('students.index', compact('data'));
     }
 
     /**

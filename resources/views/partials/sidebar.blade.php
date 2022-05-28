@@ -341,7 +341,7 @@
                 @can('result-list')
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="ti-plus"></i>
+                            <i class="ti-p  lus"></i>
                             <span class="hide-menu">Exam Result</span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
