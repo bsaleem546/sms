@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\_Class;
+use App\Models\Admission;
 use App\Models\Salary;
+use App\Models\Student;
+use App\Models\StudyMaterial;
 use App\Models\Subject;
 use App\Models\TimeTable;
 use App\Services\TimeSlotService;
@@ -38,9 +41,14 @@ class TimeTableController extends Controller
      */
     public function index()
     {
-        $classes = _Class::all();
+        if ( auth()->user()->is_student ){
+            $ad = Admission::where('student_auth_id', auth()->user()->id)->first();
+            $st = Student::where('admission_id', $ad->id)->first();
+            $timetable = TimeTable::where('__class_id', $st->__class_id)->latest()->get();
+            return view('timetables.index',compact('timetable'));
+        }
         $timetable = TimeTable::latest()->get();
-        return view('timetables.index',compact('classes', 'timetable'));
+        return view('timetables.index',compact('timetable'));
     }
 
     /**
