@@ -33,11 +33,6 @@ class Student extends Model
         return $this->belongsTo(_Class::class, '__class_id');
     }
 
-    public function _classes()
-    {
-        return $this->belongsTo(_Class::class, '__class_id');
-    }
-
     public function leave()
     {
         return $this->hasOne(StudentLeave::class, 'student_id');
