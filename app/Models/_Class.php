@@ -31,6 +31,11 @@ class _Class extends Model
         return $this->hasOne(Student::class, '__class_id');
     }
 
+    public function students()
+    {
+        return $this->hasMany(Student::class, '__class_id');
+    }
+
     public function results()
     {
         return $this->hasOne(Result::class, 'class_id');

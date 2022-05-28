@@ -28,7 +28,10 @@ class StudentController extends Controller
             $data = array();
             $staff = Staff::where('email', auth()->user()->email)->first();
             foreach ($staff->subjects as $sub){
-                array_push($data, $sub->_class->student);
+//                dd($sub->_class->students);
+                foreach($sub->_class->students as $student){
+                    array_push($data, $student);
+                }
             }
             return view('students.index',compact('data'));
         }
