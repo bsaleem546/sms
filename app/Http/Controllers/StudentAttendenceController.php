@@ -54,19 +54,16 @@ class StudentAttendenceController extends Controller
                 ->orderBy('.student_attendences.id', 'DESC')->get();
             return view('student-atd.list', compact('data'));
         }
-//        if(auth()->user()->is_teacher){
-//            $data = array();
-//            $staff = Staff::where('email',auth()->user()->email)->first();
-//            foreach ($staff->subjects as $sub){
-//                  $sa = StaffAttendence::where('__class_id',$sub->__class_id);
-//                  foreach($sa as $sad){
-////                      array_push($data, $sub->atd);
-//                      dd($sad);
-//                  }
-////                dd($sa);
-//            }
-////            dd($data);
-//        }
+        if(auth()->user()->is_teacher){
+            $data = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+//            $staff = Staff::where('id',4)->first();
+            foreach ($staff->subjects as $sub){
+                $sa = StudentAttendence::where('__class_id',$sub->__class_id)->get();
+//                dd($sa);
+                array_push($data, $sa);
+            }
+        }
         $data = StudentAttendence::latest()->get();
         return view('student-atd.list', compact('data'));
     }
