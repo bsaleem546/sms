@@ -14,7 +14,7 @@
                     <li class="breadcrumb-item">Student Attendance</li>
                     <li class="breadcrumb-item active">Edit Student Attendance</li>
                 </ol>
-                <a href="{{ route('s_atd.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
+                <a href="{{ route('s_atd.list') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>
