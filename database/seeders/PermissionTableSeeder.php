@@ -121,10 +121,14 @@ class PermissionTableSeeder extends Seeder
 //            'study-material-create',
 //            'study-material-edit',
 //            'study-material-delete',
-            'time-table-list',
-            'time-table-create',
-            'time-table-edit',
-            'time-table-delete',
+//            'time-table-list',
+//            'time-table-create',
+//            'time-table-edit',
+//            'time-table-delete',
+            'promote-list',
+            'promote-create',
+            'promote-edit',
+            'promote-delete',
         ];
 
         foreach ($permissions as $permission) {

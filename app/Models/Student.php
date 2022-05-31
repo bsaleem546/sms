@@ -38,4 +38,9 @@ class Student extends Model
         return $this->hasOne(StudentLeave::class, 'student_id');
     }
 
+    public function _session()
+    {
+        return $this->belongsTo(_Session::class,'__session_id');
+    }
+
 }

@@ -45,7 +45,7 @@
                         <table id="myTable" class="table table-striped">
                             <thead>
                             <tr>
-                                <th>No</th>
+                                <th width="100px">Session</th>
                                 <th>Class</th>
                                 <th>Section</th>
                                 <th>Student GR No</th>
@@ -59,7 +59,8 @@
                             <tbody>
                                 @foreach ($data as $key => $d)
                                     <tr>
-                                        <td>{{ $d->id }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($d->_session->start_date)->format('Y').' - '.
+                                            \Carbon\Carbon::parse($d->_session->end_date)->format('Y') }}</td>
                                         <td>{{ $d->admission->_class->name }}</td>
                                         <td>{{ $d->admission->_class->section->name }}</td>
                                         <td>{{ $d->admission->gr_no }}</td>

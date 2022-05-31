@@ -18,4 +18,10 @@ class _Session extends Model
     {
         return $this->hasOne(Fees::class);
     }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class, '__session_id');
+    }
+
 }

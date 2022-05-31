@@ -99,6 +99,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('time-tables', \App\Http\Controllers\TimeTableController::class);
     Route::get('getSubjectsByClass/{id}', [\App\Http\Controllers\TimeTableController::class, 'getSubjectsByClass']);
     Route::get('getTimetable/{id}', [\App\Http\Controllers\TimeTableController::class, 'getTimetable']);
+
+    Route::resource('promotes', \App\Http\Controllers\PromotedOrDemotedController::class);
+    Route::get('getStudents/{id}', [\App\Http\Controllers\PromotedOrDemotedController::class, 'getStudents']);
+
 });
 
 
