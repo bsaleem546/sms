@@ -6,6 +6,7 @@ use App\Models\_Class;
 use App\Models\_Session;
 use App\Models\Result;
 use App\Models\ResultDetail;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -40,9 +41,24 @@ class ExamResultController extends Controller
                 ->where('admissions.student_auth_id', auth()->user()->id)
                 ->select('results.*')
                 ->orderBy('.results.id', 'DESC')->get();
-//            dd($data[0]);
             return view('result.index', compact('data'));
         }
+
+        if ( auth()->user()->is_teacher ){
+            $data = array();
+            $staff = Staff::where('email', auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $rs = Result::where('class_id', $sub->__class_id)->latest()->get();
+                foreach ($rs as $r){
+                    array_push($data, $r);
+                }
+            }
+            return view('result.index', compact('data'));
+        }
+
         $data = Result::latest()->get();
         return view('result.index', compact('data'));
     }
@@ -54,6 +70,18 @@ class ExamResultController extends Controller
      */
     public function create()
     {
+        if ( auth()->user()->is_teacher ){
+            $classes = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $c = _Class::find($sub->__class_id);
+                array_push($classes, $c);
+            }
+            return view('result.create', compact('classes'));
+        }
         $classes = _Class::latest()->get();
         return view('result.create', compact('classes'));
     }

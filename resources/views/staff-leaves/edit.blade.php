@@ -50,7 +50,8 @@
                         <div class="row">
                             <label class="col-sm-12">Staff Name</label>
                             <div class="col-sm-12 validate">
-                                {!! Form::select('staff_id', \App\Models\Staff::pluck('name', 'id'),null, array('class' => 'form-control', 'required')) !!}
+                                <input type="hidden" name="staff_id" value="{{ $data->staff_id }}">
+                                {!! Form::select('', \App\Models\Staff::pluck('name', 'id'),null, array('class' => 'form-control', 'required', 'disabled')) !!}
                             </div>
                         </div>
                     </div>

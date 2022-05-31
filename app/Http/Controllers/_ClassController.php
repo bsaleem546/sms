@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\_Class;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class _ClassController extends Controller
 {
@@ -25,8 +26,12 @@ class _ClassController extends Controller
         if ( auth()->user()->is_teacher ){
             $data = array();
             $staff = Staff::where('email', auth()->user()->email)->first();
-            foreach ($staff->subjects as $sub){
-                array_push($data, $sub->_class);
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $cl = _Class::find($sub->__class_id);
+                array_push($data, $cl);
             }
             return view('classes.index',compact('data'));
         }

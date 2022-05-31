@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\_Class;
 use App\Models\Admission;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\StudyMaterial;
 use Illuminate\Http\Request;
@@ -31,6 +32,21 @@ class StudyMaterialController extends Controller
             $data = StudyMaterial::where('class_id', $st->__class_id)->latest()->get();
             return view('study-materials.index', compact('data'));
         }
+
+        if ( auth()->user()->is_teacher ){
+            $data = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $sm = StudyMaterial::where('class_id', $sub->__class_id)->latest()->get();
+                foreach ($sm as $s){
+                    array_push($data, $s);
+                }
+            }
+            return view('study-materials.index', compact('data'));
+        }
         $data = StudyMaterial::latest()->get();
         return view('study-materials.index', compact('data'));
     }
@@ -42,6 +58,18 @@ class StudyMaterialController extends Controller
      */
     public function create()
     {
+        if ( auth()->user()->is_teacher ){
+            $classes = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $c = _Class::find($sub->__class_id);
+                array_push($classes, $c);
+            }
+            return view('study-materials.create', compact('classes'));
+        }
         $classes = _Class::latest()->get();
         return view('study-materials.create', compact('classes'));
     }
@@ -104,6 +132,19 @@ class StudyMaterialController extends Controller
      */
     public function edit($id)
     {
+        if ( auth()->user()->is_teacher ){
+            $classes = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $c = _Class::find($sub->__class_id);
+                array_push($classes, $c);
+            }
+            $data = StudyMaterial::findOrFail($id);
+            return view('study-materials.edit', compact('classes', 'data'));
+        }
         $classes = _CLass::latest()->get();
         $data = StudyMaterial::findOrFail($id);
         return view('study-materials.edit', compact('classes', 'data'));

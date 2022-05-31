@@ -49,13 +49,28 @@ class Staff extends Model
         return $this->hasOne(StaffAttendence::class, 'staff_id');
     }
 
+    public function staff_atds()
+    {
+        return $this->hasMany(StaffAttendence::class, 'staff_id');
+    }
+
     public function salary()
     {
         return $this->hasOne(Salary::class, 'staff_id');
     }
 
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class, 'staff_id');
+    }
+
     public function leave()
     {
         return $this->hasOne(StaffLeave::class, 'staff_id');
+    }
+
+    public function leaves()
+    {
+        return $this->hasMany(StaffLeave::class, 'staff_id');
     }
 }

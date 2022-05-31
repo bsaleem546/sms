@@ -25,6 +25,11 @@ class salaryController extends Controller
      */
     public function index()
     {
+        if(auth()->user()->is_teacher){
+            $staff = Staff::where('email', auth()->user()->email)->first();
+            $data = $staff->salaries;
+            return view('salary.index', compact('data'));
+        }
         $data = Salary::latest()->get();
         return view('salary.index', compact('data'));
     }

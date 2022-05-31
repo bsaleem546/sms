@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\_Class;
 use App\Models\Admission;
 use App\Models\LiveClass;
+use App\Models\Staff;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,22 @@ class LiveClassController extends Controller
             $data = LiveClass::where('class_id', $st->__class_id)->latest()->get();
             return view('live-classes.index', compact('data'));
         }
+
+        if (auth()->user()->is_teacher){
+            $data = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $live =  LiveClass::where('class_id', $sub->__class_id)->latest()->get();
+                foreach ($live as $l){
+                    array_push($data, $l);
+                }
+            }
+            return view('live-classes.index', compact('data'));
+        }
+
         $data = LiveClass::latest()->get();
         return view('live-classes.index', compact('data'));
     }
@@ -42,6 +59,18 @@ class LiveClassController extends Controller
      */
     public function create()
     {
+        if ( auth()->user()->is_teacher ){
+            $classes = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $c = _Class::find($sub->__class_id);
+                array_push($classes, $c);
+            }
+            return view('live-classes.create', compact('classes'));
+        }
         $classes = _Class::latest()->get();
         return view('live-classes.create', compact('classes'));
     }
@@ -98,6 +127,19 @@ class LiveClassController extends Controller
      */
     public function edit($id)
     {
+        if ( auth()->user()->is_teacher ){
+            $classes = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $c = _Class::find($sub->__class_id);
+                array_push($classes, $c);
+            }
+            $data = LiveClass::findOrFail($id);
+            return view('live-classes.edit', compact('classes', 'data'));
+        }
         $classes = _Class::latest()->get();
         $data = LiveClass::findOrFail($id);
         return view('live-classes.edit', compact('classes', 'data'));

@@ -40,7 +40,7 @@
                             </div>
                         @endif
 
-                    <h5 class="card-title">Section list</h5>
+                    <h5 class="card-title">Student Leaves list</h5>
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>
@@ -59,10 +59,10 @@
                                 @foreach ($data as $key => $d)
                                     <tr>
                                         <td>{{ $d->id }}</td>
-                                        <td>{{ $d->student->_class->name }}</td>
+                                        <td>{{ $d->student->_class->name.' - '.$d->student->_class->section->name }}</td>
                                         <td>{{ $d->student->name }}</td>
-                                        <td>{{ $d->start_date }}</td>
-                                        <td>{{ $d->end_date }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($d->start_date)->format('M d, Y')  }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($d->end_date)->format('M d, Y')  }}</td>
                                         <td>{{ $d->reason }}</td>
                                         <td>{{ $d->status }}</td>
                                         <td>

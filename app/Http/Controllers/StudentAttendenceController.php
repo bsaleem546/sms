@@ -54,6 +54,7 @@ class StudentAttendenceController extends Controller
                 ->orderBy('.student_attendences.id', 'DESC')->get();
             return view('student-atd.list', compact('data'));
         }
+
         if(auth()->user()->is_teacher){
             $data = array();
             $staff = Staff::where('email',auth()->user()->email)->first();
@@ -74,6 +75,18 @@ class StudentAttendenceController extends Controller
 
     public function create()
     {
+        if(auth()->user()->is_teacher){
+            $class = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $c = _Class::find($sub->__class_id);
+                array_push($class, $c);
+            }
+            return view('student-atd.index', compact('class'));
+        }
         $class = _Class::all();
         return view('student-atd.index', compact('class'));
     }

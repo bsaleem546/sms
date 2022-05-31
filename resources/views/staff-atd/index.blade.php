@@ -59,9 +59,9 @@
                                 <tr>
                                     <td>{{ $key->id }}</td>
                                     <td>{{ $key->staff->name }}</td>
-                                    <td>{{ $key->time_in }}</td>
-                                    <td>{{ $key->time_out}}</td>
-                                    <td>{{ $key->add_at}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($key->time_in)->format('h-m a')  }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($key->time_out)->format('h-m a') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($key->add_at)->format('M d, Y') }}</td>
                                     <td>
                                         @if($key->status === 'present')
                                             <label class="label label-success">Present</label>

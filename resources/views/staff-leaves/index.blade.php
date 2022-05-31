@@ -59,8 +59,8 @@
                                 <tr>
                                     <td>{{ $d->id }}</td>
                                     <td>{{ $d->staff->name }}</td>
-                                    <td>{{ $d->start_date }}</td>
-                                    <td>{{ $d->end_date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($d->start_date)->format('M d, Y')  }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($d->end_date)->format('M d, Y')  }}</td>
                                     <td>{{ $d->reason }}</td>
                                     <td>{{ $d->status }}</td>
                                     <td>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\_Class;
 use App\Models\Admission;
 use App\Models\Salary;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\StudyMaterial;
 use App\Models\Subject;
@@ -47,6 +48,22 @@ class TimeTableController extends Controller
             $timetable = TimeTable::where('__class_id', $st->__class_id)->latest()->get();
             return view('timetables.index',compact('timetable'));
         }
+
+        if ( auth()->user()->is_teacher ){
+            $timetable = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $tt = TimeTable::where('__class_id', $sub->__class_id)->latest()->get();
+                foreach ($tt as $t){
+                    array_push($timetable, $t);
+                }
+            }
+            return view('timetables.index',compact('timetable'));
+        }
+
         $timetable = TimeTable::latest()->get();
         return view('timetables.index',compact('timetable'));
     }

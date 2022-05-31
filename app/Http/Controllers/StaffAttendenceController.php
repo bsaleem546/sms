@@ -24,8 +24,12 @@ class StaffAttendenceController extends Controller
      */
     public function index()
     {
+        if(auth()->user()->is_teacher){
+            $staff = Staff::where('email', auth()->user()->email)->first();
+            $data = $staff->staff_atds;
+            return view('staff-atd.index', compact('data'));
+        }
         $data = StaffAttendence::latest()->get();
-//        dd($data);
         return view('staff-atd.index', compact('data'));
     }
 

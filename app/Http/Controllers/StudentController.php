@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\_Class;
+use App\Models\_Session;
 use App\Models\Staff;
 use App\Models\Student;
 //use App\Models\Fees;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -25,23 +27,23 @@ class StudentController extends Controller
      */
     public function index()
     {
+        $SESSIONID = _Session::where('status', 1)->first();
         if ( auth()->user()->is_teacher ){
             $data = array();
             $staff = Staff::where('email', auth()->user()->email)->first();
-            foreach ($staff->subjects as $sub){
-//                dd($sub->_class->students);
-                foreach($sub->_class->students as $student){
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $std = Student::where('__class_id', $sub->__class_id)->where('__session_id', $SESSIONID->id)->get();
+                foreach($std as $student){
                     array_push($data, $student);
                 }
             }
             return view('students.index',compact('data'));
         }
-        $data = Student::latest()->get();
+        $data = Student::where('__session_id', $SESSIONID->id)->latest()->get();
         return view('students.index',compact('data'));
-
-
-//        $data = Student::latest()->get();
-//        return view('students.index', compact('data'));
     }
 
     /**

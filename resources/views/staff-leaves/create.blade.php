@@ -48,10 +48,13 @@
                     {!! Form::open(array('route' => 'staff-leaves.store','method'=>'POST', 'class' => 'form-material m-t-40 create')) !!}
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-12">Staff Name</label>
-                            <div class="col-sm-12 validate">
-                                {!! Form::select('staff_id', \App\Models\Staff::pluck('name', 'id'),null, array('class' => 'form-control', 'required')) !!}
-                            </div>
+                            @if(auth()->user()->is_teacher)
+                            @else
+                                <label class="col-sm-12">Staff Name</label>
+                                <div class="col-sm-12 validate">
+                                    {!! Form::select('staff_id', \App\Models\Staff::pluck('name', 'id'),null, array('class' => 'form-control', 'required')) !!}
+                                </div>
+                            @endif
                         </div>
                     </div>
 

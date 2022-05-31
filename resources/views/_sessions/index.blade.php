@@ -56,8 +56,8 @@
                                 @foreach ($data as $key => $d)
                                     <tr>
                                         <td>{{ $d->id }}</td>
-                                        <td>{{ $d->start_date }}</td>
-                                        <td>{{ $d->end_date }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($d->start_date)->format('M Y')  }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($d->end_date)->format('M Y')  }}</td>
                                         <td>
                                             @if($d->status == 1)
                                                 <label class="label label-success">ACTIVE</label>

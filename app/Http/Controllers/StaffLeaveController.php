@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Staff;
 use App\Models\StaffLeave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,11 @@ class StaffLeaveController extends Controller
      */
     public function index()
     {
+        if ( auth()->user()->is_teacher ){
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $data = $staff->leaves;//StaffLeave::where('staff_id', )->latest()->get();
+            return view('staff-leaves.index', compact('data'));
+        }
         $data = StaffLeave::latest()->get();
         return view('staff-leaves.index', compact('data'));
     }
@@ -47,14 +53,21 @@ class StaffLeaveController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'staff_id' => 'required',
+//                'staff_id' => 'required',
                 'start_date' => 'required',
                 'end_date' => 'required',
                 'reason' => 'required',
             ]);
 
+            $staffID = $request->staff_id;
+
+            if (auth()->user()->is_teacher){
+                $staff = Staff::where('email',auth()->user()->email)->first();
+                $staffID = $staff->id;
+            }
+
             StaffLeave::create([
-                'staff_id' => $request->staff_id,
+                'staff_id' => $staffID,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'reason' => $request->reason,

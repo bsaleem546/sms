@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admission;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\StudentLeave;
 use Illuminate\Http\Request;
@@ -29,6 +30,24 @@ class StudentLeaveController extends Controller
                 ->join('admissions', 'admissions.id', '=', 'students.admission_id')
                 ->select('student_leaves.*')
                 ->where('student_auth_id', auth()->user()->id)->orderBy('student_leaves.id', 'DESC')->get();
+            return view('student-leaves.index', compact('data'));
+        }
+
+        if ( auth()->user()->is_teacher ){
+            $data = array();
+            $staff = Staff::where('email',auth()->user()->email)->first();
+            $SUBID = DB::table('subject_staff')
+                ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
+                ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
+            foreach ($SUBID as $sub){
+                $students = Student::where('__class_id', $sub->__class_id)->get();
+                foreach ($students as $student){
+                    $std_atds = StudentLeave::where('student_id', $student->id)->latest()->get();
+                    foreach ($std_atds as $st){
+                        array_push($data, $st);
+                    }
+                }
+            }
             return view('student-leaves.index', compact('data'));
         }
         $data = StudentLeave::latest()->get();

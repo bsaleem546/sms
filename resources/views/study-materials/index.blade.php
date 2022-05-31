@@ -40,7 +40,7 @@
                             </div>
                         @endif
 
-                    <h5 class="card-title">Live Classes list</h5>
+                    <h5 class="card-title">Study Material list</h5>
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>
@@ -50,6 +50,7 @@
                                 <th>Added By</th>
                                 <th>Uploads</th>
                                 <th>Text</th>
+                                <th>Created At</th>
                                 <th width="280px">Action</th>
                             </tr>
                             </thead>
@@ -65,6 +66,7 @@
                                             @endif
                                         </td>
                                         <td>{{ $d->text }}</td>
+                                        <td>{{ $d->created_at->format('M d, Y') }}</td>
                                         <td>
                                             <a class="btn btn-info" href="{{ route('study-materials.show',$d->id) }}">Show</a>
 
