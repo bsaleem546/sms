@@ -40,7 +40,7 @@
                         </div>
                     @endif
 
-                    <h5 class="card-title">Section list</h5>
+                    <h5 class="card-title">Staff list</h5>
                     <div class="table-responsive">
                         <table id="myTable" class="table table-striped">
                             <thead>
@@ -64,6 +64,7 @@
                                     <td>{{ $d->reason }}</td>
                                     <td>{{ $d->status }}</td>
                                     <td>
+                                        <a class="btn btn-info" href="{{ route('staff-leaves.show',$d->id) }}">show</a>
                                         @can('staff-leave-edit')
                                             <a class="btn btn-primary" href="{{ route('staff-leaves.edit',$d->id) }}">Edit</a>
                                         @endcan

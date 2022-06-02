@@ -103,7 +103,8 @@ class salaryController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Salary::findOrFail($id);
+        return view('salary.show', compact('data'));
     }
 
     /**

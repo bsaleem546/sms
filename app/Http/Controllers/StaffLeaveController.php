@@ -92,7 +92,8 @@ class StaffLeaveController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = StaffLeave::findOrFail($id);
+        return view('staff-leaves.show', compact('data'));
     }
 
     /**

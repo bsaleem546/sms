@@ -77,7 +77,8 @@
                                         @endif
                                     </td>
                                     <td width="150px">
-                                        @can('salary-edit')
+                                        <a class="btn btn-info mx-2" href="{{ route('salaries.show',$d->id) }}">Show</a>
+                                    @can('salary-edit')
                                             <a class="btn btn-primary mx-2" href="{{ route('salaries.edit',$d->id) }}">Edit</a>
                                         @endcan
                                         @can('salary-delete')
