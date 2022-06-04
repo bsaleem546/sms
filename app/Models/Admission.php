@@ -69,4 +69,9 @@ class Admission extends Model
     {
         return $this->hasOne(Result::class, 'admission_id');
     }
+
+    public function st()
+    {
+        return $this->belongsTo(Transport::class, 'transport_id');
+    }
 }

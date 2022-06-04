@@ -1,6 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\_Class;
+use App\Models\Admission;
+use App\Models\Fees;
+use App\Models\LiveClass;
+use App\Models\Salary;
+use App\Models\User;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use App\Models\NoticeBoard;
 use App\Models\_Session;
@@ -66,18 +72,37 @@ class HomeController extends Controller
                     array_push($timetable, $t);
                 }
             }
-//Salary Chart
+//salary chart
+            $salary = Salary::where('staff_id',$data->id)->latest()->first();
+//            dd($present);
+            return view('home',compact('present','absent','leave','data','data2','late','data1','SUBID','transport','SUB','timetable','salary'));
+        }
+
+        if(auth()->user()->is_student){
+            $d = Admission::where('student_auth_id',auth()->user()->id)->first();
+//            dd($d);
+            $transport = $d->st;
+            $fee = Fees::where('admission_id',$d->id)->latest()->first();
+            $announcement = NoticeBoard::latest()->first();
+            $livelink = LiveClass::where('class_id',$d->__class_id)->latest()->first();
+//fee chart
 //            $chart_options = [
-//                'chart_title' => 'Salary by months',
+//                'chart_title' => 'Users by months',
 //                'report_type' => 'group_by_date',
-//                'model' => 'App\Models\Salary',
+//                'model' => Fees::where('admission_id',$d->id)->get(),
 //                'group_by_field' => 'created_at',
 //                'group_by_period' => 'month',
 //                'chart_type' => 'bar',
 //            ];
 //            $chart1 = new LaravelChart($chart_options);
-            return view('home',compact('present','absent','leave','data','data2','late','data1','SUBID','transport','SUB','timetable'));
+
+             $fees = Fees::where('admission_id',$d->id)->get();
+//             dd($fee);
+
+
         }
+
+        return view('home',compact('transport','fee','announcement','livelink','fees'));
     }
 
 }

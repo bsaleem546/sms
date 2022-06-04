@@ -27,4 +27,9 @@ class Transport extends Model
     {
         return $this->hasOne(Staff::class,'transport_id');
     }
+
+    public function transport()
+    {
+        return $this->hasOne(Admission::class,'transport_id');
+    }
 }
