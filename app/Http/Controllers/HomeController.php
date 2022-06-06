@@ -85,24 +85,15 @@ class HomeController extends Controller
             $fee = Fees::where('admission_id',$d->id)->latest()->first();
             $announcement = NoticeBoard::latest()->first();
             $livelink = LiveClass::where('class_id',$d->__class_id)->latest()->first();
-//fee chart
-//            $chart_options = [
-//                'chart_title' => 'Users by months',
-//                'report_type' => 'group_by_date',
-//                'model' => Fees::where('admission_id',$d->id)->get(),
-//                'group_by_field' => 'created_at',
-//                'group_by_period' => 'month',
-//                'chart_type' => 'bar',
-//            ];
-//            $chart1 = new LaravelChart($chart_options);
-
-             $fees = Fees::where('admission_id',$d->id)->get();
+            $fees = Fees::where('admission_id',$d->id)->get();
+            $minmax = DB::table('fees')->select(\DB::raw('MIN(total) AS DateStart, MAX(total) AS DateEnd'))->first();
 //             dd($fee);
 
 
+            return view('home',compact('transport','fee','announcement','livelink','fees','minmax'));
         }
-
-        return view('home',compact('transport','fee','announcement','livelink','fees'));
+        return view('home');
     }
+
 
 }

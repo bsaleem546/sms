@@ -445,6 +445,21 @@
                     </li>
                 @endcan
 
+                @can('gate-pass-list')
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                            <i class="ti-plus"></i>
+                            <span class="hide-menu">Gate Pass</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('gate-pass.index') }}">View Gate Pass</a>
+                                @can('gate-pass-create')<a href="{{ route('gate-pass.create') }}">Create Gate Pass</a>@endcan
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

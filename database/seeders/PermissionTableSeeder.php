@@ -125,10 +125,14 @@ class PermissionTableSeeder extends Seeder
 //            'time-table-create',
 //            'time-table-edit',
 //            'time-table-delete',
-            'promote-list',
-            'promote-create',
-            'promote-edit',
-            'promote-delete',
+//            'promote-list',
+//            'promote-create',
+//            'promote-edit',
+//            'promote-delete',
+            'gate-pass-list',
+            'gate-pass-create',
+            'gate-pass-edit',
+            'gate-pass-delete',
         ];
 
         foreach ($permissions as $permission) {

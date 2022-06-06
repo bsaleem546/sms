@@ -102,6 +102,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('promotes', \App\Http\Controllers\PromotedOrDemotedController::class);
     Route::get('getStudents/{id}', [\App\Http\Controllers\PromotedOrDemotedController::class, 'getStudents']);
+    Route::resource('gate-pass', \App\Http\Controllers\GatePassController::class);
 
 });
 

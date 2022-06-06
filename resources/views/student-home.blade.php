@@ -16,6 +16,7 @@
             <div class="col-sm-12">
                 <div class="card-body">
                     <h5 class="card-title" style="color:#004274">Vehicle Number</h5>
+{{--                    @dd($min)--}}
                     <h4 class="card-title" style="color:#004274">{{$transport->vehicle_number}}</h4>
                     {{--                                <p class="mb-4">{{$data1->description}}</p>--}}
                     {{--                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>--}}
@@ -246,7 +247,7 @@
                             options: {
                                 legend: {display: false},
                                 scales: {
-                                    yAxes: [{ticks: {min: 100, max:10000}}],
+                                    yAxes: [{ticks: {min: {{$minmax->DateStart}}, max: {{$minmax->DateEnd}}}}],
                                 }
                             }
                         });
