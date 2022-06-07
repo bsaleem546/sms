@@ -21,12 +21,17 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
-            @if(auth()->user()->is_teacher)
-                @include('teacher-home')
-            @endif
-                @if(auth()->user()->is_student)
-                    @include('student-home')
-                @endif
+                    @if(auth()->user()->is_teacher)
+                        @include('teacher-home')
+                    @endif
+
+                    @if(auth()->user()->is_student)
+                        @include('student-home')
+                    @endif
+
+                    @if(auth()->user()->is_admin)
+                        @include('admin-home')
+                    @endif
         </div>
     </div>
 

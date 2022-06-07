@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 use App\Models\_Class;
 use App\Models\Admission;
+use App\Models\Department;
 use App\Models\Fees;
 use App\Models\LiveClass;
 use App\Models\Salary;
+use App\Models\StaffLeave;
+use App\Models\StudentLeave;
+use App\Models\Transport;
 use App\Models\User;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use App\Models\NoticeBoard;
@@ -91,6 +95,38 @@ class HomeController extends Controller
 
 
             return view('home',compact('transport','fee','announcement','livelink','fees','minmax'));
+        }
+
+        if(auth()->user()->is_admin){
+            $dep = count(Department::get()->all());
+            $user = count(User::get()->all());
+            $stu = count(Student::get()->all());
+            $staff = count(Staff::get()->all());
+            $teacher = DB::table('user_department')->
+            join('users', 'users.id', '=', 'user_department.user_id')->
+            join('departments', 'departments.id', '=','user_department.department_id')
+                //join('user_id','=', 'staffs.user_id')->get();
+                ->select('departments.name as departmentName')->where('departments.name','Teacher')->get();
+            $transport = count(Transport::get()->all());
+            $pen_salaries = count(Salary::where('status','pending')->get());
+            $pen_Sleaves = count(StaffLeave::where('status','pending')->get());
+            $pen_stuleaves = count(StudentLeave::where('status','pending')->get());
+            $pen_fee = count(Fees::where('status','pending')->get());
+
+            $STUDENTCLASSESARRAY = array('class_name' => [], 'students_total' => []);
+            $classes = _Class::get();
+            foreach ($classes as $class){
+                $stucent_count = count( Student::where('__class_id', $class->id)->get() );
+                array_push($STUDENTCLASSESARRAY['class_name'], $class->name.' - '.$class->section->name );
+                array_push($STUDENTCLASSESARRAY['students_total'], $stucent_count );
+//                dd($STUDENTCLASSESARRAY);
+            }
+
+            $STUDENTCLASSESARRAY = json_encode($STUDENTCLASSESARRAY);
+//            dd($STUDENTCLASSESARRAY['class_name']);
+
+            return view('home',compact('dep','user','stu','staff','teacher','transport',
+                'pen_salaries','pen_Sleaves','pen_stuleaves','pen_fee', 'STUDENTCLASSESARRAY'));
         }
         return view('home');
     }
