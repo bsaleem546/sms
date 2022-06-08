@@ -149,7 +149,51 @@
         </div>
     </div>
 </div>
+{{--REG ADM CHART--}}
+<div class="col-lg-12 mb-2 order-0">
+    <div class="card">
+        <div class="d-flex align-items-end row">
+            <div class="col-sm-12">
+                <div class="card-body">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+                    <canvas id="MyChart" style="width:100%;max-width:100%"></canvas>
+                    {{--@dd($admission)--}}
+                    <script type="text/javascript">
+                        var xValues = ["Admissions","Pending Admissions","Registrations","Pending Registrations",];
+                        var yValues = [{{$admission}},{{$admission_p}},{{$registration}},{{$registration_p}}];
+                        //var barColors = ["#004274", "#004274","#004274","#004274","#004274","#004274", "#004274","#004274","#004274","#004274"];
 
+                        new Chart("MyChart", {
+                            type: "line",
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                    fill: false,
+                                    lineTension: 0,
+                                    backgroundColor: "rgba(0,0,255,1.0)",
+                                    borderColor: "rgba(0,0,255,0.1)",
+                                    data: yValues
+                                }]
+                            },
+                            options: {
+                                legend: {display: false},
+                                scales: {
+                                    yAxes: [{ticks: {mix: {{$minmax1->maxs}}, max: {{$minmax->max}}}}],
+                                },
+                                title: {
+                                    display: true,
+                                    text: "Registration And Admission"
+                                }
+                            }
+                        });
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{--STU_CHART--}}
 <div class="col-lg-12 mb-2 order-0">
     <div class="card">
         <div class="d-flex align-items-end row">
@@ -177,7 +221,7 @@
                                 legend: {display: false},
                                 title: {
                                     display: true,
-                                    text: "World Wine Production 2018"
+                                    text: "Number Of Student"
                                 }
                             }
                         });
@@ -187,5 +231,4 @@
         </div>
     </div>
 </div>
-
 {{--@dd($dep)--}}

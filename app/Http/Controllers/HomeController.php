@@ -6,6 +6,7 @@ use App\Models\Admission;
 use App\Models\Department;
 use App\Models\Fees;
 use App\Models\LiveClass;
+use App\Models\Registration;
 use App\Models\Salary;
 use App\Models\StaffLeave;
 use App\Models\StudentLeave;
@@ -112,6 +113,14 @@ class HomeController extends Controller
             $pen_Sleaves = count(StaffLeave::where('status','pending')->get());
             $pen_stuleaves = count(StudentLeave::where('status','pending')->get());
             $pen_fee = count(Fees::where('status','pending')->get());
+            $admission = count(Admission::get());
+            $admission_p = count(Admission::where('status','pending')->get());
+            $registration = count(Registration::where('status','pending')->get());
+            $registration_p = count(Registration::where('status','admitted')->get());
+            $minmax = DB::table('admissions')->select(\DB::raw('MIN(id) AS min, MAX(id) AS max'))->first();
+            $minmax1 = DB::table('registrations')->select(\DB::raw('MIN(id) AS mins, MAX(id) AS maxs'))->first();
+//            dd($registration_p);
+
 
             $STUDENTCLASSESARRAY = array('class_name' => [], 'students_total' => []);
             $classes = _Class::get();
@@ -126,7 +135,7 @@ class HomeController extends Controller
 //            dd($STUDENTCLASSESARRAY['class_name']);
 
             return view('home',compact('dep','user','stu','staff','teacher','transport',
-                'pen_salaries','pen_Sleaves','pen_stuleaves','pen_fee', 'STUDENTCLASSESARRAY'));
+                'pen_salaries','pen_Sleaves','pen_stuleaves','pen_fee', 'STUDENTCLASSESARRAY','admission','admission_p','registration','registration_p','minmax','minmax1'));
         }
         return view('home');
     }
