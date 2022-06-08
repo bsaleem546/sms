@@ -119,6 +119,7 @@ class HomeController extends Controller
             $registration_p = count(Registration::where('status','admitted')->get());
             $minmax = DB::table('admissions')->select(\DB::raw('MIN(id) AS min, MAX(id) AS max'))->first();
             $minmax1 = DB::table('registrations')->select(\DB::raw('MIN(id) AS mins, MAX(id) AS maxs'))->first();
+            $notice = NoticeBoard::latest()->first();
 //            dd($registration_p);
 
 
@@ -135,7 +136,7 @@ class HomeController extends Controller
 //            dd($STUDENTCLASSESARRAY['class_name']);
 
             return view('home',compact('dep','user','stu','staff','teacher','transport',
-                'pen_salaries','pen_Sleaves','pen_stuleaves','pen_fee', 'STUDENTCLASSESARRAY','admission','admission_p','registration','registration_p','minmax','minmax1'));
+                'pen_salaries','pen_Sleaves','pen_stuleaves','pen_fee', 'STUDENTCLASSESARRAY','admission','admission_p','registration','registration_p','minmax','minmax1','notice'));
         }
         return view('home');
     }

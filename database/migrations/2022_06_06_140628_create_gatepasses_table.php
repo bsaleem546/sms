@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('gatepasses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('vehicle_no');
-            $table->string('phone_number');
-            $table->text('address');
-            $table->string('cnic');
+            $table->string('vehicle_no')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->text('address')->nullable();
+            $table->string('cnic')->nullable();
             $table->string('time_in');
             $table->string('time_out');
             $table->timestamps();

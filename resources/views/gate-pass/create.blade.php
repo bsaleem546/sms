@@ -56,25 +56,25 @@
                             <div class="col-sm-6 mb-4">
                                 <label class="col-sm-12">Person Cell No</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" name="phone_number" required class="form-control">
+                                    <input type="text" name="phone_number" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-12 mb-4">
                                 <label class="col-sm-12">Vehicle No</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" name="vehicle_no" required class="form-control">
+                                    <input type="text" name="vehicle_no"  class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-6 mb-4">
                                 <label class="col-sm-12">CNIC No</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" name="cnic" required class="form-control">
+                                    <input type="text" name="cnic"  class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-6 mb-4">
                                 <label class="col-sm-12">Address</label>
                                 <div class="col-sm-12 validate">
-                                    <input type="text" name="address" required class="form-control">
+                                    <input type="text" name="address" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-6 mb-4">

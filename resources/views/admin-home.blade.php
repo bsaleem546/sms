@@ -90,6 +90,7 @@
 </div>
 
 
+
 <div class="col-lg-3 mb-2 order-0">
     <div class="card">
         <div class="d-flex align-items-end row">
@@ -142,6 +143,22 @@
                 <div class="card-body">
                     <h5 class="card-title" style="color:#004274">Pending Fees</h5>
                     <h4 class="card-title" style="color:#004274">{{$pen_fee}}</h4>
+                    {{--                                <p class="mb-4">{{$data1->description}}</p>--}}
+                    {{--                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>--}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{--Announcement--}}
+<div class="col-lg-12 mb-2 order-0">
+    <div class="card">
+        <div class="d-flex align-items-end row">
+            <div class="col-sm-12">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#004274">Announcement</h5>
+                    <h6 class="card-title" style="color:#004274">Title : {{$notice->title}}</h6>
+                    <p class="card-title" style="color:#004274">{{$notice->notice}}</p>
                     {{--                                <p class="mb-4">{{$data1->description}}</p>--}}
                     {{--                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>--}}
                 </div>

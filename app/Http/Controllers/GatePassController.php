@@ -42,17 +42,17 @@ class GatePassController extends Controller
 
         DB::beginTransaction();
         try {
-            $data = $request->validate([
+                $request->validate([
                 "name" => 'required',
                 "phone_number" => 'nullable',
                 "address" => 'nullable',
-                "cnic" => 'nullable|min:13',
-                "vehicle_no" => 'required',
-                "time_out" => 'nullable',
-                "time_in" => 'nullable',
+                "cnic" => 'nullable',
+                "vehicle_no" => 'nullable',
+                "time_out" => 'required',
+                "time_in" => 'required',
             ]);
 
-            $reg = Gatepass::create([
+                Gatepass::create([
                 "name" => $request->name,
                 "phone_number" => $request->phone_number,
                 "address" => $request->address,
@@ -62,12 +62,12 @@ class GatePassController extends Controller
                 'time_in' => $request->time_in,
             ]);
             DB::commit();
-            return redirect()->back()
+            return redirect()->route('gate-pass.index')
                 ->with('success','Entry Successfully..!!');
         }
         catch (\Exception $exception){
             DB::rollBack();
-            return redirect()->back()
+            return redirect()->route('gate-pass.index')
                 ->with('error',$exception->getMessage());
         }
     }
@@ -113,9 +113,9 @@ class GatePassController extends Controller
                 "phone_number" => 'nullable',
                 "address" => 'nullable',
                 "cnic" => 'nullable',
-                "vehicle_no" => 'required',
-                "time_out" => 'nullable',
-                "time_in" => 'nullable',
+                "vehicle_no" => 'nullable',
+                "time_out" => 'required',
+                "time_in" => 'required',
             ]);
 
             Gatepass::where('id', $id)->update([
