@@ -151,6 +151,8 @@
     </div>
 </div>
 {{--Announcement--}}
+
+@if($notice)
 <div class="col-lg-12 mb-2 order-0">
     <div class="card">
         <div class="d-flex align-items-end row">
@@ -166,6 +168,8 @@
         </div>
     </div>
 </div>
+@endif
+
 {{--REG ADM CHART--}}
 <div class="col-lg-12 mb-2 order-0">
     <div class="card">
