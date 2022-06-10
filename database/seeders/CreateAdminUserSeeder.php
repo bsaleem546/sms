@@ -21,7 +21,6 @@ class CreateAdminUserSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'super@admin.com',
             'password' => bcrypt('admin123'),
-            'role' => 'admin'
         ]);
 
 //        $user = User::find(1);
