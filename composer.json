@@ -15,8 +15,7 @@
         "laravelcollective/html": "^6.3",
         "laraveldaily/laravel-charts": "^0.1.29",
         "spatie/laravel-permission": "^5.5",
-        "ext-gd":"*",
-        "ext-imagick": "*"
+        "ext-gd":"*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
