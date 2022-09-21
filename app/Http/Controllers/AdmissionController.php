@@ -68,7 +68,7 @@ class AdmissionController extends Controller
                 $img = time().'.' . $request->id_proof->getClientOriginalExtension();
                 //\Image::make($request->id_proof)->save(public_path('uploads/students/').$img);
                 //for heroku
-                \Image::make($request->id_proof)->save('/public/uploads/students/'.$img);
+                \Image::make($request->id_proof)->save('./public/uploads/students/'.$img);
             }
 
             //update admission
@@ -217,7 +217,7 @@ class AdmissionController extends Controller
             $img = time().'.' . $request['id_proof']->getClientOriginalExtension();
             //\Image::make($request['id_proof'])->save(public_path('uploads/students/').$img);
                 //for heroku
-               \Image::make($request->id_proof)->save('/public/uploads/students/'.$img);
+               \Image::make($request->id_proof)->save('./public/uploads/students/'.$img);
             //save admission
             $admission = Admission::create([
                 "student_name" => $request['student_name'],
