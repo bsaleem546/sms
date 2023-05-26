@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\_Class;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Section;
 use Illuminate\Database\Seeder;
 
 class ClassSeeder extends Seeder
@@ -15,21 +15,14 @@ class ClassSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=3; $i<=10; $i++){
-            _Class::create([
-                'section_id' => 1,
-                'name' => 'CLASS '.$i
-            ]);
-            _Class::create([
-                'section_id' => 2,
-                'name' => 'CLASS '.$i
-            ]);
-            _Class::create([
-                'section_id' => 3,
-                'name' => 'CLASS '.$i
-            ]);
-
-
+        $sections = Section::all();
+        foreach ($sections as $section) {
+            for ($i = 1; $i <= 3; $i++) {
+                _Class::create([
+                    'section_id' => $section->id,
+                    'name' => 'CLASS ' . $i
+                ]);
+            }
         }
     }
 }

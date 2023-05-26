@@ -14,7 +14,8 @@
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                     <li class="breadcrumb-item active">Teacher Details</li>
                 </ol>
-                <a href="{{ route('teachers.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
+                <a href="{{ route('teachers.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i
+                        class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>
@@ -33,30 +34,33 @@
                             <p>Email: {{ $data->email }}</p>
                             <p>Joining Date: {{ $data->joining_date }}</p>
                             <p>Salary: {{ $data->salary }}</p>
-                            @if( count($data->subjects) > 0 )
+                            @if (count($data->subjects) > 0)
                                 <p>
                                     Subjects:
-                                    @foreach($data->subjects as $subs)
-                                        <label class="label label-primary">{{ $subs->name." - ".$subs->_class->name." - ".$subs->_class->section->name }}</label>
+                                    @foreach ($data->subjects as $subs)
+                                        <label
+                                            class="label label-primary">{{ $subs->name . ' - ' . $subs->_class->name . ' - ' . $subs->_class->section->name }}</label>
                                     @endforeach
                                 </p>
                             @endif
 
                             <p>Bus Incharge:
-                                @if($data->is_bus_incharge === 0)
+                                @if ($data->is_bus_incharge === 0)
                                     <label class="label label-danger">NO</label>
                                 @else
                                     <label class="label label-success">YES</label>
                                 @endif
                             </p>
-                            <p>Transportation: {{ $data->transport->vehicle_number.' - '.$data->transport->vehicle_model }}</p>
+                            <p>Transportation: {{ $data->transport->vehicle_number . ' - ' . $data->transport->vehicle_model }}
+                            </p>
                             <p>Department:
-                                @foreach($data->users->departments as $dd)
+                                @foreach ($data->users->departments as $dd)
                                     <label class="label label-megna">{{ $dd->name }}</label>
-                                @endforeach</p>
+                                @endforeach
+                            </p>
                             <p>Role: {{ $userRole->name }}</p>
                             <p>Permissions:
-                                @foreach($rolePermissions as $p)
+                                @foreach ($rolePermissions as $p)
                                     <label class="label label-warning">{{ $p->name }}</label>
                                 @endforeach
                             </p>
@@ -64,8 +68,9 @@
                             <p>Created At: {{ $data->created_at->format('M d, Y') }}</p>
                         </div>
                         <div class="col-6 justify-content-center">
-                            @if($data->id_proof !== null)
-                                <img src="{{ url('public/uploads/staffs/'.$data->id_proof) }}" alt="" class="shadow-lg" height="150px">
+                            @if ($data->id_proof !== null)
+                                <img src="{{ asset('uploads/staffs/' . $data->id_proof) }}" alt="" class="shadow-lg"
+                                    height="150px">
                             @endif
                         </div>
                     </div>

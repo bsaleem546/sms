@@ -4,8 +4,9 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
-                <li class="user-pro"> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                        <img src="{{ url('public/assets/images/users/1.jpg')  }}" alt="user-img" class="img-circle">
+                <li class="user-pro"> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)"
+                        aria-expanded="false">
+                        <img src="{{ asset('assets/images/users/1.jpg') }}" alt="user-img" class="img-circle">
                         <span class="hide-menu">{{ Auth::user()->name }}</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
@@ -15,7 +16,7 @@
                         </li>
                         <li>
                             <a href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
                                 <i class="fa fa-power-off"></i> Logout</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -34,7 +35,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('roles.index') }}">All Roles</a>
-                                @can('role-create')<a href="{{ route('roles.create') }}">Create Role</a>@endcan
+                                @can('role-create')
+                                    <a href="{{ route('roles.create') }}">Create Role</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -49,7 +52,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('departments.index') }}">All Department</a>
-                                @can('department-create')<a href="{{ route('departments.create') }}">Create Department</a>@endcan
+                                @can('department-create')
+                                    <a href="{{ route('departments.create') }}">Create Department</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -64,7 +69,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('users.index') }}">All Users</a>
-                               @can('user-create') <a href="{{ route('users.create') }}">Create User</a>@endcan
+                                @can('user-create')
+                                    <a href="{{ route('users.create') }}">Create User</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -79,7 +86,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('sections.index') }}">All Sections</a>
-                               @can('section-create') <a href="{{ route('sections.create') }}">Create Section</a>@endcan
+                                @can('section-create')
+                                    <a href="{{ route('sections.create') }}">Create Section</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -94,7 +103,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('classes.index') }}">All Classes</a>
-                                @can('class-create')<a href="{{ route('classes.create') }}">Create Classes</a>@endcan
+                                @can('class-create')
+                                    <a href="{{ route('classes.create') }}">Create Classes</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -123,7 +134,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('subjects.index') }}">All Subjects</a>
-                                @can('subject-create')<a href="{{ route('subjects.create') }}">Create Subject</a>@endcan
+                                @can('subject-create')
+                                    <a href="{{ route('subjects.create') }}">Create Subject</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -138,7 +151,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('staffs.index') }}">All Staffs</a>
-                                @can('staff-create')<a href="{{ route('staffs.create') }}">Create Staff</a>@endcan
+                                @can('staff-create')
+                                    <a href="{{ route('staffs.create') }}">Create Staff</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -181,7 +196,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('admission.index') }}">All Admissions</a>
-                               @can('admission-create') <a href="{{ route('admission.create') }}">Create Admission</a>@endcan
+                                @can('admission-create')
+                                    <a href="{{ route('admission.create') }}">Create Admission</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -196,7 +213,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('transfers.index') }}">All Transfers</a>
-                               @can('transfer-create') <a href="{{ route('transfers.create') }}">Create Transfers</a>@endcan
+                                @can('transfer-create')
+                                    <a href="{{ route('transfers.create') }}">Create Transfers</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -211,7 +230,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('transports.index') }}">All Transports</a>
-                                @can('transport-create')<a href="{{ route('transports.create') }}">Create Transport</a>@endcan
+                                @can('transport-create')
+                                    <a href="{{ route('transports.create') }}">Create Transport</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -226,7 +247,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('transport-routes.index') }}">All Routes</a>
-                               @can('troute-create') <a href="{{ route('transport-routes.create') }}">Create Route</a>@endcan
+                                @can('troute-create')
+                                    <a href="{{ route('transport-routes.create') }}">Create Route</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -241,7 +264,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('yearly-session.index') }}">All Sessions</a>
-                                @can('session-create')<a href="{{ route('yearly-session.create') }}">Create Sessions</a>@endcan
+                                @can('session-create')
+                                    <a href="{{ route('yearly-session.create') }}">Create Sessions</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -257,7 +282,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('fees.index') }}">All Fees</a>
-                                @can('fee-create') <a href="{{ route('fees.create') }}">Create Fee</a> @endcan
+                                @can('fee-create')
+                                    <a href="{{ route('fees.create') }}">Create Fee</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -272,7 +299,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('s_atd.list') }}">View Attendance</a>
-                                @can('s_att-create')<a href="{{ route('s_atd.create') }}">Attendance</a>@endcan
+                                @can('s_att-create')
+                                    <a href="{{ route('s_atd.create') }}">Attendance</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -287,7 +316,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('staff-attendance.index') }}">View Attendance</a>
-                                @can('st_atd-create')<a href="{{ route('staff-attendance.create') }}">Create Attendance</a>@endcan
+                                @can('st_atd-create')
+                                    <a href="{{ route('staff-attendance.create') }}">Create Attendance</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -302,7 +333,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('salaries.index') }}">View Staff Salary</a>
-                               @can('salary-create') <a href="{{ route('salaries.create') }}">Create Staff Salary</a>@endcan
+                                @can('salary-create')
+                                    <a href="{{ route('salaries.create') }}">Create Staff Salary</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -317,7 +350,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('expenses.index') }}">View Expenses</a>
-                               @can('expense-create') <a href="{{ route('expenses.create') }}">Create Expenses</a>@endcan
+                                @can('expense-create')
+                                    <a href="{{ route('expenses.create') }}">Create Expenses</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -332,7 +367,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('notices.index') }}">View Notices</a>
-                               @can('notice-create') <a href="{{ route('notices.create') }}">Create Notice</a>@endcan
+                                @can('notice-create')
+                                    <a href="{{ route('notices.create') }}">Create Notice</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -347,7 +384,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('results.index') }}">View Result</a>
-                                @can('result-create')<a href="{{ route('results.create') }}">Create Result</a>@endcan
+                                @can('result-create')
+                                    <a href="{{ route('results.create') }}">Create Result</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -363,7 +402,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('student-leaves.index') }}">View Student Leave</a>
-                                @can('student-leave-create')<a href="{{ route('student-leaves.create') }}">Create Student Leave</a>@endcan
+                                @can('student-leave-create')
+                                    <a href="{{ route('student-leaves.create') }}">Create Student Leave</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -379,7 +420,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('staff-leaves.index') }}">View Staff Leave</a>
-                                @can('staff-leave-create')<a href="{{ route('staff-leaves.create') }}">Create Staff Leave</a>@endcan
+                                @can('staff-leave-create')
+                                    <a href="{{ route('staff-leaves.create') }}">Create Staff Leave</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -394,7 +437,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('live-classes.index') }}">View Live Classes</a>
-                                @can('live-class-create')<a href="{{ route('live-classes.create') }}">Create Live Classes</a>@endcan
+                                @can('live-class-create')
+                                    <a href="{{ route('live-classes.create') }}">Create Live Classes</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -409,7 +454,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('study-materials.index') }}">View Study Material</a>
-                                @can('study-material-create')<a href="{{ route('study-materials.create') }}">Create Study Material</a>@endcan
+                                @can('study-material-create')
+                                    <a href="{{ route('study-materials.create') }}">Create Study Material</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -424,7 +471,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('time-tables.index') }}">View Time Tables</a>
-                                @can('time-table-create')<a href="{{ route('time-tables.create') }}">Create Time Tables</a>@endcan
+                                @can('time-table-create')
+                                    <a href="{{ route('time-tables.create') }}">Create Time Tables</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -439,7 +488,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('promotes.index') }}">View Promote Students</a>
-                                @can('promote-create')<a href="{{ route('promotes.create') }}">Create Promote Students</a>@endcan
+                                @can('promote-create')
+                                    <a href="{{ route('promotes.create') }}">Create Promote Students</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>
@@ -454,7 +505,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li>
                                 <a href="{{ route('gate-pass.index') }}">View Gate Pass</a>
-                                @can('gate-pass-create')<a href="{{ route('gate-pass.create') }}">Create Gate Pass</a>@endcan
+                                @can('gate-pass-create')
+                                    <a href="{{ route('gate-pass.create') }}">Create Gate Pass</a>
+                                @endcan
                             </li>
                         </ul>
                     </li>

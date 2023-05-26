@@ -14,7 +14,8 @@
                     <li class="breadcrumb-item">Staffs</li>
                     <li class="breadcrumb-item active">Staff Details</li>
                 </ol>
-                <a href="{{ route('staffs.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Back</a>
+                <a href="{{ route('staffs.index') }}" class="btn btn-info d-none d-lg-block m-l-15"><i
+                        class="fa fa-plus-circle"></i> Back</a>
             </div>
         </div>
     </div>
@@ -34,20 +35,22 @@
                             <p>Joining Date: {{ $data->joining_date }}</p>
                             <p>Salary: {{ $data->salary }}</p>
                             <p>Bus Incharge:
-                                @if($data->is_bus_incharge === 0)
+                                @if ($data->is_bus_incharge === 0)
                                     <label class="label label-danger">NO</label>
                                 @else
                                     <label class="label label-success">YES</label>
                                 @endif
                             </p>
-                            <p>Transportation: {{ $data->transport->vehicle_number.' - '.$data->transport->vehicle_model }}</p>
+                            <p>Transportation: {{ $data->transport->vehicle_number . ' - ' . $data->transport->vehicle_model }}
+                            </p>
                             <p>Department:
-                                @foreach($data->users->departments as $dd)
+                                @foreach ($data->users->departments as $dd)
                                     <label class="label label-megna">{{ $dd->name }}</label>
-                                @endforeach</p>
+                                @endforeach
+                            </p>
                             <p>Role: {{ $userRole->name }}</p>
                             <p>Permissions:
-                                @foreach($rolePermissions as $p)
+                                @foreach ($rolePermissions as $p)
                                     <label class="label label-warning">{{ $p->name }}</label>
                                 @endforeach
                             </p>
@@ -55,8 +58,9 @@
                             <p>Created At: {{ $data->created_at->format('M d, Y') }}</p>
                         </div>
                         <div class="col-6 justify-content-center">
-                            @if($data->id_proof !== null)
-                                <img src="{{ url('public/uploads/staffs/'.$data->id_proof) }}" alt="" class="h-50 shadow-lg">
+                            @if ($data->id_proof !== null)
+                                <img src="{{ asset('uploads/staffs/' . $data->id_proof) }}" alt=""
+                                    class="h-50 shadow-lg">
                             @endif
                         </div>
                     </div>
