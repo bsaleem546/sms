@@ -62,7 +62,7 @@
                                 <tr>
                                     <td>{{ $d->id }}</td>
                                     <td>{{ $d->__class->name.' - '.$d->__class->section->name }}</td>
-                                    <td>{{ $d->__class->student->name }}</td>
+                                    <td>{{ $d->admission->student_name }}</td>
                                     <td>{{ $d->exam_type }}</td>
                                     <td>{{ $d->total_marks }}</td>
                                     <td>{{ $d->obtained_marks }}</td>

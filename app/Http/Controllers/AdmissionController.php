@@ -12,7 +12,6 @@ use App\Models\Registration;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,11 +19,11 @@ use Spatie\Permission\Models\Role;
 
 class AdmissionController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
-        $this->middleware('permission:admission-list|admission-create|admission-edit|admission-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:admission-list|admission-create|admission-edit|admission-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:admission-create', ['only' => ['create']]);
-        $this->middleware('permission:admission-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:admission-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:admission-delete', ['only' => ['destroy']]);
         $this->middleware('permission:admission-confirm', ['only' => ['store']]);
     }
@@ -33,18 +32,16 @@ class AdmissionController extends Controller
     {
         DB::beginTransaction();
         try {
-
             Fees::where('admission_id', $id)->delete();
             Student::where('admission_id', $id)->delete();
             Admission::where('id', $id)->delete();
 
             DB::commit();
             return redirect()->route('admission.index')
-                ->with( 'success', 'Record deleted.....' );
-        }
-        catch (\Exception $exception){
+                ->with('success', 'Record deleted.....');
+        } catch (\Exception $exception) {
             DB::rollBack();
-            return redirect()->back()->with('error',$exception->getMessage());
+            return redirect()->back()->with('error', $exception->getMessage());
         }
     }
 
@@ -57,18 +54,18 @@ class AdmissionController extends Controller
             //get session
             $session = _Session::where('status', 1)->first();
 
-            if ($session == null){
+            if ($session == null) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'No session created. please create session first.');
             }
 
             //save image
             $img = null;
-            if ($request->id_proof !== null){
-                $img = time().'.' . $request->id_proof->getClientOriginalExtension();
-                //\Image::make($request->id_proof)->save(public_path('uploads/students/').$img);
+            if ($request->id_proof !== null) {
+                $img = time() . '.' . $request->id_proof->getClientOriginalExtension();
+                \Image::make($request->id_proof)->save(public_path('uploads/students/') . $img);
                 //for heroku
-                \Image::make($request->id_proof)->save('./public/uploads/students/'.$img);
+                // \Image::make($request->id_proof)->save('./public/uploads/students/'.$img);
             }
 
             //update admission
@@ -94,7 +91,7 @@ class AdmissionController extends Controller
             $admission->mother_name = $request['mother_name'];
             $admission->mother_phone = $request['mother_phone'];
             $admission->mother_occ = $request['mother_occ'];
-            if ($img != null){
+            if ($img != null) {
                 $admission->student_pic = $img;
             }
             $admission->is_trans = $request['is_trans'];
@@ -116,35 +113,35 @@ class AdmissionController extends Controller
             $fee = Fees::where('admission_id', $id)->first();
             $feeDetails = FeeDetails::where('fee_id', $fee->id)->get();
 
-            foreach ($feeDetails  as $fd){
-                if ($fd->fee_type === 'admission'){
+            foreach ($feeDetails  as $fd) {
+                if ($fd->fee_type === 'admission') {
                     $fd->fee_amount = $request['admission_fees'];
                     $fd->update();
                 }
-                if ($fd->fee_type === 'tuition'){
+                if ($fd->fee_type === 'tuition') {
                     $fd->fee_amount = $request['tuition_fees'];
                     $fd->update();
                 }
-                if ($fd->fee_type === 'transportation'){
-                    if ($admission->is_trans == 1 && $data['is_trans'] == 1){
+                if ($fd->fee_type === 'transportation') {
+                    if ($admission->is_trans == 1 && $data['is_trans'] == 1) {
                         $fd->fee_amount = $request['transportation_fees'];
                         $fd->update();
                     }
-                    if ($admission->is_trans == 0 && $request['is_trans'] == 1){
+                    if ($admission->is_trans == 0 && $request['is_trans'] == 1) {
                         FeeDetails::create([
                             'fee_id' => $fee->id,
                             'fee_type' => 'transportation',
                             'fee_amount' => $request['transportation_fees'],
                         ]);
                     }
-                    if ($admission->is_trans == 1 && $request['is_trans'] == 0){
+                    if ($admission->is_trans == 1 && $request['is_trans'] == 0) {
                         FeeDetails::where('fee_id', $fee->id)->where('fee_type', 'transportation')->delete();
                     }
                 }
             }
 
             //make login
-            if ($request->is_login == 1){
+            if ($request->is_login == 1) {
                 $user = User::create([
                     'name' => $request->student_name,
                     'email' => $request->email,
@@ -152,16 +149,15 @@ class AdmissionController extends Controller
                 ]);
                 $role = Role::find(3);
                 $user->assignRole([$role->id]);
-                Admission::where('id', $id)->update([ 'student_auth_id' => $user->id ]);
-                Fees::where('admission_id', $id)->update([ 'user_id' => $user->id ]);
+                Admission::where('id', $id)->update(['student_auth_id' => $user->id]);
+                Fees::where('admission_id', $id)->update(['user_id' => $user->id]);
             }
             DB::commit();
             return redirect()->route('admission.index')
-                ->with( 'success', 'Updated record ....' );
-        }
-        catch (\Exception $exception){
+                ->with('success', 'Updated record ....');
+        } catch (\Exception $exception) {
             DB::rollBack();
-            return redirect()->back()->with('error',$exception->getMessage());
+            return redirect()->back()->with('error', $exception->getMessage());
         }
     }
 
@@ -171,15 +167,15 @@ class AdmissionController extends Controller
         $ad_fee = 0;
         $tt_fee = 0;
         $tp_fee = 0;
-        foreach ($data->fees as $f){
-            foreach ($f->feedetails as $fd){
-                if ($fd->fee_type === 'admission'){
+        foreach ($data->fees as $f) {
+            foreach ($f->feedetails as $fd) {
+                if ($fd->fee_type === 'admission') {
                     $ad_fee = $fd->fee_amount;
                 }
-                if ($fd->fee_type === 'tuition'){
+                if ($fd->fee_type === 'tuition') {
                     $tt_fee = $fd->fee_amount;
                 }
-                if ($fd->fee_type === 'transportation'){
+                if ($fd->fee_type === 'transportation') {
                     $tp_fee = $fd->fee_amount;
                 }
             }
@@ -208,45 +204,45 @@ class AdmissionController extends Controller
             //get session
             $session = _Session::where('status', 1)->first();
 
-            if ($session == null){
+            if ($session == null) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'No session created. please create session first.');
             }
 
             //save image
-            $img = time().'.' . $request['id_proof']->getClientOriginalExtension();
-            //\Image::make($request['id_proof'])->save(public_path('uploads/students/').$img);
-                //for heroku
-               \Image::make($request->id_proof)->save('./public/uploads/students/'.$img);
+            $img = time() . '.' . $request['id_proof']->getClientOriginalExtension();
+            \Image::make($request['id_proof'])->save(public_path('uploads/students/') . $img);
+            //for heroku
+            // \Image::make($request->id_proof)->save('./public/uploads/students/' . $img);
             //save admission
             $admission = Admission::create([
-                "student_name" => $request['student_name'],
-                "gender" => $request['gender'],
-                "dob" => $request['dob'],
-                "religion" => $request['religion'],
-                "cast" => $request['cast'],
-                "blood_group" => $request['blood_group'],
-                "address" => $request['address'],
-                "state" => $request['state'],
-                "city" => $request['city'],
-                "country" => $request['country'],
-                "phone" => $request['phone'],
-                "email" => $request['email'],
-                "extra_note" => $request['extra_note'],
-                "gr_no" => $request['gr_no'],
-                "father_name" => $request['father_name'],
-                "father_phone" => $request['father_phone'],
-                "father_occ" => $request['father_occ'],
-                "mother_name" => $request['mother_name'],
-                "mother_phone" => $request['mother_phone'],
-                "mother_occ" => $request['mother_occ'],
-                "student_pic" => $img,
-                "is_trans" => $request['is_trans'],
-                "transport_id" => $request['transportation'],
-                "__class_id" => $request['selected_class'],
-                "__session_id" => $session->id,
-                "user_id" => Auth::user()->id,
-                "status" => 'admitted'
+                'student_name' => $request['student_name'],
+                'gender' => $request['gender'],
+                'dob' => $request['dob'],
+                'religion' => $request['religion'],
+                'cast' => $request['cast'],
+                'blood_group' => $request['blood_group'],
+                'address' => $request['address'],
+                'state' => $request['state'],
+                'city' => $request['city'],
+                'country' => $request['country'],
+                'phone' => $request['phone'],
+                'email' => $request['email'],
+                'extra_note' => $request['extra_note'],
+                'gr_no' => $request['gr_no'],
+                'father_name' => $request['father_name'],
+                'father_phone' => $request['father_phone'],
+                'father_occ' => $request['father_occ'],
+                'mother_name' => $request['mother_name'],
+                'mother_phone' => $request['mother_phone'],
+                'mother_occ' => $request['mother_occ'],
+                'student_pic' => $img,
+                'is_trans' => $request['is_trans'],
+                'transport_id' => $request['transportation'],
+                '__class_id' => $request['selected_class'],
+                '__session_id' => $session->id,
+                'user_id' => Auth::user()->id,
+                'status' => 'admitted'
             ]);
 
             //save student
@@ -272,7 +268,7 @@ class AdmissionController extends Controller
                 'total' => $total,
             ]);
             $amount = 0;
-            foreach ($fee_types as $type){
+            foreach ($fee_types as $type) {
                 if ($type == 'admission') {
                     $amount = $request['admission_fees'];
                 }
@@ -280,11 +276,11 @@ class AdmissionController extends Controller
                     $amount = $request['tuition_fees'];
                 }
                 if ($type == 'transportation') {
-                    if ($request['is_trans'] == 1){
+                    if ($request['is_trans'] == 1) {
                         $amount = $request['transportation_fees'];
                     }
                 }
-                if ($amount > 0){
+                if ($amount > 0) {
                     FeeDetails::create([
                         'fee_id' => $fee->id,
                         'fee_type' => $type,
@@ -294,7 +290,7 @@ class AdmissionController extends Controller
             }
 
             //create login
-            if ($request->is_login == 1){
+            if ($request->is_login == 1) {
                 $user = User::create([
                     'name' => $request->student_name,
                     'email' => $request->email,
@@ -302,22 +298,21 @@ class AdmissionController extends Controller
                 ]);
                 $role = Role::find(3);
                 $user->assignRole([$role->id]);
-                Admission::where('id', $admission->id)->update([ 'student_auth_id' => $user->id ]);
-                Fees::where('admission_id', $admission->id)->update([ 'user_id' => $user->id ]);
+                Admission::where('id', $admission->id)->update(['student_auth_id' => $user->id]);
+                Fees::where('admission_id', $admission->id)->update(['user_id' => $user->id]);
             }
 
             //update registration
-            if ($request->reg_id > 0){
-                Registration::where('id', $request->reg_id)->update([ 'status' => 'admitted' ]);
+            if ($request->reg_id > 0) {
+                Registration::where('id', $request->reg_id)->update(['status' => 'admitted']);
             }
 
             DB::commit();
             return redirect()->back()
-                ->with( 'success', 'Student admission successfull....' );
-        }
-        catch (\Exception $exception){
+                ->with('success', 'Student admission successfull....');
+        } catch (\Exception $exception) {
             DB::rollBack();
-            return redirect()->back()->with('error',$exception->getMessage());
+            return redirect()->back()->with('error', $exception->getMessage());
         }
     }
 }

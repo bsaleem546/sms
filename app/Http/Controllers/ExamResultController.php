@@ -11,15 +11,18 @@ use App\Models\Student;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use setasign\Fpdi\Fpdi;
 
 class ExamResultController extends Controller
 {
-
-    function __construct()
+    public function __construct()
     {
-        $this->middleware('permission:result-list|result-create|result-edit|result-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:result-create', ['only' => ['create','store']]);
-        $this->middleware('permission:result-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:result-list|result-create|result-edit|result-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:result-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:result-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:result-delete', ['only' => ['destroy']]);
     }
 
@@ -27,8 +30,9 @@ class ExamResultController extends Controller
     {
         $subjects = Subject::where('__class_id', $id)->get();
         $students = Student::where('__class_id', $id)->get();
-        return response()->json([ 'subjects' => $subjects, 'students' => $students ]);
+        return response()->json(['subjects' => $subjects, 'students' => $students]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,30 +40,30 @@ class ExamResultController extends Controller
      */
     public function index()
     {
-        if ( auth()->user()->is_student ){
+        if (auth()->user()->is_student) {
             $data = Result::join('admissions', 'admissions.id', '=', 'results.admission_id')
                 ->where('admissions.student_auth_id', auth()->user()->id)
                 ->select('results.*')
-                ->orderBy('.results.id', 'DESC')->get();
+                ->orderBy('results.id', 'DESC')->get();
             return view('result.index', compact('data'));
         }
 
-        if ( auth()->user()->is_teacher ){
-            $data = array();
+        if (auth()->user()->is_teacher) {
+            $data = [];
             $staff = Staff::where('email', auth()->user()->email)->first();
             $SUBID = DB::table('subject_staff')
                 ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
                 ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
-            foreach ($SUBID as $sub){
+            foreach ($SUBID as $sub) {
                 $rs = Result::where('class_id', $sub->__class_id)->latest()->get();
-                foreach ($rs as $r){
+                foreach ($rs as $r) {
                     array_push($data, $r);
                 }
             }
             return view('result.index', compact('data'));
         }
 
-        $data = Result::latest()->get();
+        $data = Result::all();
         return view('result.index', compact('data'));
     }
 
@@ -70,13 +74,13 @@ class ExamResultController extends Controller
      */
     public function create()
     {
-        if ( auth()->user()->is_teacher ){
-            $classes = array();
-            $staff = Staff::where('email',auth()->user()->email)->first();
+        if (auth()->user()->is_teacher) {
+            $classes = [];
+            $staff = Staff::where('email', auth()->user()->email)->first();
             $SUBID = DB::table('subject_staff')
                 ->join('subjects', 'subjects.id', '=', 'subject_staff.subject_id')
                 ->where('staff_id', $staff->id)->distinct()->get(['__class_id']);
-            foreach ($SUBID as $sub){
+            foreach ($SUBID as $sub) {
                 $c = _Class::find($sub->__class_id);
                 array_push($classes, $c);
             }
@@ -101,19 +105,31 @@ class ExamResultController extends Controller
 
             $total_marks = 0;
             $obt_marks = 0;
-            foreach ($request->local_subjects as $ls){
+            foreach ($request->local_subjects as $ls) {
                 $total_marks += $ls['total_marks'];
                 $obt_marks += $ls['obt_marks'];
             }
-            $percentage = ceil($obt_marks/$total_marks*100);
+            $percentage = ceil($obt_marks / $total_marks * 100);
             $grade = null;
             $status = null;
-            if ($percentage > 90){ $grade = 'A+'; }
-            else if ($percentage > 80 && $percentage < 90){ $grade = 'A'; $status = 'pass'; }
-            else if ($percentage > 70 && $percentage < 80){ $grade = 'B'; $status = 'pass'; }
-            else if ($percentage > 60 && $percentage < 70){ $grade = 'C'; $status = 'pass'; }
-            else if ($percentage > 50 && $percentage < 60){ $grade = 'D'; $status = 'pass'; }
-            else { $grade = 'F'; $status = 'fail'; }
+            if ($percentage > 90) {
+                $grade = 'A+';
+            } elseif ($percentage > 80 && $percentage < 90) {
+                $grade = 'A';
+                $status = 'pass';
+            } elseif ($percentage > 70 && $percentage < 80) {
+                $grade = 'B';
+                $status = 'pass';
+            } elseif ($percentage > 60 && $percentage < 70) {
+                $grade = 'C';
+                $status = 'pass';
+            } elseif ($percentage > 50 && $percentage < 60) {
+                $grade = 'D';
+                $status = 'pass';
+            } else {
+                $grade = 'F';
+                $status = 'fail';
+            }
 
             $result = Result::create([
                 'admission_id' => $admission->admission_id,
@@ -128,7 +144,7 @@ class ExamResultController extends Controller
                 'status' => $status,
             ]);
 
-            foreach ($request->local_subjects as $ls){
+            foreach ($request->local_subjects as $ls) {
                 ResultDetail::create([
                     'result_id' => $result->id,
                     'subject_name' => $ls['subject_name'],
@@ -137,11 +153,10 @@ class ExamResultController extends Controller
                 ]);
             }
             DB::commit();
-            return response()->json([ 'status' => true, 'msg' => 'Record saved....' ]);
-        }
-        catch (\Exception $exception){
+            return response()->json(['status' => true, 'msg' => 'Record saved....']);
+        } catch (\Exception $exception) {
             DB::rollBack();
-            return response()->json([ 'status' => false, 'msg' => $exception->getMessage() ]);
+            return response()->json(['status' => false, 'msg' => $exception->getMessage()]);
         }
     }
 
@@ -157,6 +172,55 @@ class ExamResultController extends Controller
         $classes = _Class::latest()->get();
         $rds = ResultDetail::where('result_id', $id)->get();
         return view('result.show', compact('classes', 'data', 'rds'));
+    }
+
+
+    public function generatePDF($id)
+    {
+        $filePath = public_path('templates/output.pdf');
+        $outputFilePath = public_path('pdf/output.pdf');
+
+        $this->fillPDF($filePath, $outputFilePath, $id);
+
+        return response()->file($outputFilePath);
+    }
+
+    public function fillPDF($file, $output, $id){
+
+        $result = Result::findOrFail($id);
+        $fpdi = new FPDI;
+        $count = $fpdi->setSourceFile($file);
+        for ($i=1; $i<= $count; $i++){
+            $template = $fpdi->importPage($i);
+            $size = $fpdi->getTemplateSize($template);
+            $fpdi->AddPage($size['orientation'], [$size['width'], $size['height']]);
+            $fpdi->useTemplate($template);
+
+            $fpdi->setFont('helvetica', '', 12);
+            $fpdi->setTextColor(0,0,0);
+
+            $dateLeft = 28;
+            $dateTop = 70;
+            $textDate = date('M d, Y');
+
+            $fpdi->Text($dateLeft, $dateTop, $textDate);
+
+            $fpdi->setFont('helvetica', '', 18);
+            $nameLeft = 28;
+            $nameTop = 80;
+            $textName = $result->admission->student->name;
+
+            $fpdi->Text($nameLeft, $nameTop, $textName);
+
+            $fpdi->setFont('helvetica', '', 16);
+            $examTypeLeft = 28;
+            $examTypeTop = 105;
+            $textExamType = $result->exam_type;
+
+            $fpdi->Text($examTypeLeft, $examTypeTop, $textExamType);
+        }
+
+        return $fpdi->Output($output, 'F');
     }
 
     /**
@@ -184,19 +248,30 @@ class ExamResultController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $grade = null;
             $status = null;
             $percentage = ceil($request->formData['per']);
             $total_marks = $request->formData['total'];
             $obt_marks = $request->formData['obt'];
 
-            if ($percentage > 90){ $grade = 'A+'; }
-            else if ($percentage > 80 && $percentage < 90){ $grade = 'A'; $status = 'pass'; }
-            else if ($percentage > 70 && $percentage < 80){ $grade = 'B'; $status = 'pass'; }
-            else if ($percentage > 60 && $percentage < 70){ $grade = 'C'; $status = 'pass'; }
-            else if ($percentage > 50 && $percentage < 60){ $grade = 'D'; $status = 'pass'; }
-            else { $grade = 'F'; $status = 'fail'; }
+            if ($percentage > 90) {
+                $grade = 'A+';
+            } elseif ($percentage > 80 && $percentage < 90) {
+                $grade = 'A';
+                $status = 'pass';
+            } elseif ($percentage > 70 && $percentage < 80) {
+                $grade = 'B';
+                $status = 'pass';
+            } elseif ($percentage > 60 && $percentage < 70) {
+                $grade = 'C';
+                $status = 'pass';
+            } elseif ($percentage > 50 && $percentage < 60) {
+                $grade = 'D';
+                $status = 'pass';
+            } else {
+                $grade = 'F';
+                $status = 'fail';
+            }
 
             $data = Result::findOrFail($id);
             $data->total_marks = $total_marks;
@@ -206,7 +281,7 @@ class ExamResultController extends Controller
             $data->status = $status;
             $data->update();
 
-            foreach ($request->local_result_details as $ls){
+            foreach ($request->local_result_details as $ls) {
                 $rs = ResultDetail::findOrFail($ls['id']);
                 $rs->subject_name = $ls['subject_name'];
                 $rs->subject_marks = $ls['total_marks'];
@@ -214,11 +289,10 @@ class ExamResultController extends Controller
                 $rs->update();
             }
             DB::commit();
-            return response()->json([ 'status' => true, 'msg' => 'Record saved....' ]);
-        }
-        catch (\Exception $exception){
+            return response()->json(['status' => true, 'msg' => 'Record saved....']);
+        } catch (\Exception $exception) {
             DB::rollBack();
-            return response()->json([ 'status' => false, 'msg' => $exception->getMessage() ]);
+            return response()->json(['status' => false, 'msg' => $exception->getMessage()]);
         }
     }
 
@@ -233,16 +307,15 @@ class ExamResultController extends Controller
         {
             DB::beginTransaction();
             try {
-                ResultDetail:: where('result_id',$id)->delete();
+                ResultDetail::where('result_id', $id)->delete();
                 Result::where('id', $id)->delete();
 
                 DB::commit();
                 return redirect()->route('result.index')
-                    ->with( 'success', 'Record deleted.....' );
-            }
-            catch (\Exception $exception){
+                    ->with('success', 'Record deleted.....');
+            } catch (\Exception $exception) {
                 DB::rollBack();
-                return redirect()->back()->with('error',$exception->getMessage());
+                return redirect()->back()->with('error', $exception->getMessage());
             }
         }
     }

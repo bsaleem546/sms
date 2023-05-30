@@ -24,6 +24,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
+                    <a href="{{ route('result.certificate', ['id' => $data->id]) }}" class="btn btn-outline-primary mb-4">Print Certificate</a>
                     <h5 class="card-title">{{ $data->admission->student->name }}</h5>
                     <div class="row">
                         <div class="col-lg-8">
